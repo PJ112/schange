@@ -6,10 +6,10 @@
     <input class="loginIn-test" type="text" placeholder="验证码"/>
     <img class="loginIn-img"/>
     <button class="loginIn-button">登录</button>
-    <div class="loginIn-shadow" :class="{isShow: show}"  @click="moveCircle">
-      <span class="shadow-content">{{showPas ? '隐藏':'显示'}}</span>
-      <span class="shadow-circle"  :class="{isMove: move}"></span>
-    </div>
+    <!--<div class="loginIn-shadow" :class="{isShow: show}"  @click="moveCircle">-->
+      <!--<span class="shadow-content">{{showPas ? '隐藏':'显示'}}</span>-->
+      <!--<span class="shadow-circle"  :class="{isMove: move}"></span>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -81,12 +81,12 @@
       font-weight:bolder;
       color:#fff;
     .loginIn-shadow
-      position:absolute
+      position:absolute;
       left: 55%;
-      top:53.5%;
-      width:55px
-      height:20px
-      line-height:20px
+      top:54.6%;
+      width:calc(9vh);
+      height:calc(3vh);
+      line-height:calc(3vh);
       border-radius:40px
       border:1px solid gainsboro
       color: gainsboro

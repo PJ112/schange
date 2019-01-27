@@ -9,10 +9,10 @@
     <input class="register-test" type="text" placeholder="验证码"/>
     <img class="register-img"/>
     <button class="register-button">登录</button>
-    <div class="register-shadow" :class="{isShow: show}"  @click="moveCircle">
-      <span class="shadow-content">{{showPas ? '隐藏':'显示'}}</span>
-      <span class="shadow-circle"  :class="{isMove: move}"></span>
-    </div>
+    <!--<div class="register-shadow" :class="{isShow: show}"  @click="moveCircle">-->
+      <!--<span class="shadow-content">{{showPas ? '隐藏':'显示'}}</span>-->
+      <!--<span class="shadow-circle"  :class="{isMove: move}"></span>-->
+    <!--</div>-->
   </div>
 </template>
 
