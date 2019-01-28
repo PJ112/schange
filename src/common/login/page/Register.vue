@@ -1,13 +1,13 @@
 <template>
   <div class="register">
-    <input class="register-user" type="text" placeholder="请输入昵称"/>
+    <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
     <input class="register-user" type="text" placeholder="请选择学校"/>
-    <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码"/>
-    <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="password" />
-    <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="password" />
+    <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="password"/>
+    <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
+    <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
     <input class="register-test" type="text" placeholder="验证码"/>
     <img class="register-img"/>
-    <button class="register-button">注册</button>
+    <button class="register-button" @click="go">注册</button>
     <i class="iconfont loginIn-yanjing" @click="show" :class="{'isShow': isShow}">&#xe669;</i>
   </div>
 </template>
@@ -18,13 +18,25 @@
     data () {
       return {
         showPas: false,
-        isShow:false
+        isShow:false,
+        user:'',
+        NewPassword:'',
+        password:''
       }
     },
     methods:{
       show () {
         this.showPas = !this.showPas
         this.isShow = ! this.isShow
+      },
+      go(){
+        if(this.user == ''){
+          alert('用户名为空！')
+        }else if(this.password !== this.NewPassword){
+          alert('两次输入密码不同！')
+        } else{
+          alert('注册成功！')
+        }
       }
     }
   }
@@ -76,6 +88,7 @@
       font-size:18px;
       font-weight:bolder;
       color:#fff;
+      cursor:pointer;
     .loginIn-yanjing
       cursor:pointer
       display:block;

@@ -5,7 +5,7 @@
     <input class="loginIn-pas" type="text" placeholder="密码" v-show="showPas" v-model="password"/>
     <input class="loginIn-test" type="text" placeholder="验证码"/>
     <img class="loginIn-img"/>
-    <button class="loginIn-button">登录</button>
+    <button class="loginIn-button" @click="go">登录</button>
     <i class="iconfont loginIn-yanjing" @click="show" :class="{'isShow': isShow}">&#xe669;</i>
   </div>
 </template>
@@ -23,6 +23,9 @@
       show () {
         this.showPas = !this.showPas
         this.isShow = ! this.isShow
+      },
+      go(){
+        alert('登录成功！')
       }
     }
   }
