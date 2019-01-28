@@ -6,10 +6,7 @@
     <input class="loginIn-test" type="text" placeholder="验证码"/>
     <img class="loginIn-img"/>
     <button class="loginIn-button">登录</button>
-    <!--<div class="loginIn-shadow" :class="{isShow: show}"  @click="moveCircle">-->
-      <!--<span class="shadow-content">{{showPas ? '隐藏':'显示'}}</span>-->
-      <!--<span class="shadow-circle"  :class="{isMove: move}"></span>-->
-    <!--</div>-->
+    <i class="iconfont loginIn-yanjing" @click="show" :class="{'isShow': isShow}">&#xe669;</i>
   </div>
 </template>
 
@@ -18,25 +15,24 @@
     name: 'LoginIn',
     data () {
       return {
-        showPas: true,
-        user: '',
-        password: ''
+        showPas: false,
+        isShow:false
       }
     },
-    methods: {
-      moveCircle() {
-        this.move = !this.move
+    methods:{
+      show () {
         this.showPas = !this.showPas
-        this.show = !this.show
-        this.showpas = !this.showpas
+        this.isShow = ! this.isShow
       }
     }
   }
 </script>
 
 <style lang="stylus" scoped>
+  @import "../../../assets/iconfont/iconfont.css"
+  /*::-webkit-input-placeholder*/
   .loginIn
-    margin-top:8%;
+    margin-left:10%;
     font-size:12px;
     width:calc(50vh);
     height:calc(42vh);
@@ -45,7 +41,7 @@
     border-radius:10px;
     margin:-5% auto;
     .loginIn-user
-      margin-left:8%;
+      margin-left:10%;
       width:calc(40vh);
       height:calc(4.8vh);
       border:1px solid gainsboro
@@ -57,13 +53,13 @@
       height:calc(4.8vh);
       border:1px solid gainsboro
       border-radius:5px
-      margin-left:8%;
+      margin-left:10%;
     .loginIn-test
       margin-top:6%;
       width:calc(28vh);
       height:calc(4.8vh);
       border-radius:5px;
-      margin-left:8%;
+      margin-left:10%;
      .loginIn-img
       margin-top: 6%;
       width:calc(10vh);
@@ -71,7 +67,7 @@
       background:blueviolet;
       margin-left:3%;
     .loginIn-button
-      margin-left:8%;
+      margin-left:10%;
       margin-top:8%;
       width:calc(40vh);
       height:calc(5.2vh);
@@ -80,31 +76,13 @@
       font-size:18px;
       font-weight:bolder;
       color:#fff;
-    .loginIn-shadow
-      position:absolute;
-      left: 55%;
-      top:54.6%;
-      width:calc(9vh);
-      height:calc(3vh);
-      line-height:calc(3vh);
-      border-radius:40px
-      border:1px solid gainsboro
-      color: gainsboro
-      font-size:10px
-      .isShow
-        background:#67d49d
-      .shadow-circle
-        position:absolute
-        left:0px
-        top: -2px
-        width: 22px
-        height:22px
-        border-radius:11px
-        background:#67d49d;
-        transition: transform .3s
-      .isMove
-        transform: translateX(35px)
-        background:white
+    .loginIn-yanjing
+      cursor:pointer
+      display:block;
+      margin-left:82%;
+      margin-top:-42%;
+      color:black;
+      font-size:18px;
     .isShow
-      background:#67d49d
+      color:#67d49d;
 </style>
