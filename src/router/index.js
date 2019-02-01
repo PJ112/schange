@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/common/login/Login';
 import LoginIn from '../common/login/page/LoginIn';
-import Register from '../common/login/page/Register'
+import Register from '../common/login/page/Register';
+import My from '../pages/my/My'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
           component:Register
         }
       ]
+    },
+    {
+      path: '/my',
+      name: 'My',
+      component: My,
     }
   ]
 })

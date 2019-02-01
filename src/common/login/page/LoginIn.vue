@@ -6,7 +6,8 @@
     <input class="loginIn-test" type="text" placeholder="验证码"/>
     <img class="loginIn-img"/>
     <button class="loginIn-button" @click="go">登录</button>
-    <i class="iconfont loginIn-yanjing" @click="show" :class="{'isShow': isShow}">&#xe669;</i>
+    <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
+    <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
   </div>
 </template>
 
@@ -86,6 +87,4 @@
       margin-top:-42%;
       color:black;
       font-size:18px;
-    .isShow
-      color:#67d49d;
 </style>

@@ -8,7 +8,8 @@
     <input class="register-test" type="text" placeholder="验证码"/>
     <img class="register-img"/>
     <button class="register-button" @click="go">注册</button>
-    <i class="iconfont loginIn-yanjing" @click="show" :class="{'isShow': isShow}">&#xe669;</i>
+    <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
+    <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
   </div>
 </template>
 
@@ -96,6 +97,4 @@
       margin-top:-42%;
       color:black;
       font-size:18px;
-    .isShow
-      color:#67d49d;
 </style>
