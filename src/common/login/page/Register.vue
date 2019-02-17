@@ -36,7 +36,10 @@
         }else if(this.password !== this.NewPassword){
           alert('两次输入密码不同！')
         } else{
-          alert('注册成功！')
+          this.$router.push({
+            path: '/index',
+          })
+
         }
       }
     }
@@ -49,7 +52,7 @@
     font-size:12px;
     width:calc(50vh);
     height:calc(55vh);
-    background-color:rgba(0,0,0,0.9);
+    background-color:rgba(0,0,0,0.7);
     box-shadow:0 3px 9px rgba(0,0,0,0.5)
     border-radius:10px;
     margin:-5% auto;
