@@ -68,7 +68,7 @@
 
 <style lang="stylus" scoped>
   .router-link-active
-    background:black; 
+    background:#85cab5;
   .my
     width:100%;
     min-height:calc(100vh);
@@ -161,8 +161,10 @@
             margin-top:12%;
             .my-li
               display:inline-block;
-              width:100%;
-              margin-left:42px;
+              padding-left:42px;
+              margin-left:5%;
+              margin-right:5%;
+              width:70%;
               height:34px;
               line-height:34px;
               font-size:12px;

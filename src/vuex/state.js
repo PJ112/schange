@@ -6,5 +6,8 @@ export default {
   img:'',
   myDateTel:'',
   myDateMes:'',
-  myDateSch:''
+  myDateSch:'',
+
+  //mymall
+  jifen:'0'
 }

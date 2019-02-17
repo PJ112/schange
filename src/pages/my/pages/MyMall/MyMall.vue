@@ -1,83 +1,90 @@
 <template>
   <div>
-    123
-      <div class="item_bock head_p">
-        <div class="head_img">
-          <img :src="userInfo.avatar"/>
-        </div>
-        <div class="setting_right" @click.stop="uploadHeadImg">
-          <div class="caption">更改头像</div>
-        </div>
-        <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
+    <div class="myMall">
+      <h1 class="myMall-h1">积分商城</h1>
+      <h2 class="myMall-h2">已有积分:{{jifen}}</h2>
+      <div>
+        <li class="myMall-li">
+          <div class="myMall-li-left">
+            <img class="myMall-li-left-img"/>
+          </div>
+          <div class="myMall-li-right">
+            <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
+            <div class="myMall-li-right-jifen">所需积分</div>
+            <button class="myMall-li-right-button">兑换</button>
+          </div>
+        </li>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
     export default {
         name: "MyMall",
       data() {
         return {
-          userInfo: {
-            avatar: 'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=62d46c39067b020818c437b303b099b6/d4628535e5dde7119c3d076aabefce1b9c1661ba.jpg'
-          }
-          // 初始图片
+
         }
       },
-      methods: {
-        // 打开图片上传
-        uploadHeadImg: function () {
-          this.$el.querySelector('.hiddenInput').click()
-        },
-        // 将头像显示
-        handleFile: function (e) {
-          let $target = e.target || e.srcElement
-          let file = $target.files[0]
-          var reader = new FileReader()
-          reader.onload = (data) => {
-            let res = data.target || data.srcElement
-            this.userInfo.avatar = res.result
-          }
-          reader.readAsDataURL(file)
-        },
-      }
+    computed:{
+      ...mapState(['jifen'])
+    }
     }
 </script>
 
-<style scoped>
-  .item_bock {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height:94px;
-    width: 300px;
-    padding:0px 24px 0px 38px;
-    border-bottom: 1px solid #f7f7f7;
-    background: #fff;
-  }
-  .head_p {
-    height:132px;
-  }
-  .head_img{
-    height: 90px;
-  }
-  .head_img img{
-    width:90px;
-    height:90px;
-    border-radius:50px
-  }
-  .setting_right{
-    display: flex;
-    height: 37px;
-    justify-content: flex-end;
-    align-items: center;
-  }
-  .hiddenInput{
-    display: none;
-  }
-  .caption {
-    color: #8F8F8F;
-    font-size: 26px;
-    height: 37px;
-  }
+<style lang="stylus" scoped>
+  .myMall
+    margin-left:8%;
+    margin-top:32px;
+    .myMall-h1
+      display:inline-block
+      font-size:18px;
+      color:#2b2a2a
+      margin-bottom:34px;
+    .myMall-h2
+      display:inline-block
+      float:right;
+      font-size:18px;
+      color:#2b2a2a;
+      margin-right:10%;
+    .myMall-li
+      list-style:none;
+      margin-top:20px;
+      width:90%;
+      box-shadow:0 0px 9px rgba(0,0,0,0.1);
+      border-radius:5px;
+      height:180px
+      background-color:black;
+      .myMall-li-left
+        display:inline-block
+        vertical-align:top;
+        height:180px;
+        width:30%;
+        border-radius:5px;
+        background-color:yellow;
+      .myMall-li-right
+        display:inline-block
+        float:right;
+        vertical-align:top;
+        height:180px;
+        width:66%;
+        border-radius:5px;
+        background-color:yellow;
+        .myMall-li-right-content
+          color:#8d8d8d;
+          margin-top:20px;
+        .myMall-li-right-jifen
+          display:inline-block;
+          margin-top:70px;
+        .myMall-li-right-button
+          display:inline-block;
+          margin-left:60%;
+          font-size:13px;
+          border-radius:5px;
+          width:60px;
+          height:25px;
+          color: white;
+          background:#85cab5;
 </style>
