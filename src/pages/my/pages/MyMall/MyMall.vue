@@ -86,5 +86,6 @@
           width:60px;
           height:25px;
           color: white;
+          cursor:pointer;
           background:#85cab5;
 </style>

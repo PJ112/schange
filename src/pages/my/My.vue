@@ -13,22 +13,62 @@
         </span>
       </div>
       <div class="my-left">
-        <div class="my-top">
+        <div class="my-top" :class="{'my-top-hidden':show}">
           <img src="./resource/userIcon.png" class="my-icon" v-show="!img"/>
           <img :src="img.img" v-show="img" class="my-changeIcon"/>
           <div class="my-name">{{user.user}}</div>
           <div class="my-year">圈龄</div>
           <router-link class="my-LeftButton" to="/mydata">编辑资料</router-link>
         </div>
-        <div class="my-bottom">
+        <div class="my-bottom" >
           <div class="my-BottomLi">
-            <router-link class="my-li" to="/mymall">
+            <router-link
+              tag="li"
+              class="my-li" to="/mymall"
+              :class="{'is-active':$route.meta.active === '/mymall'}"
+            >
               <i class="iconfont my-LiIcon">&#xe612;</i>
-                积分商城
+              积分商城
             </router-link>
-            <router-link class="my-li" to="/mycollection">
-              <i class="iconfont my-LiIcon-xingxing">&#xe657;</i>
+            <router-link
+            class="my-li"
+             to="/mycollection"
+              :class="{'is-active':$route.meta.active === '/mycollection'}"
+            >
+              <i class="iconfont my-LiIcon">&#xe657;</i>
               收藏
+            </router-link>
+            <router-link
+              class="my-li"
+              to="/mypublish"
+              :class="{'is-active':$route.meta.active === '/mypublish'}"
+            >
+              <i class="iconfont my-LiIcon">&#xe62c;</i>
+              已发布
+            </router-link>
+            <router-link
+              class="my-li"
+              to="/mybuy"
+              :class="{'is-active':$route.meta.active === '/mybuy'}"
+            >
+              <i class="iconfont my-LiIcon">&#xe61a;</i>
+              已购入
+            </router-link>
+            <router-link
+              class="my-li"
+              to="/myorder"
+              :class="{'is-active':$route.meta.active === '/myorder'}"
+            >
+              <i class="iconfont my-LiIcon">&#xe60c;</i>
+              订单管理
+            </router-link>
+            <router-link
+              class="my-li"
+              to="/myhjudge"
+              :class="{'is-active':$route.meta.active === '/myhjudge'}"
+            >
+              <i class="iconfont my-LiIcon">&#xe69d;</i>
+              历史评价
             </router-link>
           </div>
         </div>
@@ -48,13 +88,19 @@
   import {mapState} from 'vuex'
   export default {
     name: 'My',
+    data(){
+      return{
+
+      }
+    },
     methods:{
       goRes() {
         this.$router.push('./resgister')
       },
       goLogin () {
         this.$router.push('./loginin')
-      }
+      },
+
     },
     components:{
       MyLink
@@ -67,8 +113,6 @@
 </script>
 
 <style lang="stylus" scoped>
-  .router-link-active
-    background:#85cab5;
   .my
     width:100%;
     min-height:calc(100vh);
@@ -120,6 +164,8 @@
           background:white;
           box-shadow:0 0px 9px rgba(0,0,0,0.1)
           border-radius:5px;
+          .my-top-hidden
+             height:calc(60vh);
           .my-icon
             margin-top:12%;
             width:66px;
@@ -159,6 +205,8 @@
           .my-BottomLi
             display:inline-block;
             margin-top:12%;
+            .router-link-active
+              background:#85cab5;
             .my-li
               display:inline-block;
               padding-left:42px;
@@ -168,16 +216,11 @@
               height:34px;
               line-height:34px;
               font-size:12px;
-              color:#323233;
+              color:#85cab5;
+            .is-active
+              color:white;
               .my-LiIcon
-                color:#85cab5;
                 font-size:20px;
-                margin-right:15px;
-                vertical-align:top;
-              .my-LiIcon-xingxing
-                font-size:22px;
-                color:#85cab5;
-                margin-right:15px;
                 vertical-align:top;
       .my-right
         display:inline-block;

@@ -8,6 +8,10 @@ import Index from '../common/index/Index'
 import MyData from '../pages/my/pages/MyData/MyData'
 import MyMall from '../pages/my/pages/MyMall/MyMall'
 import MyCollection from '../pages/my/pages/MyCollection/MyCollection'
+import MyBuy from '../pages/my/pages/MyBuy/MyBuy'
+import MyHJudge from '../pages/my/pages/MyHJudge/MyHJudge'
+import MyOrder from '../pages/my/pages/MyOrder/MyOrder'
+import MyPublish from '../pages/my/pages/MyPublish/MyPublish'
 
 Vue.use(Router);
 
@@ -38,16 +42,56 @@ export default new Router({
       children:[
         {
           path:'/mydata',
-          component:MyData
+          component:MyData,
         },
         {
           path:'/mymall',
-          component:MyMall
+          component:MyMall,
+          meta:{
+            requireAuth:true,
+            active:'/mymall'
+          }
         },
         {
           path:'/mycollection',
-          component:MyCollection
-        }
+          component:MyCollection,
+          meta:{
+            requireAuth:true,
+            active:'/mycollection'
+          }
+        },
+        {
+          path:'/mybuy',
+          component:MyBuy,
+          meta:{
+            requireAuth:true,
+            active:'/mybuy'
+          }
+        },
+        {
+          path:'/myhjudge',
+          component:MyHJudge,
+          meta:{
+            requireAuth:true,
+            active:'/myhjudge'
+          }
+        },
+        {
+          path:'/myorder',
+          component:MyOrder,
+          meta:{
+            requireAuth:true,
+            active:'/myorder'
+          }
+        },
+        {
+          path:'/mypublish',
+          component:MyPublish,
+          meta:{
+            requireAuth:true,
+            active:'/mypublish'
+          }
+        },
       ]
     },
     {
