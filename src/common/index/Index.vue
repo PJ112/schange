@@ -1,8 +1,10 @@
 <template>
     <div class="index">
       <div class="index-top">
-        <nav-common></nav-common>
-        <div class="index-carousel">
+        <nav-common ></nav-common>
+      </div>
+      <div class="index-center">
+        <div class="index-carousel" >
           <div class="swiper-container">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
@@ -17,98 +19,38 @@
          <div class="index-category">
            <div class="index-category-all">
              <div class="all">所有分类</div>
-             <div class="index-category-item" v-for="(item,index) of 8" :key="index">
-               <div class="item-icon">
-                 <img src="../../assets/imgs/index/图书.png">
+             <router-link to="detail">
+               <div class="index-category-item" v-for="(item,index) of 8" :key="index">
+                 <div class="item-icon">
+                   <img src="../../assets/imgs/index/图书.png">
+                 </div>
+                 <div class="item-name">
+                   服饰
+                 </div>
+                 <div class="item-one" v-for="(item,index) of items" :key="index">
+                   {{item}}
+                 </div>
                </div>
-               <div class="item-name">
-                 服饰
-               </div>
-               <div class="item-one" v-for="(item,index) of items" :key="index">
-                {{item}}
-               </div>
-             </div>
+             </router-link>
            </div>
            <div class="index-category-recommend">
              <div class="all">热门推荐</div>
              <div class="recommend-items">
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/iphone.jpg"/>
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     个人闲置苹果X国行
+               <div class="item" v-for="(item,index) of 6" :key="index">
+                 <router-link to="/sale-product">
+                   <div class="item-img">
+                     <img src="../../assets/imgs/index/iphone.jpg"/>
                    </div>
-                   <div class="item-price">
-                     价格：3599元
+                   <div class="item-description">
+                     <div class="item-name">
+                       个人闲置苹果X国行
+                     </div>
+                     <div class="item-price">
+                       价格：3599元
+                     </div>
                    </div>
-                 </div>
-               </div>
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/cloth.jpg">
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     灰蓝色衬衫
-                   </div>
-                   <div class="item-price">
-                     价格：89元
-                   </div>
-                 </div>
-               </div>
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/house.jpg">
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     房屋出租整套
-                   </div>
-                   <div class="item-price">
-                     价格：1000元/月
-                   </div>
-                 </div>
-               </div>
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/lanqiu.jpg">
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     JORDAN篮球
-                   </div>
-                   <div class="item-price">
-                     价格：69元
-                   </div>
-                 </div>
-               </div>
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/kouhong.jpg">
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     雅诗兰黛口红#333
-                   </div>
-                   <div class="item-price">
-                     价格：199元
-                   </div>
-                 </div>
-               </div>
-               <div class="item">
-                 <div class="item-img">
-                   <img src="../../assets/imgs/index/jita.jpg">
-                 </div>
-                 <div class="item-description">
-                   <div class="item-name">
-                     古他藏蓝色
-                   </div>
-                   <div class="item-price">
-                     价格：99元
-                   </div>
-                 </div>
+                 </router-link>
+
                </div>
              </div>
            </div>
@@ -168,12 +110,16 @@
     height: 100%;
     background :#fff;
     font-family "Microsoft Yahei";
-    .index-top{
-      width:100%;
+    .index-top {
+      width: 100%;
+      z-index :100;
+    }
+    .index-center{
+      z-index :1;
       .index-carousel{
         img{
-          width :100%;
-          height :auto;
+          width :120%;
+          height :350px;
         }
       }
     }

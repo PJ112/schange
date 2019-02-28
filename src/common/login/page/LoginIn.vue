@@ -28,7 +28,7 @@
       },
       go(){
         this.$store.dispatch('updateUserAsyc',this.user)
-        this.$router.push({path: '/my',})
+        this.$router.push({path: '/index',})
       },
     }
   }
