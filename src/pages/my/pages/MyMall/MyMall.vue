@@ -101,7 +101,7 @@
           margin-left:5%;
         .myMall-li-right-button
           display:inline-block;
-          margin-left:60%;
+          margin-left:50%;
           font-size:13px;
           border-radius:5px;
           width:60px;

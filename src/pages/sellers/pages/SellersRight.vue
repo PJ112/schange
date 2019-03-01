@@ -29,7 +29,12 @@
           </div>
         </div>
         <div class="sellersR-talk-sendIn">
-         <input type="text" class="sellersR-talk-sendIn-input" v-model="inputValue" @change="saveList()"/>
+         <input
+           type="text"
+           class="sellersR-talk-sendIn-input"
+           v-model="inputValue"
+           @keyup.enter="handIn"
+           @change="saveList()"/>
           <button class="sellersR-talk-sendIn-button" @click="handIn">确定</button>
         </div>
       </div>

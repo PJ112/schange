@@ -134,8 +134,8 @@
              width:40px;
              height:40px;
              float:right;
-             margin-top:1%;
-             margin-right:1%;
+             margin-top:2%;
+             margin-right:10%;
           .my-changeUserIcon
             width:40px;
             height:40px;
@@ -145,13 +145,13 @@
             margin-right:1%;
           .my-login
             float:right;
-            margin-top:2%;
+            margin-top:3%;
             cursor:pointer
           .my-register
             float:right;
             cursor:pointer
-            margin-top:2%;
-            margin-right:5%;
+            margin-top:3%;
+            margin-right:10%;
             margin-left:1%;
       .my-left
           display:inline-block;

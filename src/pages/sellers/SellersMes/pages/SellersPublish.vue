@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="myCollection">
-      <h1 class="myCollection-h1">已发布</h1>
+      <h1 class="myCollection-h1" v-show="this.one.length>0" >已发布</h1>
       <h2 class="myCollection-h2" @click="Chose" v-show="this.one.length>0">勾选</h2>
       <div>
         <div v-for="(item,index) in one" class="content" :key="index">

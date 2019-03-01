@@ -2,7 +2,7 @@
   <div>
     <div class="myMall">
       <h1 class="myMall-h1">已购入</h1>
-      <div>
+      <div v-for="(item,index) in one" :key="index">
         <li class="myMall-li">
           <div class="myMall-li-left">
             <img class="myMall-li-left-img" src="../../resource/商品.png"/>
@@ -10,14 +10,20 @@
           <div class="myMall-li-right">
             <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
             <div class="myMall-li-right-jifen">价格:</div>
-            <button class="myMall-li-right-button">评价</button>
+            <button class="myMall-li-right-button" @click="showAssess(index)">评价</button>
           </div>
         </li>
-        <div class="myMall-li-assess">
-          <input type="text" class="myMall-li-assess-input" placeholder="请输入评价" v-model="myassess"/>
+        <div class="myMall-li-assess" v-show="index == i">
+          <input
+            type="text"
+            class="myMall-li-assess-input"
+            placeholder="请输入评价"
+            v-model="myassess"
+            @keyup.enter="goPublish"
+          />
           <div class="myMall-li-assess-button">
             <button class="myMall-li-assess-button-handin" @click="goPublish">发表</button>
-            <button class="myMall-li-assess-button-handout">取消</button>
+            <button class="myMall-li-assess-button-handout" @click="hidden()">取消</button>
           </div>
         </div>
       </div>
@@ -31,7 +37,11 @@
     name: "MyBuy",
     data() {
       return {
-        myassess:''
+        myassess:'',
+        i:-1,
+        one:[
+          1,2
+        ]
       }
     },
     computed:{
@@ -52,12 +62,21 @@
           console.log(year+'年'+month+'月'+day+'日 '+hour +':'+minute+':'+second)
           alert('发表成功！')
         }
+      },
+      showAssess(index){
+        this.i = index
+      },
+      hidden(){
+       this.i = -1
       }
     }
   }
 </script>
 
 <style lang="stylus" scoped>
+  .assess{
+    display:none
+  }
   .myMall
     margin-left:8%;
     margin-top:32px;
