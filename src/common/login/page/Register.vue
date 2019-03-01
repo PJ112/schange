@@ -1,7 +1,20 @@
 <template>
   <div class="register">
     <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
-    <input class="register-user" type="text" placeholder="请选择学校"/>
+   <div class="register-school">
+      <span >
+        <select class="school-city"  v-model="cityChange">
+          <option selected>--城市</option>
+          <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option> <!---->
+        </select>
+      </span>
+     <span>
+      <select  class="school-school" v-model="schoolChange">
+          <option selected>--学校</option>
+          <option :value="item.id" v-for="item in newList" :key="item.id">{{item.name}}</option>
+      </select>
+     </span>
+   </div>
     <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="password"/>
     <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
     <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
@@ -14,34 +27,58 @@
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     name: 'Register',
-    data () {
+    data() {
       return {
         showPas: false,
-        isShow:false,
-        user:'',
-        NewPassword:'',
-        password:''
+        isShow: false,
+        user: '',
+        NewPassword: '',
+        password: '',
+        cityChange:'--城市',
+        cityList:'',
+        newList:[],
+        university:[],
+        schoolChange:'--学校',
       }
     },
-    methods:{
-      show () {
+    methods: {
+      show() {
         this.showPas = !this.showPas
-        this.isShow = ! this.isShow
+        this.isShow = !this.isShow
       },
-      go(){
-        if(this.user == ''){
+      go() {
+        if (this.user == '') {
           alert('用户名为空！')
-        }else if(this.password !== this.NewPassword){
+        } else if (this.password !== this.NewPassword) {
           alert('两次输入密码不同！')
-        } else{
+        } else {
           this.$router.push({
             path: '/index',
           })
-
         }
-      }
+      },
+    },
+    watch: {
+      cityChange(){
+        for(let i=0;i<this.university.length;i++) {
+          if (this.cityChange === this.university[i].zone) {
+           this.newList.push(this.university[i])
+            console.log(this.newList)
+          }
+        }
+        }
+
+    },
+    created(){
+      axios.get('../../../static/school.json').then((res)=>{
+        const data = res.data
+        this.cityList = data.zone
+        this.university = data.university
+        this.cityChange()
+      })
     }
   }
 </script>
@@ -51,11 +88,25 @@
     margin-top:8%;
     font-size:12px;
     width:calc(50vh);
-    height:calc(55vh);
+    height:calc(59vh);
     background-color:rgba(0,0,0,0.7);
     box-shadow:0 3px 9px rgba(0,0,0,0.5)
     border-radius:10px;
     margin:-5% auto;
+    .register-school
+      margin-left:10%;
+      margin-top:6%;
+      .school-city
+        width:calc(12vh);
+        height:calc(4vh);
+        border:1px solid gainsboro
+        border-radius:5px
+      .school-school
+        margin-left:5%;
+        width:calc(25vh);
+        height:calc(4vh);
+        border:1px solid gainsboro
+        border-radius:5px
     .register-user
       margin-left:10%;
       width:calc(40vh);

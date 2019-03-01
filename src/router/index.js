@@ -12,6 +12,12 @@ import MyHJudge from '../pages/my/pages/MyHJudge/MyHJudge'
 import MyOrder from '../pages/my/pages/MyOrder/MyOrder'
 import MyPublish from '../pages/my/pages/MyPublish/MyPublish'
 
+import Sellers from '../pages/sellers/Sellers'
+import SellersMes from '../pages/sellers/SellersMes/SellersMes'
+import SellersPublish from '../pages/sellers/SellersMes/pages/SellersPublish'
+import SellersHJudge from '../pages/sellers/SellersMes/pages/SellersHJudge'
+
+
 import Index from '../common/index/Index'
 import IndexShopping from '../common/index/components/Shopping'
 import IndexCollection from '../common/index/components/Collection'
@@ -160,7 +166,25 @@ export default new Router({
     {
       path:'/contact-seller',
       component:ContactSeller
-    }
-
+    },
+    {
+      path:'/sellers',
+      component:Sellers
+    },
+    {
+      path:'/sellersmes',
+      component:SellersMes,
+      redirect:'/sellershjudge',
+      children:[
+        {
+          path:'/sellershjudge',
+          component:SellersHJudge,
+        },
+        {
+          path:'/sellerspublish',
+          component:SellersPublish,
+        }
+      ]
+    },
   ]
 })

@@ -16,7 +16,7 @@
         <div class="my-top" :class="{'my-top-hidden':show}">
           <img src="./resource/userIcon.png" class="my-icon" v-show="!img"/>
           <img :src="img.img" v-show="img" class="my-changeIcon"/>
-          <div class="my-name">{{user.user}}</div>
+          <div class="my-name">wo</div>
           <div class="my-year">圈龄</div>
           <router-link class="my-LeftButton" to="/mydata">编辑资料</router-link>
         </div>
@@ -35,8 +35,8 @@
              to="/mycollection"
               :class="{'is-active':$route.meta.active === '/mycollection'}"
             >
-              <i class="iconfont my-LiIcon">&#xe657;</i>
-              收藏
+              <i class="iconfont my-LiIconM">&#xe69d;</i>
+              消息
             </router-link>
             <router-link
               class="my-li"
@@ -51,7 +51,7 @@
               to="/mybuy"
               :class="{'is-active':$route.meta.active === '/mybuy'}"
             >
-              <i class="iconfont my-LiIcon">&#xe61a;</i>
+              <i class="iconfont my-LiIconB">&#xe61a;</i>
               已购入
             </router-link>
             <router-link
@@ -67,7 +67,7 @@
               to="/myhjudge"
               :class="{'is-active':$route.meta.active === '/myhjudge'}"
             >
-              <i class="iconfont my-LiIcon">&#xe69d;</i>
+              <i class="iconfont my-LiIconM">&#xe69d;</i>
               历史评价
             </router-link>
           </div>
@@ -125,6 +125,7 @@
       .my-header
           height:15%;
           width:100%;
+          margin-bottom:1%;
           .my-logo
               width:275px;
               height:92px;
@@ -150,7 +151,7 @@
             float:right;
             cursor:pointer
             margin-top:2%;
-            margin-right:1%;
+            margin-right:5%;
             margin-left:1%;
       .my-left
           display:inline-block;
@@ -184,6 +185,7 @@
             font-size:12px;
             color:#a3a3a7;
             margin-bottom:6%;
+            margin-top:4%;
           .my-LeftButton
             display:block;
             font-size:13px;
@@ -219,9 +221,18 @@
               color:#85cab5;
             .is-active
               color:white;
-              .my-LiIcon
-                font-size:20px;
-                vertical-align:top;
+            .my-LiIcon
+              font-size:20px;
+              vertical-align:top;
+              margin-right:20px;
+            .my-LiIconM
+              font-size:18px;
+              vertical-align:top;
+              margin-right:20px;
+            .my-LiIconB
+              font-size:22px;
+              vertical-align:top;
+              margin-right:20px;
       .my-right
         display:inline-block;
         vertical-align:top;
@@ -234,5 +245,4 @@
         position:fixed;
         width:6%;
         height:80%;
-        background:blueviolet;
 </style>

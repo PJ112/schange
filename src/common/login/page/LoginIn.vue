@@ -41,7 +41,7 @@
     margin-left:10%;
     font-size:12px;
     width:calc(50vh);
-    height:calc(42vh);
+    height:calc(44vh);
     background-color:rgba(0,0,0,0.7);
     box-shadow:0 3px 9px rgba(0,0,0,0.5)
     border-radius:10px;
