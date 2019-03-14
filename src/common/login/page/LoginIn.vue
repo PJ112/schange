@@ -1,6 +1,6 @@
 <template>
   <div class="loginIn">
-    <input class="loginIn-user" type="text" placeholder="用户名" v-model="user" maxlength="11" />
+    <input class="loginIn-user" type="text" placeholder="用户名" v-model="username" maxlength="11" />
     <input class="loginIn-pas" type="password" placeholder="密码" v-show="!showPas" v-model="password"/>
     <input class="loginIn-pas" type="text" placeholder="密码" v-show="showPas" v-model="password"/>
     <input class="loginIn-test" type="text" placeholder="验证码"/>
@@ -18,7 +18,8 @@
       return {
         showPas: false,
         isShow:false,
-        user:''
+        username:'',
+        password:''
       }
     },
     methods:{
@@ -27,8 +28,25 @@
         this.isShow = ! this.isShow
       },
       go(){
-        this.$store.dispatch('updateUserAsyc',this.user)
-        this.$router.push({path: '/my',})
+        //this.$store.dispatch('updateUserAsyc',this.user)
+        //this.$router.push({path: '/my',})
+        var _this=this;
+        $.ajax({
+          url:"/api/sunny/user/login",
+          async:true,
+          type:'GET',
+          data:{
+            "username":this.username,"password":this.password
+          },
+          success:function (data) {
+            console.log(data);
+            _this.$router.push({path:'/index'});
+          },
+          error:function () {
+
+          },
+          dataType:'json'
+        })
       },
     }
   }
