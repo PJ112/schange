@@ -25,17 +25,24 @@ export default {
       this.loginL = !this.loginL
       this.loginR = !this.loginR
     }
+  },
+  created:{
+
   }
 }
 </script>
 
 <style lang="stylus" scoped>
   .login
-    height: calc(100vh);
+    position:absolute
+    height:100%;
+    width:100%;
   .loginL
-    background-image:url("./resource/登录/background.png")
+    background:url("./resource/登录/background.png") ;
+    background-size:100% 100%;
   .loginR
-      background-image:url("./resource/注册/background.png")
+      background:url("./resource/注册/background.png");
+      background-size:100% 100%;
     .login-logo
       text-align: center;
       img

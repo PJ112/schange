@@ -117,6 +117,7 @@
     width:100%;
     min-height:calc(100vh);
     background:white;
+    font-family: simsun;
     .my-content
       margin:0 auto;
       min-height:calc(100vh);

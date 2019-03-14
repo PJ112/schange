@@ -62,6 +62,8 @@ export default {
       margin-top:10px;
       .myCollection-li-right-content
         margin-top:5%;
+      .myCollection-li-right-header-name
+        color:black;
       .myCollection-li-right-header-img
         margin-left:3%;
     .myCollection-li-time

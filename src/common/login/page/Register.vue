@@ -1,42 +1,53 @@
 <template>
-  <div class="register">
-    <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
-   <div class="register-school">
+ <div>
+   <div class="register">
+     <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
+     <div class="register-school">
       <span >
         <select class="school-city"  v-model="cityChange">
           <option selected>--城市</option>
           <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option> <!---->
         </select>
       </span>
-     <span>
+       <span>
       <select  class="school-school" v-model="schoolChange">
           <option selected>--学校</option>
           <option :value="item.id" v-for="item in newList" :key="item.id">{{item.name}}</option>
       </select>
      </span>
+     </div>
+     <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
+     <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
+     <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
+     <input class="register-test" type="text" placeholder="验证码"/>
+     <img class="register-img"/>
+     <button class="register-button" @click="go">注册</button>
+     <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
+     <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
    </div>
-    <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="password"/>
-    <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
-    <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-    <input class="register-test" type="text" placeholder="验证码"/>
-    <img class="register-img"/>
-    <button class="register-button" @click="go">注册</button>
-    <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
-    <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
-  </div>
+   <transition
+     name="fade"
+   >
+     <alert v-if="alertDara"
+            :alertDara="alertDara"  @alertSure="alertSureFn"></alert>
+     <alert v-if="alertData"
+            :alertDara="alertData"  @alertSure="alertSureFnT"></alert>
+   </transition>
+ </div>
 </template>
 
 <script>
-import axios from 'axios';
+  import Alert from '../../Alert/Alert'
   export default {
     name: 'Register',
+    components: {Alert},
     data() {
       return {
         showPas: false,
         isShow: false,
         user: '',
         NewPassword: '',
-        password: '',
+        pass: '',
         cityChange:'--城市',
         cityList:'',
         newList:[],
@@ -50,13 +61,48 @@ import axios from 'axios';
         this.isShow = !this.isShow
       },
       go() {
-        if (this.user == '') {
-          alert('用户名为空！')
-        } else if (this.password !== this.NewPassword) {
-          alert('两次输入密码不同！')
+        if (this.user === '') {
+          let alertData = {
+            titleColor: "#abd9ca",
+            content: "用户名为空！",
+            contentColor: "gray",
+            btn: [ "确定"],
+            btnColor: ["", ""],
+            btnBColor: ["#abd9ca", "#abd9ca"]
+          };
+          this.alertData = alertData;
+        } else if (this.pass !== this.NewPassword) {
+          let alertDara = {
+            titleColor: "#abd9ca",
+            content: "两次输入密码不同！",
+            contentColor: "gray",
+            btn: ["确定"],
+            btnColor: ["", ""],
+            btnBColor: ["#abd9ca", "#abd9ca"]
+          };
+          this.alertDara = alertDara;
         } else {
-          this.$router.push({
-            path: '/index',
+          let _this = this
+          $.ajax({
+            type: "GET",
+            url: "/api/sunny/user/register",
+            data:{username:_this.user,password:_this.pass},
+            dataType: "json",
+            async: true,
+            jsonp: "callback",
+            success: function (res) {
+              console.log(res)
+              if (res.status === 200) {
+                this.$router.push({
+                  path: '/loginin',
+                })
+              } else {
+                alert(res.message)
+              }
+            },
+            error: function () {
+              console.log("获取失败");
+            }
           })
         }
       },
@@ -66,7 +112,6 @@ import axios from 'axios';
         for(let i=0;i<this.university.length;i++) {
           if (this.cityChange === this.university[i].zone) {
            this.newList.push(this.university[i])
-            console.log(this.newList)
           }
         }
         }
@@ -84,6 +129,12 @@ import axios from 'axios';
 </script>
 
 <style lang="stylus" scoped>
+  &.fade-enter-active, &.fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  &.fade-enter, &.fade-leave-to {
+    opacity: 0;
+  }
   .register
     margin-top:8%;
     font-size:12px;

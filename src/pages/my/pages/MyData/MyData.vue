@@ -46,31 +46,29 @@
         </div>
       </div>
       <transition name="fade">
-        <div v-show="showAlert" class="myData-alert">
-          <div class="myData-alert-icon iconfont" @click="goQX">&#xe608;</div>
-          <div class="myData-alert-mes">确认保存吗？</div>
-          <div class="myData-alert-quxiao" @click="goQX">取消</div>
-          <div class="myData-alert-queding" @click="goQD">确定</div>
-        </div>
+        <alert v-if="alertDara"
+               :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
       </transition>
     </div>
 </template>
 
 <script>
+import Alert from '../../../../common/Alert/Alert'
 export default {
   name: "MyData",
+  components: {Alert},
   data(){
     return {
       userInfo: {
         avatar: ''
       },
-      showAlert:false,
       close1:true,
       on1:false,
       close2:true,
       on2:false,
       close3:true,
-      on3:false
+      on3:false,
+      alertDara:''
     }
   },
   props:{
@@ -93,18 +91,24 @@ export default {
       reader.readAsDataURL(file)
     },
     goBao() {
-      this.showAlert = true
+      let alertDara = {
+        title: "",
+        titleColor: "#abd9ca",
+        content: "确定保存吗？",
+        contentColor: "gray",
+        btn: ["返回", "确定"],
+        btnColor: ["", ""],
+        btnBColor: ["#abd9ca", "#abd9ca"]
+      };
+      this.alertDara = alertDara;
     },
-    goQX(){
-      this.showAlert = false
+    alertBackFn(data) {
+      this.alertDara = '';
+      console.log("点击了取消",data)
     },
-    goQD() {
-      if(!this.userInfo.avatar){
-        this.showAlert = false
-      }else {
-        this.$store.dispatch('updateImgAsyc',this.userInfo.avatar)
-        this.showAlert = false
-      }
+    alertSureFn(data){
+      this.alertDara = '';
+      console.log("点击了确定",data)
     },
     changeOC1(){
         this.on1 = !this.on1

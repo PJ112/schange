@@ -18,7 +18,7 @@
             type="text"
             class="myMall-li-assess-input"
             placeholder="请输入评价"
-            v-model="myassess"
+            v-model="index"
             @keyup.enter="goPublish"
           />
           <div class="myMall-li-assess-button">
@@ -49,7 +49,7 @@
     },
     methods:{
       goPublish(){
-        if(this.myassess.length == 0){
+        if(this.index.length == 0){
           alert('请输入评价信息!')
         }else{
           let date = new Date();

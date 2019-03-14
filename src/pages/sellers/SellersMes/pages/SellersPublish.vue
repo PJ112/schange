@@ -2,16 +2,8 @@
   <div>
     <div class="myCollection">
       <h1 class="myCollection-h1" v-show="this.one.length>0" >已发布</h1>
-      <h2 class="myCollection-h2" @click="Chose" v-show="this.one.length>0">勾选</h2>
       <div>
         <div v-for="(item,index) in one" class="content" :key="index">
-          <div class="myCollection-li-chose" v-show="chose">
-            <input
-              type="checkbox"
-              :value="index"
-              v-model="selectArr"
-              class="myCollection-li-chose-input"/>
-          </div>
           <li class="myMall-li" >
             <div class="myMall-li-left">
               <img class="myMall-li-left-img" src="../../../../assets/imgs/my/mycollection/img.png"/>
@@ -23,10 +15,6 @@
             </div>
           </li>
         </div>
-        <div class="myCollection-bottom" v-show="this.one.length>0">
-          <span class="myCollection-bottom-qingkong"  @click="del">删除</span>
-          <span class="myCollection-bottom-quxiao" @click="QuXiao">取消</span>
-        </div>
       </div>
     </div>
   </div>
@@ -37,36 +25,15 @@
     name: "SellersPublish",
     data() {
       return {
-        chose: false,
         one: [{
           id: '1',
         }, {
           id: '2',
         }],
-        selectArr: []
       }
     },
     methods: {
-      Chose() {
-        this.chose = !this.chose
-      },
-      QuXiao() {
-        this.chose=false
-      },
-      del() {
-        let arr = [];
-        let one  = this.one
-        let len = this.one.length;
-        for (let i = 0; i < len; i++) {
-          if (this.selectArr.indexOf(i)>=0) {
-            console.log(this.selectArr.indexOf(i))
-          }else{
-            arr.push(one[i])
-          }
-        }
-        this.one = arr;
-        this.selectArr = []
-      }
+
     }
   }
 </script>
@@ -81,13 +48,6 @@
       font-size:18px;
       color:#2b2a2a
       margin-bottom:3%;
-    .myCollection-h2
-      display:inline-block
-      float:right;
-      font-size:18px;
-      margin-right:10%;
-      color:#85cab5;
-      cursor:pointer;
     .content
       margin-top:20px;
       width:100%;
@@ -141,15 +101,4 @@
             color: white;
             cursor:pointer;
             background:#85cab5;
-    .myCollection-bottom
-      margin-top:3%;
-      margin-bottom:2%;
-      .myCollection-bottom-qingkong,.myCollection-bottom-quxiao
-        cursor:pointer;
-        color:#85cab5;
-        height:25px;
-        line-height:25px;
-      .myCollection-bottom-quxiao
-        float:right;
-        margin-right:12%;
 </style>
