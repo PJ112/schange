@@ -20,7 +20,7 @@
      <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
      <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
      <input class="register-test" type="text" placeholder="验证码"/>
-     <img class="register-img"/>
+     <img class="register-img"  :src="{verifyImg}"/>
      <button class="register-button" @click="go">注册</button>
      <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
      <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
@@ -29,14 +29,13 @@
      name="fade"
    >
      <alert v-if="alertDara"
-            :alertDara="alertDara"  @alertSure="alertSureFn"></alert>
-     <alert v-if="alertData"
-            :alertDara="alertData"  @alertSure="alertSureFnT"></alert>
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
    </transition>
  </div>
 </template>
 
 <script>
+  import axios from 'axios'
   import Alert from '../../Alert/Alert'
   export default {
     name: 'Register',
@@ -53,6 +52,8 @@
         newList:[],
         university:[],
         schoolChange:'--学校',
+        verifyImg:"",
+
       }
     },
     methods: {
@@ -61,51 +62,46 @@
         this.isShow = !this.isShow
       },
       go() {
-        if (this.user === '') {
-          let alertData = {
-            titleColor: "#abd9ca",
-            content: "用户名为空！",
-            contentColor: "gray",
-            btn: [ "确定"],
-            btnColor: ["", ""],
-            btnBColor: ["#abd9ca", "#abd9ca"]
-          };
-          this.alertData = alertData;
-        } else if (this.pass !== this.NewPassword) {
-          let alertDara = {
-            titleColor: "#abd9ca",
-            content: "两次输入密码不同！",
-            contentColor: "gray",
-            btn: ["确定"],
-            btnColor: ["", ""],
-            btnBColor: ["#abd9ca", "#abd9ca"]
-          };
-          this.alertDara = alertDara;
-        } else {
-          let _this = this
+          var _this=this;
           $.ajax({
-            type: "GET",
-            url: "/api/sunny/user/register",
-            data:{username:_this.user,password:_this.pass},
-            dataType: "json",
-            async: true,
-            jsonp: "callback",
-            success: function (res) {
-              console.log(res)
-              if (res.status === 200) {
-                this.$router.push({
-                  path: '/loginin',
-                })
-              } else {
-                alert(res.message)
+            url:"/api/sunny/user/register",
+            async:true,
+            type:'GET',
+            data:{
+              "username":this.user,
+              "password":this.pass,
+              "address":this.cityChange,
+              "school":this.schoolChange
+            },
+            success:function (data) {
+              if( data.message === "注册成功" ){
+                _this.$router.push({path:'/loginin'});
+              }else{
+                if (data.message ==='注册失败:用户信息异常') {
+                  alert('请输入用户名或密码！')
+                }else if(data.message ==='注册失败:用户已存在') {
+                 if (_this.pass !== _this.NewPassword) {
+                    alert('两次密码不同，请重新确认密码！')
+                  }else{
+                    alert('用户民已存在！')
+                  }
+                }
               }
             },
-            error: function () {
-              console.log("获取失败");
-            }
+            error:function () {
+
+            },
+            dataType:'json'
           })
-        }
       },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+        console.log("点击了取消",data)
+      },
+      alertSureFn:function(data){
+        this.alertDara = '';
+        console.log("点击了确定",data)
+      }
     },
     watch: {
       cityChange(){
@@ -115,15 +111,27 @@
           }
         }
         }
-
     },
-    created(){
+    beforeCreate(){
       axios.get('../../../static/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
         this.university = data.university
         this.cityChange()
+      }),
+      $.ajax({
+        url:"/api/sunny/verify",
+        async:true,
+        type:'GET',
+        success:function () {
+          this.verifyImg = require("http://localhost:8080" +this.url)
+        },
+        error:function () {
+
+        },
+        dataType:'json'
       })
+
     }
   }
 </script>
@@ -182,7 +190,6 @@
       margin-top: 6%;
       width:calc(10vh);
       height:calc(4.8vh);
-      background:blueviolet;
       margin-left:3%;
     .register-button
       margin-left:10%;

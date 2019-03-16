@@ -11,10 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api':{
-        target:'http://119.23.12.250:80',
+      '/api': {
+        target: 'http://119.23.12.250', // 接口的域名
+        // secure: false,  // 如果是https接口，需要配置这个参数
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         pathRewrite: {
-          '^/api': ''
+          '^/api': 'http://119.23.12.250'
         }
       }
     },
@@ -50,7 +52,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

@@ -18,7 +18,7 @@
           <form>
             <div class="publish-form">
               <div class="title">标题</div>
-              <input type="text" placeholder="请输入标题">
+              <input type="text" placeholder="请输入标题" v-model="name">
             </div>
             <div class="publish-form">
               <img src="../../../assets/imgs/publish/select.png" class="publish-form-img">
@@ -29,49 +29,84 @@
             </div>
             <div class="publish-form">
               <div class="desc">详情描述</div>
-              <textarea rows="3" placeholder="请描述物品的转手原因、购入渠道、新旧程度等">
+              <textarea rows="3" placeholder="请描述物品的转手原因、购入渠道、新旧程度等" v-model="content">
               </textarea>
             </div>
             <div class="publish-form">
               <div class="category">
                 分类
               </div>
-              <select>
-                <option>书籍</option>
+              <select v-model="typeId">
+                <option value="1">书籍</option>
               </select>
             </div>
             <div class="publish-form">
               <div class="new">
                 新旧
               </div>
-              <select>
-                <option>八成新</option>
+              <select v-model="oldDegree">
+                <option value="8">八成新</option>
               </select>
             </div>
             <div class="publish-form">
               <div class="way">
                 交易方式（可多选）
               </div>
-              <label>自提  <input type="checkbox"></label>
-              <label>送货上门  <input type="checkbox"></label>
-              <label>会面交易  <input type="checkbox"></label>
+              <label>自提  <input type="radio" v-model="means" value="1"></label>
+              <label>送货上门  <input type="radio" v-model="means" value="2"></label>
+              <label>会面交易  <input type="radio" v-model="means" value="3"></label>
             </div>
             <div class="publish-form">
               <div class="price">价格</div>
-              <input type="text" placeholder="请输入价格">
+              <input type="text" placeholder="请输入价格" v-model="price">
+            </div>
+            <div class="publish-container-publish">
+              <span @click="addProduct">发布</span>
             </div>
           </form>
         </div>
-        <div class="publish-container-publish">
-          <router-link to="/sale-product"><span>发布</span></router-link>
-        </div>
+
       </div>
     </div>
 </template>
 
 <script>
+   import $ from "jquery"
     export default {
-        name: "Publish"
+        name: "Publish",
+        data(){
+          return{
+            name:'',
+            content:'',
+            typeId:'',
+            oldDegree:'',
+            means:'1',
+            price:''
+          }
+        },
+      methods:{
+        addProduct(){
+          $.ajax({
+            url:"/api/sunny/goods/add",
+            async:true,
+            type:'GET',
+            data:{
+                  "sellerId":2,
+                  "name":this.name,"typeId":this.typeId,
+                  "price": this.price,"oldDegree":this.oldDegree,
+                  "means": this.means,"content": this.content
+            },
+            success:function (data) {
+
+              console.log(data);
+            },
+            error:function () {
+
+            },
+            dataType:'json'
+          })
+        }
+      }
     }
 </script>
 

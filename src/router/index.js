@@ -41,7 +41,6 @@ import ContactSeller from '../common/index/pages/ContactSeller'
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
