@@ -37,7 +37,7 @@
         isShow:false,
         verifyText:'',
         verifyImg:'',
-        alertDara: ''
+        alertDara: '',
       }
     },
     methods:{
@@ -67,7 +67,39 @@
             btnColor: ["", ""]
           };
           _this.alertDara = alertDara;
-        }else{
+        }
+        // else if(this.verifyText !== ""){
+        //   $.ajax({
+        //     url:"/api/sunny/user/check",
+        //     async:true,
+        //     type:'GET',
+        //     data:{
+        //       "verify":this.verifyText
+        //     },
+        //     success:function (data) {
+        //       //验证成功
+        //       //验证失败:无指定参数
+        //       switch (data.message) {
+        //         case "验证码成功":
+        //           console.log("验证码成功")
+        //         case "验证失败:无指定参数":{
+        //           let alertDara = {
+        //             content: "验证码错误！",
+        //             contentColor: "red",
+        //             btn: ["确定"],
+        //             btnColor: ["", ""]
+        //           };
+        //           _this.alertDara = alertDara;
+        //         }
+        //       }
+        //
+        //     },
+        //     error:function () {
+        //     },
+        //     dataType:'json'
+        //   })
+        // }
+        else{
           $.ajax({
             url:"/api/sunny/user/login",
             async:true,
@@ -77,7 +109,8 @@
             },
             success:function (data) {
               //登陆成功
-              //登陆失败:用户信息异常
+              //登陆失败:密码不正确
+              //登陆失败:指定用户不存在
               switch (data.message){
                 case "登陆成功":{
                   _this.$router.push("/mydata");
@@ -97,7 +130,7 @@
                 }
                 case "登陆失败:指定用户不存在":{
                   let alertDara = {
-                    content: "用户已存在！",
+                    content: "指定用户不存在！",
                     contentColor: "red",
                     btn: ["确定"],
                     btnColor: ["", ""]
@@ -126,7 +159,10 @@
     },
     created(){
       this.verifyImg = "http://119.23.12.250/sunny/verify"
-      setInterval((this.changeverifyImg),10000)
+      setInterval((this.changeverifyImg),100000000000)
+    },
+    watch:{
+
     }
   }
 </script>

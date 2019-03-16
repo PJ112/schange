@@ -33,6 +33,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
     name: "MyPublish",
     data() {
@@ -69,6 +70,22 @@
         this.one = arr;
         this.selectArr = []
       }
+    },
+    beforeCreate(){
+      $.ajax({
+        url:"/api/sunny/goods/search",
+        async:true,
+        type:'GET',
+        data:{
+          "username":this.user,"password":this.pass
+        },
+        success:function (data) {
+          alert(success)
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
     }
   }
 </script>

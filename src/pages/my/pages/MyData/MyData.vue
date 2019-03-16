@@ -91,23 +91,7 @@ export default {
       reader.readAsDataURL(file)
     },
     goBao() {
-      let alertDara = {
-        title: "",
-        titleColor: "#abd9ca",
-        content: "确定保存吗？",
-        contentColor: "gray",
-        btn: ["返回", "确定"],
-        btnColor: ["", ""],
-      };
-      this.alertDara = alertDara;
-    },
-    alertBackFn(data) {
-      this.alertDara = '';
-      console.log("点击了取消",data)
-    },
-    alertSureFn(data) {
-      this.alertDara = '';
-      console.log("点击了确定",data)
+      let _this = this
       $.ajax({
         url: "/api/sunny/user/update",
         async: true,
@@ -119,27 +103,37 @@ export default {
           "wechat":this.wechat
         },
         success: function (data) {
-            switch(data.message){
-              case "修改成功":{
-               alert(123)
-               setInterval(function () {
-                 let alertDara = {
-                   title: "",
-                   titleColor: "#abd9ca",
-                   content: "保存成功！",
-                   contentColor: "gray",
-                   btnColor: ["", ""],
-                 };
-                 this.alertDara = alertDara;
-               },1000)
-              }
+          switch(data.message){
+            case "修改成功":{
+              let alertDara = {
+                title: "",
+                titleColor: "#abd9ca",
+                content: "修改成功！",
+                contentColor: "gray",
+                btn: ["确定"],
+                btnColor: ["", ""],
+              };
+              _this.alertDara = alertDara;
+              _this.$store.dispatch('updateUserAsyc',_this.username)
+              _this.$store.dispatch('updateImgAsyc',_this.img)
+              break;
             }
+          }
         },
         error: function () {
 
         },
         dataType: 'json'
       })
+    },
+    alertBackFn(data) {
+      this.alertDara = '';
+      console.log("点击了取消",data)
+    },
+    alertSureFn(data) {
+      this.alertDara = '';
+      console.log("点击了确定",data)
+
     },
     changeOC1(){
         this.on1 = !this.on1
@@ -229,6 +223,7 @@ export default {
       margin-top:6%;
       margin-left:28%;
       cursor:pointer
+      padding-bottom:5%;
   .myData-alert
     z-index:100;
     position:fixed
