@@ -19,8 +19,13 @@
      <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
      <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
      <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-     <input class="register-test" type="text" placeholder="验证码"/>
-     <img class="register-img"  :src="{verifyImg}"/>
+     <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
+     <a
+       href="#"
+       @click="changeverifyImg()"
+     >
+       <img class="register-img"  :src="verifyImg"  alt="图片加载失败"/>
+     </a>
      <button class="register-button" @click="go">注册</button>
      <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
      <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
@@ -53,7 +58,8 @@
         university:[],
         schoolChange:'--学校',
         verifyImg:"",
-
+        verifyText:"",
+        alertDara: ''
       }
     },
     methods: {
@@ -61,8 +67,39 @@
         this.showPas = !this.showPas
         this.isShow = !this.isShow
       },
+      changeverifyImg(){
+       let num = Math.ceil(Math.random() *10);
+       this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
+      },
       go() {
-          var _this=this;
+        let _this = this;
+        if(this.user===""  || this.pass===""){
+          let alertDara = {
+            content: "请输入用户名或密码！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          this.alertDara = alertDara;
+        }else if(this.verifyText === ""){
+          let alertDara = {
+            content: "请输入验证码！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          this.alertDara = alertDara;
+        }else if (this.pass !== this.NewPassword){
+          let alertDara = {
+            content: "两次输入密码不同！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          this.alertDara = alertDara;
+          this.pass =""
+          this.NewPassword =""
+        }else{
           $.ajax({
             url:"/api/sunny/user/register",
             async:true,
@@ -74,17 +111,25 @@
               "school":this.schoolChange
             },
             success:function (data) {
-              if( data.message === "注册成功" ){
-                _this.$router.push({path:'/loginin'});
-              }else{
-                if (data.message ==='注册失败:用户信息异常') {
-                  alert('请输入用户名或密码！')
-                }else if(data.message ==='注册失败:用户已存在') {
-                 if (_this.pass !== _this.NewPassword) {
-                    alert('两次密码不同，请重新确认密码！')
-                  }else{
-                    alert('用户民已存在！')
-                  }
+              //注册成功
+              //注册失败:用户信息异常
+              //注册失败:用户已存在
+              switch (data.message){
+                case "注册成功":{
+                  _this.$router.push("/loginin");
+                  break;
+                }
+                case "注册失败:用户信息异常":
+                  console.log("注册失败:用户信息异常");
+                  break;
+                case "注册失败:用户已存在":{
+                  let alertDara = {
+                    content: "用户已存在！",
+                    contentColor: "red",
+                    btn: ["确定"],
+                    btnColor: ["", ""]
+                  };
+                  _this.alertDara = alertDara;
                 }
               }
             },
@@ -92,7 +137,21 @@
 
             },
             dataType:'json'
+          }),
+            //验证码判断
+          $.ajax({
+            url:"/api/sunny/verify",
+            async:true,
+            type:'GET',
+            data:{
+            },
+            success:function (data) {
+            },
+            error:function () {
+            },
+            dataType:'json'
           })
+        }
       },
       alertBackFn: function(data) {
         this.alertDara = '';
@@ -112,27 +171,16 @@
         }
         }
     },
-    beforeCreate(){
+    created(){
       axios.get('../../../static/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
         this.university = data.university
         this.cityChange()
-      }),
-      $.ajax({
-        url:"/api/sunny/verify",
-        async:true,
-        type:'GET',
-        success:function () {
-          this.verifyImg = require("http://localhost:8080" +this.url)
-        },
-        error:function () {
-
-        },
-        dataType:'json'
       })
-
-    }
+      this.verifyImg = "http://119.23.12.250/sunny/verify"
+      setInterval((this.changeverifyImg),10000)
+    },
   }
 </script>
 

@@ -16,7 +16,7 @@
         <div class="my-top" :class="{'my-top-hidden':show}">
           <img src="./resource/userIcon.png" class="my-icon" v-show="!img"/>
           <img :src="img.img" v-show="img" class="my-changeIcon"/>
-          <div class="my-name">wo</div>
+          <div class="my-name">{{user.user}}</div>
           <div class="my-year">圈龄</div>
           <router-link class="my-LeftButton" to="/mydata">编辑资料</router-link>
         </div>
@@ -108,6 +108,9 @@
     computed:{
       ...mapState(['user']),
         ...mapState(['img'])
+    },
+    created(){
+      console.log(user)
     }
   }
 </script>

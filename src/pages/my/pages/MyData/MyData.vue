@@ -31,15 +31,15 @@
         </div>
         <div class="myData-tel">
           手机号<br/>
-          <input type="text" v-model="myDateTel" class="myData-tel-detail"/>
+          <input type="text" class="myData-tel-detail" v-model="phone"/>
         </div>
         <div class="myData-tel">
-          QQ/微信<br/>
-          <input type="text" v-model="myDateMes" class="myData-tel-detail"/>
+          微信<br/>
+          <input type="text"  class="myData-tel-detail" v-model="wechat"/>
         </div>
         <div class="myData-tel">
           所在学校<br/>
-          <input type="text" v-model="myDateSch" class="myData-tel-detail"/>
+          <input type="text" class="myData-tel-detail" v-model="school"/>
         </div>
         <div class="myData-baocun" @click="goBao">
           <img src="../../resource/保存.png"/>
@@ -98,7 +98,6 @@ export default {
         contentColor: "gray",
         btn: ["返回", "确定"],
         btnColor: ["", ""],
-        btnBColor: ["#abd9ca", "#abd9ca"]
       };
       this.alertDara = alertDara;
     },
@@ -106,9 +105,41 @@ export default {
       this.alertDara = '';
       console.log("点击了取消",data)
     },
-    alertSureFn(data){
+    alertSureFn(data) {
       this.alertDara = '';
       console.log("点击了确定",data)
+      $.ajax({
+        url: "/api/sunny/user/update",
+        async: true,
+        type: 'GET',
+        data: {
+          "username": this.username,
+          "phone": this.phone,
+          "school": this.school,
+          "wechat":this.wechat
+        },
+        success: function (data) {
+            switch(data.message){
+              case "修改成功":{
+               alert(123)
+               setInterval(function () {
+                 let alertDara = {
+                   title: "",
+                   titleColor: "#abd9ca",
+                   content: "保存成功！",
+                   contentColor: "gray",
+                   btnColor: ["", ""],
+                 };
+                 this.alertDara = alertDara;
+               },1000)
+              }
+            }
+        },
+        error: function () {
+
+        },
+        dataType: 'json'
+      })
     },
     changeOC1(){
         this.on1 = !this.on1

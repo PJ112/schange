@@ -1,25 +1,43 @@
 <template>
-  <div class="loginIn">
-    <input class="loginIn-user" type="text" placeholder="用户名" v-model="username" maxlength="11" />
-    <input class="loginIn-pas" type="password" placeholder="密码" v-show="!showPas" v-model="password"/>
-    <input class="loginIn-pas" type="text" placeholder="密码" v-show="showPas" v-model="password"/>
-    <input class="loginIn-test" type="text" placeholder="验证码"/>
-    <img class="loginIn-img"/>
-    <button class="loginIn-button" @click="go">登录</button>
-    <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
-    <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
+  <div>
+    <div class="loginIn">
+      <input class="loginIn-user" type="text" placeholder="用户名" v-model="user" maxlength="11" />
+      <input class="loginIn-pas" type="password" placeholder="密码" v-show="!showPas" v-model="pass"/>
+      <input class="loginIn-pas" type="text" placeholder="密码" v-show="showPas" v-model="pass"/>
+      <input class="loginIn-test" type="text" placeholder="验证码" v-model="verifyText" @keyup.enter="go"/>
+      <a
+        href="#"
+        @click="changeverifyImg()"
+      >
+        <img class="loginIn-img"  :src="verifyImg"  alt="图片加载失败"/>
+      </a>
+      <button class="loginIn-button" @click="go">登录</button>
+      <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
+      <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
+    </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../Alert/Alert'
   export default {
     name: 'LoginIn',
+    components: {Alert},
     data () {
       return {
+        user:'',
+        pass:'',
         showPas: false,
         isShow:false,
-        username:'',
-        password:''
+        verifyText:'',
+        verifyImg:'',
+        alertDara: ''
       }
     },
     methods:{
@@ -27,31 +45,88 @@
         this.showPas = !this.showPas;
         this.isShow = ! this.isShow
       },
-      go(){
-        //this.$store.dispatch('updateUserAsyc',this.user)
-        //this.$router.push({path: '/my',})
-        var _this=this;
-        $.ajax({
-          url:"/api/sunny/user/login",
-          async:true,
-          type:'GET',
-          data:{
-            "username":this.username,"password":this.password
-          },
-          success:function (data) {
-            if(data.message ==='注册失败:用户信息异常'){
-              alert('请输入用户名或密码！')
-            }else if(data.message ==='登录成功'){
-              // _this.$router.push({path:'/index'});
-            }else{
-
-            }
-          },
-          error:function () {
-          },
-          dataType:'json'
-        })
+      changeverifyImg(){
+        let num = Math.ceil(Math.random() *10);
+        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
       },
+      go(){
+        let _this = this;
+        if(this.user === "" || this.pass === ""){
+          let alertDara = {
+            content: "请输入用户名或密码！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          _this.alertDara = alertDara;
+        }else if(this.verifyText === ""){
+          let alertDara = {
+            content: "请输入验证码！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          _this.alertDara = alertDara;
+        }else{
+          $.ajax({
+            url:"/api/sunny/user/login",
+            async:true,
+            type:'GET',
+            data:{
+              "username":this.user,"password":this.pass
+            },
+            success:function (data) {
+              //登陆成功
+              //登陆失败:用户信息异常
+              switch (data.message){
+                case "登陆成功":{
+                  _this.$router.push("/mydata");
+                  _this.$store.dispatch('updateUserAsyc',_this.user)
+                  break;
+                }
+                case "登陆失败:密码不正确":{
+                  let alertDara = {
+                    content: "密码错误！",
+                    contentColor: "red",
+                    btn: ["确定"],
+                    btnColor: ["", ""]
+                  };
+                  _this.alertDara = alertDara;
+                  this.pass =""
+                  break;
+                }
+                case "登陆失败:指定用户不存在":{
+                  let alertDara = {
+                    content: "用户已存在！",
+                    contentColor: "red",
+                    btn: ["确定"],
+                    btnColor: ["", ""]
+                  };
+                  _this.alertDara = alertDara;
+                  this.user = "";
+                  this.pass =""
+                  break;
+                }
+              }
+            },
+            error:function () {
+            },
+            dataType:'json'
+          })
+        }
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+        console.log("点击了取消",data)
+      },
+      alertSureFn:function(data){
+        this.alertDara = '';
+        console.log("点击了确定",data)
+      }
+    },
+    created(){
+      this.verifyImg = "http://119.23.12.250/sunny/verify"
+      setInterval((this.changeverifyImg),10000)
     }
   }
 </script>
@@ -91,7 +166,6 @@
       margin-top: 6%;
       width:calc(10vh);
       height:calc(4.8vh);
-      background:blueviolet;
       margin-left:3%;
     .loginIn-button
       margin-left:10%;
@@ -103,6 +177,7 @@
       font-size:18px;
       font-weight:bolder;
       color:#fff;
+      cursor:pointer
     .loginIn-yanjing
       cursor:pointer
       display:block;

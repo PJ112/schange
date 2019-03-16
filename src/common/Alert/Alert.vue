@@ -1,37 +1,37 @@
 <template>
 
     <!-- alert -->
-    <div id="alert" class="flex-con" v-if="alertDara">
-      <div class="con">
-        <div class="title" :style="{color:alertDara.titleColor}">{{alertDara.title}}</div>
-        <div class="content" :style="{color:alertDara.contentColor}">{{alertDara.content}}</div>
-        <div class="btn">
-          <div
-            class="btn-back flex-con"
-            v-if="alertDara.btn[0]"
-            :style="{background:alertDara.btnBColor[0],color:alertDara.btnColor[0]}"
-            @click="alertBackFn"
-          >{{alertDara.btn[0]}}</div>
-          <div
-            class="btn-sure flex-con"
-            v-if="alertDara.btn[1]"
-            :style="{background:alertDara.btnBColor[1],color:alertDara.btnColor[0]}"
-            @click="alertSureFn"
-          >{{alertDara.btn[1]}}</div>
-        </div>
+  <div id="alert" class="flex-con" v-if="alertDara">
+    <div class="con">
+      <div class="title" :style="{color:alertDara.titleColor}">{{alertDara.title}}</div>
+      <div class="content" :style="{color:alertDara.contentColor}">{{alertDara.content}}</div>
+      <div class="btn">
+        <div
+          class="btn-back flex-con"
+          v-if="alertDara.btn[0]"
+          :style="{color:alertDara.btnColor[0]}"
+          @click="alertBackFn"
+        >{{alertDara.btn[0]}}</div>
+        <div
+          class="btn-sure flex-con"
+          v-if="alertDara.btn[1]"
+          :style="{color:alertDara.btnColor[1]}"
+          @click="alertSureFn"
+        >{{alertDara.btn[1]}}</div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "Alert",
+  name: "Alert",
   props:['alertDara'],
   methods: {
-    alertBackFn(){
+    alertBackFn:function(){
       this.$emit('alertBack', '这是子组件传递的消息');
     },
-    alertSureFn(){
+    alertSureFn:function(){
       this.$emit('alertBack', '这是子组件传递的消息');
     }
   },
@@ -57,7 +57,7 @@ export default {
     border:1px solid transparent;
   }
   #alert .con{
-    width:28%;
+    width:30%;
     background: #fff;
   }
   #alert .title{
@@ -67,7 +67,7 @@ export default {
     font-size: 1.1em;
   }
   #alert .content{
-    padding: 0 1em .5em;
+    padding:  0 .4em 1em;
     text-align: center;
   }
   #alert .btn{
@@ -76,6 +76,7 @@ export default {
     border-top: 1px solid gray;
     display: flex;
     justify-content: center;
+    cursor:pointer;
   }
   #alert .btn div{
     width: 100%;
