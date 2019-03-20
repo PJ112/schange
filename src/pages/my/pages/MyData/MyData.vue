@@ -4,29 +4,15 @@
         <h1 class="myData-h1">编辑个人资料</h1>
         用户名<br>
         <input type="text"  class="myData-userInput" placeholder="username" v-model="username"/>
-        <div class="myData-userImg">
-          <img src="../../resource/头像.png" v-show="!userInfo.avatar"/>
-          <img :src="userInfo.avatar" class="myData-changeImg" v-show="userInfo.avatar"/>
-        </div>
-        <div class="myData-choseFile" @click.stop="uploadHeadImg">
-          <img src="../../resource/选择文件.png"/>
-        </div>
-        <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
         <div class="myData-sex">
           性别
           <div class="myData-sex-detail">
-          <span class="myData-sex-male">
-            <img src="../../resource/男.png" />
-           <span :class="{'close':close1,'on':on1}" @click="changeOC1"><input type="radio" id="male" name="sex"/></span>
-          </span>
-            <span class="myData-sex-female">
-            <img src="../../resource/女.png"/>
-            <span :class="{'close':close2,'on':on2}" @click="changeOC2"><input type="radio" id="female" name="sex"/></span>
-          </span>
-            <span>
-            <img src="../../resource/保密.png"/>
-            <span :class="{'close':close3,'on':on3}" @click="changeOC3"><input type="radio" id="baomi" name="sex"/></span>
-          </span>
+            <img src="../../resource/男.png" class="myData-sex-male" />
+            <input type="radio" id="male" name="sex" class="myData-sex-radioInput"/>
+            <img src="../../resource/女.png" class="myData-sex-female"/>
+            <input type="radio" id="female" name="sex" class="myData-sex-radioInput"/>
+            <img src="../../resource/保密.png" class="myData-sex-female"/>
+            <input type="radio" id="baomi" name="sex" class="myData-sex-radioInput"/>
           </div>
         </div>
         <div class="myData-tel">
@@ -62,17 +48,12 @@ export default {
       userInfo: {
         avatar: ''
       },
-      close1:true,
-      on1:false,
-      close2:true,
-      on2:false,
-      close3:true,
-      on3:false,
       alertDara:''
     }
   },
   props:{
-    user:''
+    user:'',
+    userId:''
   },
   methods: {
     // 打开图片上传
@@ -108,6 +89,7 @@ export default {
     alertSureFn(data) {
       this.alertDara = '';
       console.log("点击了确定",data)
+      let _this = this
       $.ajax({
         url: "/api/sunny/user/update",
         async: true,
@@ -120,21 +102,22 @@ export default {
           "id":this.userId,
         },
         success: function (data) {
-            switch(data.message){
-              case "修改成功":{
-               alert(123)
-               setInterval(function () {
-                 let alertDara = {
-                   title: "",
-                   titleColor: "#abd9ca",
-                   content: "保存成功！",
-                   contentColor: "gray",
-                   btnColor: ["", ""],
-                 };
-                 this.alertDara = alertDara;
-               },1000)
-              }
+          switch(data.message){
+            case "修改成功":{
+              let alertDara = {
+                title: "",
+                titleColor: "#abd9ca",
+                content: "修改成功！",
+                contentColor: "gray",
+                btn: ["确定"],
+                btnColor: ["", ""],
+              };
+              _this.alertDara = alertDara;
+              _this.$store.dispatch('updateUserAsyc',_this.username)
+              _this.$store.dispatch('updateImgAsyc',_this.img)
+              break;
             }
+          }
         },
         error: function () {
 
@@ -142,20 +125,14 @@ export default {
         dataType: 'json'
       })
     },
-    changeOC1(){
-        this.on1 = !this.on1
-        this.on2 = false
-        this.on3 = false
+    alertBackFn(data) {
+      this.alertDara = '';
+      console.log("点击了取消",data)
     },
-    changeOC2(){
-      this.on2 = !this.on2
-      this.on1 = false
-      this.on3 = false
-    },
-    changeOC3(){
-      this.on3 = !this.on3
-      this.on2 = false
-      this.on1 = false
+    alertSureFn(data) {
+      this.alertDara = '';
+      console.log("点击了确定",data)
+
     }
   },
   created(){
@@ -165,10 +142,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  input[type="radio"]{
-   opacity:0;
-    cursor:pointer;
-  }
   .myData
     margin-left:8%;
     margin-top:32px;
@@ -184,42 +157,16 @@ export default {
       line-height:45px;
       border:1px solid black;
       border-radius:2px;
-    .myData-userImg
-      display:inline-block
-      margin-top:6%;
-      .myData-changeImg
-        width:50px;
-        height:50px;
-        border-radius:50px;
-    .myData-choseFile
-      display:inline-block
-      margin-top:6%;
-      color:gray;
-      margin-left:2%;
-      cursor:pointer;
-    .hiddenInput
-      display: none;
     .myData-sex
       margin-top:6%;
       .myData-sex-detail
-        margin-top:2%;
+        margin-top:3%;
         .myData-sex-female
-          margin-left:74px;
-          margin-right:74px;
-        .close
-          z-index:100;
-          margin-left:26px;
-          background-image:url("../../resource/选择框.png")
-          background-repeat:no-repeat;
-          background-size:100% 100%;
-          width:20px;
-          height:20px;
-        .on
-          z-index:-1;
-          margin-left:26px;
-          background-image:url("../../resource/选中.png")
-          width:20px
-          height:20px;
+          margin-left:13%;
+        .myData-sex-male
+          margin-left:3%;
+        .myData-sex-radioInput
+          margin-left:3%;
     .myData-tel
       margin-top:6%;
       .myData-tel-detail
@@ -233,6 +180,7 @@ export default {
       margin-top:6%;
       margin-left:28%;
       cursor:pointer
+      padding-bottom:5%;
   .myData-alert
     z-index:100;
     position:fixed

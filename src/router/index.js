@@ -119,72 +119,72 @@ export default new Router({
       ]
     },
     {
-      path:'/index',
-      component:Index
+     path:'/index',
+     component:Index
     },
     {
-      path:'/index-shopping',
-      component:IndexShopping
+     path:'/index-shopping',
+     component:IndexShopping
 
     },
     {
-      path:'/index-collection',
-      component:IndexCollection
+     path:'/index-collection',
+     component:IndexCollection
     },
     {
-      path:'/index-integral',
-      component:IndexIntegral
+     path:'/index-integral',
+     component:IndexIntegral
     },
     {
-      path:'/index-profile',
-      component:IndexProfile
+     path:'/index-profile',
+     component:IndexProfile
     },
     {
-      path:'/index-private-letter',
-      component:IndexPrivateLetter
+     path:'/index-private-letter',
+     component:IndexPrivateLetter
     },
     {
-      path:'/index-ordering',
-      component:IndexOrdering
+     path:'/index-ordering',
+     component:IndexOrdering
     },
     {
-      path:'/confirm-ordering',
-      component:ConfirmOrdering
+     path:'/confirm-ordering',
+     component:ConfirmOrdering
     },
     {
-      path:'/publish',
-      component:Publish
+     path:'/publish',
+     component:Publish
     },
     {
-      path:'/sale-product',
-      component:SaleProduct
+     path:'/sale-product',
+     component:SaleProduct
     },
     {
-      path:'/detail',
-      component:Detail
+     path:'/detail',
+     component:Detail
     },
     {
-      path:'/contact-seller',
-      component:ContactSeller
+     path:'/contact-seller',
+     component:ContactSeller
     },
     {
-      path:'/sellers',
-      component:Sellers
+     path:'/sellers',
+     component:Sellers
     },
     {
-      path:'/sellersmes',
-      component:SellersMes,
-      redirect:'/sellershjudge',
-      children:[
-        {
-          path:'/sellershjudge',
-          component:SellersHJudge,
-        },
-        {
-          path:'/sellerspublish',
-          component:SellersPublish,
-        }
-      ]
+     path:'/sellersmes',
+     component:SellersMes,
+     redirect:'/sellershjudge',
+     children:[
+       {
+         path:'/sellershjudge',
+         component:SellersHJudge,
+       },
+       {
+         path:'/sellerspublish',
+         component:SellersPublish,
+       }
+     ]
     },
   ]
 })
