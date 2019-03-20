@@ -2,6 +2,7 @@ export default {
   //login
   user:'',
   pass:'',
+  id:'',
 
   //mydata
   img:'',

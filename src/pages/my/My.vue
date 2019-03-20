@@ -10,12 +10,18 @@
         <span v-show="user">
           <img src="./resource/userIcon.png" class="my-userIcon" v-show="!img"/>
           <img :src="img.img" v-show="img" class="my-changeUserIcon"/>
+          <i>退出登录</i>
         </span>
       </div>
       <div class="my-left">
         <div class="my-top" :class="{'my-top-hidden':show}">
           <img src="./resource/userIcon.png" class="my-icon" v-show="!img"/>
-          <img :src="img.img" v-show="img" class="my-changeIcon"/>
+          <img :src="img.img" v-show="img" class="my-changeIcon" @mouseenter="changeUserImg" @mouseleave="hiidenchangeUserImg"/>
+          <div v-show="changeuserImg" class="my-change-userImg">
+            <img src="./resource/头像.png" v-show="!userInfo.avatar"/>
+            <img :src="userInfo.avatar" class="myData-changeImg" v-show="userInfo.avatar"/>
+            <img src="./resource/选择文件.png"  @click.stop="uploadHeadImg"/>
+          </div>
           <div class="my-name">{{user.user}}</div>
           <div class="my-year">圈龄</div>
           <router-link class="my-LeftButton" to="/mydata">编辑资料</router-link>
@@ -90,6 +96,9 @@
     name: 'My',
     data(){
       return{
+        userInfo: {
+          avatar: ''
+        },
 
       }
     },
@@ -100,6 +109,21 @@
       goLogin () {
         this.$router.push('./loginin')
       },
+      // 打开图片上传
+      uploadHeadImg () {
+        this.$el.querySelector('.hiddenInput').click()
+      },
+      // 将头像显示
+      handleFile(e) {
+        let $target = e.target || e.srcElement
+        let file = $target.files[0]
+        var reader = new FileReader()
+        reader.onload = (data) => {
+          let res = data.target || data.srcElement
+          this.userInfo.avatar = res.result
+        }
+        reader.readAsDataURL(file)
+      },
 
     },
     components:{
@@ -107,10 +131,11 @@
     },
     computed:{
       ...mapState(['user']),
-        ...mapState(['img'])
+        ...mapState(['img']),
+      ...mapState(['userId']),
     },
     created(){
-      console.log(user)
+      console.log(userId)
     }
   }
 </script>
@@ -164,7 +189,7 @@
           height:80%;
           margin-left:7%;
         .my-top
-          height:200px;
+          height:calc(33vh);
           text-align:center;
           background:white;
           box-shadow:0 0px 9px rgba(0,0,0,0.1)
@@ -180,6 +205,9 @@
             width:66px;
             height:61px;
             border-radius:60px;
+            .my-change-userImg
+              display:block;
+              margin-top:-100px;
           .my-name
             font-size:24px;
             color:#323233;

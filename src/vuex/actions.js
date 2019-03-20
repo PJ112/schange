@@ -9,5 +9,10 @@ export default {
     store.commit('updateImg',{
       img:data
     })
+  },
+  updateuserIdAsyc(store,data) {
+    store.commit('updateuserId',{
+      userId:data
+    })
   }
 }

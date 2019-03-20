@@ -37,7 +37,8 @@
         isShow:false,
         verifyText:'',
         verifyImg:'',
-        alertDara: ''
+        alertDara: '',
+        userId:''
       }
     },
     methods:{
@@ -73,7 +74,9 @@
             async:true,
             type:'GET',
             data:{
-              "username":this.user,"password":this.pass
+              "username":this.user,
+              "password":this.pass,
+              "id":this.userId
             },
             success:function (data) {
               //登陆成功
@@ -82,6 +85,7 @@
                 case "登陆成功":{
                   _this.$router.push("/mydata");
                   _this.$store.dispatch('updateUserAsyc',_this.user)
+                  _this.$store.dispatch('updateuserIdAsyc',_this.userId)
                   break;
                 }
                 case "登陆失败:密码不正确":{

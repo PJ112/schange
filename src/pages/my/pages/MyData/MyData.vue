@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import Alert from '../../../../common/Alert/Alert'
+import Alert from '../../../../common/Alert/Alert';
 export default {
   name: "MyData",
   components: {Alert},
@@ -98,7 +98,7 @@ export default {
         contentColor: "gray",
         btn: ["返回", "确定"],
         btnColor: ["", ""],
-      };
+      }
       this.alertDara = alertDara;
     },
     alertBackFn(data) {
@@ -116,7 +116,8 @@ export default {
           "username": this.username,
           "phone": this.phone,
           "school": this.school,
-          "wechat":this.wechat
+          "wechat":this.wechat,
+          "id":this.userId,
         },
         success: function (data) {
             switch(data.message){
@@ -157,6 +158,9 @@ export default {
       this.on1 = false
     }
   },
+  created(){
+    console.log(this.userId)
+  }
 }
 </script>
 

@@ -6,5 +6,9 @@ export default  {
   updateImg (state, img) {
     console.log(img)
     state.img = img
-  }
+  },
+  updateuserId (state, userId) {
+    console.log(userId)
+    state.userId = userId
+  },
 }
