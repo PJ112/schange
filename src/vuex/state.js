@@ -2,7 +2,10 @@ export default {
   //login
   user:'',
   pass:'',
-  id:'',
+  id:Number,
+
+  //register
+  school:'',
 
   //mydata
   img:'',

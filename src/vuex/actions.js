@@ -1,6 +1,5 @@
 export default {
   updateUserAsyc(store,data) {
-    console.log(data)
     store.commit('updateUser',{
       user:data
     })
@@ -14,5 +13,10 @@ export default {
     store.commit('updateuserId',{
       userId:data
     })
-  }
+  },
+  updateschoolAsyc (store,data) {
+    store.commit('updateSchool',{
+      school:data
+    })
+  },
 }

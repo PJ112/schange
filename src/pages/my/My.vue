@@ -101,7 +101,11 @@
           </div>
         </div>
         <div class="my-right">
-          <router-view :user="user" :userId="userId"></router-view>
+          <router-view
+            :user="user"
+            :userId="userId"
+            :school="school"
+          ></router-view>
         </div>
         <div class="my-link">
           <my-link></my-link>
@@ -182,8 +186,10 @@
       ...mapState(['user']),
         ...mapState(['img']),
       ...mapState(['userId']),
+      ...mapState(['school'])
     },
     created(){
+      console.log(this.school)
     }
   }
 </script>

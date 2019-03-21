@@ -5,14 +5,12 @@
      <div class="register-school">
       <span >
         <select class="school-city"  v-model="cityChange">
-          <option selected>--城市</option>
           <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option> <!---->
         </select>
       </span>
        <span>
       <select  class="school-school" v-model="schoolChange">
-          <option selected>--学校</option>
-          <option :value="item.id" v-for="item in newList" :key="item.id">{{item.name}}</option>
+          <option :value="item.id" v-for="item in newList" :key="item.id" v-model="scholl">{{item.name}}</option>
       </select>
      </span>
      </div>
@@ -59,7 +57,8 @@
         schoolChange:'--学校',
         verifyImg:"",
         verifyText:"",
-        alertDara: ''
+        alertDara: '',
+        scholl:''
       }
     },
     methods: {
@@ -108,7 +107,7 @@
               "username":this.user,
               "password":this.pass,
               "address":this.cityChange,
-              "school":this.schoolChange
+              "school":this.scholl
             },
             success:function (data) {
               //注册成功
@@ -117,6 +116,7 @@
               switch (data.message){
                 case "注册成功":{
                   _this.$router.push("/loginin");
+                  _this.$store.dispatch('updateschoolAsyc',_this.school);
                   break;
                 }
                 case "注册失败:用户信息异常":

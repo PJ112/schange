@@ -3,16 +3,16 @@
       <div class="myData">
         <h1 class="myData-h1">编辑个人资料</h1>
         用户名<br>
-        <input type="text"  class="myData-userInput" placeholder="username" v-model="username"/>
+        <input type="text"  class="myData-userInput" placeholder="username" :value="user.user"/>
         <div class="myData-sex">
           性别
           <div class="myData-sex-detail">
             <img src="../../resource/男.png" class="myData-sex-male" />
-            <input type="radio" id="male" name="sex" class="myData-sex-radioInput"/>
+            <input type="radio" id="male" name="sex" class="myData-sex-radioInput" value="1"/>
             <img src="../../resource/女.png" class="myData-sex-female"/>
-            <input type="radio" id="female" name="sex" class="myData-sex-radioInput"/>
+            <input type="radio" id="female" name="sex" class="myData-sex-radioInput" value="2"/>
             <img src="../../resource/保密.png" class="myData-sex-female"/>
-            <input type="radio" id="baomi" name="sex" class="myData-sex-radioInput"/>
+            <input type="radio" id="baomi" name="sex" class="myData-sex-radioInput" value="3"/>
           </div>
         </div>
         <div class="myData-tel">
@@ -25,7 +25,7 @@
         </div>
         <div class="myData-tel">
           所在学校<br/>
-          <input type="text" class="myData-tel-detail" v-model="school"/>
+          <input type="text" class="myData-tel-detail" :value="school.school"/>
         </div>
         <div class="myData-baocun" @click="goBao">
           <img src="../../resource/保存.png"/>
@@ -48,12 +48,17 @@ export default {
       userInfo: {
         avatar: ''
       },
-      alertDara:''
+      alertDara:'',
+      userId:Number,
+      wechat:'',
+      sex:'',
+      phone:''
     }
   },
   props:{
     user:'',
-    userId:''
+    userId:Number,
+    school:''
   },
   methods: {
     // 打开图片上传
@@ -72,24 +77,8 @@ export default {
       reader.readAsDataURL(file)
     },
     goBao() {
-      let alertDara = {
-        title: "",
-        titleColor: "#abd9ca",
-        content: "确定保存吗？",
-        contentColor: "gray",
-        btn: ["返回", "确定"],
-        btnColor: ["", ""],
-      }
-      this.alertDara = alertDara;
-    },
-    alertBackFn(data) {
-      this.alertDara = '';
-      console.log("点击了取消",data)
-    },
-    alertSureFn(data) {
-      this.alertDara = '';
-      console.log("点击了确定",data)
-      let _this = this
+      let _this = this;
+      this.sex=$("input:radio[name='sex']:checked").val();
       $.ajax({
         url: "/api/sunny/user/update",
         async: true,
@@ -99,7 +88,8 @@ export default {
           "phone": this.phone,
           "school": this.school,
           "wechat":this.wechat,
-          "id":this.userId,
+          "id":this.userId.userId,
+          'sex':this.sex
         },
         success: function (data) {
           switch(data.message){
@@ -114,7 +104,6 @@ export default {
               };
               _this.alertDara = alertDara;
               _this.$store.dispatch('updateUserAsyc',_this.username)
-              _this.$store.dispatch('updateImgAsyc',_this.img)
               break;
             }
           }
@@ -124,6 +113,10 @@ export default {
         },
         dataType: 'json'
       })
+    },
+    alertSureFn(data) {
+      this.alertDara = '';
+      console.log("点击了确定",data)
     },
     alertBackFn(data) {
       this.alertDara = '';
@@ -136,7 +129,7 @@ export default {
     }
   },
   created(){
-    console.log(this.userId)
+    // console.log(this.schoolChange)
   }
 }
 </script>

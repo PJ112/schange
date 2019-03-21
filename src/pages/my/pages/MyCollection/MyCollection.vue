@@ -24,6 +24,27 @@
 <script>
 export default {
   name: "MyCollection",
+  props:{
+    userId:Number,
+  },
+  created(){
+    let _this = this
+    $.ajax({
+      url: "/api/sunny/message/findMessage",
+      async: true,
+      type: 'GET',
+      data: {
+        "id":this.userId.userId
+      },
+      success: function (data) {
+       console.log(data)
+      },
+      error: function () {
+
+      },
+      dataType: 'json'
+    })
+  }
 }
 </script>
 

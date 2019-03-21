@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="myMall">
-      <h1 class="myMall-h1">已购入</h1>
+    <div class="myHJudge">
+      <h1 class="myHJudge-h1">历史评价</h1>
       <div>
-        <li class="myMall-li">
-          <div class="myMall-li-assess">
+        <li class="myHJudge-li">
+          <div class="myHJudge-li-assess">
             <img class="myCollection-li-left-img" src="../../resource/商品.png"/>
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
@@ -17,11 +17,11 @@
             </div>
             <div class="myCollection-li-time">2019-01-26 12:24:01</div>
           </div>
-          <div class="myMall-li-goods">
-            <img class="myMall-li-left-img" src="../../resource/商品.png" />
-            <div class="myMall-li-right">
-              <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-              <div class="myMall-li-right-time">2019-01-26 12:24:01</div>
+          <div class="myHJudge-li-goods">
+            <img class="myHJudge-li-left-img" src="../../resource/商品.png" />
+            <div class="myHJudge-li-right">
+              <div class="myHJudge-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
+              <div class="myHJudge-li-right-time">2019-01-26 12:24:01</div>
             </div>
           </div>
         </li>
@@ -31,31 +31,48 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  export default {
-    name: "MyHjudge",
-    data() {
-      return {
+export default {
+  name: "MyHjudge",
+  data() {
+    return {
 
-      }
-    },
-    computed:{
-      ...mapState(['jifen'])
     }
+  },
+  props:{
+    userId:Number,
+  },
+  created(){
+    let _this = this
+    $.ajax({
+      url: "/api/sunny/comment/search",
+      async: true,
+      type: 'GET',
+      data: {
+        "id":_this.userId.userId
+      },
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+
+      },
+      dataType: 'json'
+    })
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  .myMall
+  .myHJudge
     margin-left:8%;
     margin-top:32px;
     margin-bottom:3%;
-    .myMall-h1
+    .myHJudge-h1
       display:inline-block
       font-size:18px;
       color:#2b2a2a
       margin-bottom:3%;
-    .myMall-li
+    .myHJudge-li
       list-style:none;
       margin-top:20px;
       width:90%;
@@ -63,7 +80,7 @@
       border-radius:5px;
       height:165px
       margin-bottom:3%;
-      .myMall-li-assess
+      .myHJudge-li-assess
         width:100%;
         height:60px;
       .myCollection-li-left-img
@@ -88,27 +105,27 @@
         float:right;
         margin-top:1%;
         margin-right:3%;
-    .myMall-li-goods
+    .myHJudge-li-goods
       width:100%;
       display:flex
       margin-top:3%;
       height:70px;
-      .myMall-li-left-img
+      .myHJudge-li-left-img
         display:inline-block;
         vertical-align:top;
         margin-left:20px;
         width:60px;
         height:70px;
         background-size:60px 70px;
-      .myMall-li-right
+      .myHJudge-li-right
         flex:1;
         display:inline-block
         background: rgba(141, 141, 141, 0.39);
-        .myMall-li-right-content
+        .myHJudge-li-right-content
           margin-top:10px;
           margin-left:3%;
           margin-right:3%
-        .myMall-li-right-time
+        .myHJudge-li-right-time
           margin-top:2%;
           margin-left:5%;
 </style>

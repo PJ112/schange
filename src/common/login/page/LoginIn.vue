@@ -38,7 +38,7 @@
         verifyText:'',
         verifyImg:'',
         alertDara: '',
-        userId:''
+        userId:Number
       }
     },
     methods:{
@@ -108,7 +108,6 @@
             data:{
               "username":this.user,
               "password":this.pass,
-              "id":this.userId
             },
             success:function (data) {
               //登陆成功
