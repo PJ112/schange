@@ -1,9 +1,9 @@
 <template>
 <div>
-  <div class="myCollection">
+  <div class="myCollection" v-show="list.length>0">
     <h1 class="myCollection-h1">我的消息</h1>
     <div>
-      <li class="myCollection-li">
+      <li class="myCollection-li" v-for="(item,index) in list">
         <img class="myCollection-li-left-img" src="../../resource/商品.png"/>
         <div class="myCollection-li-right">
             <div class="myCollection-li-right-header">
@@ -12,21 +12,41 @@
                 <img src="../../../../assets/imgs/my/mycollection/女.png"/>
               </span>
             </div>
-            <div class="myCollection-li-right-content">抱歉，这已经是最低的价格了</div>
+            <div class="myCollection-li-right-content">{{item.content}}</div>
         </div>
-        <div class="myCollection-li-time">2019-01-26 12:24:01</div>
+        <div class="myCollection-li-time">{{item.createTime}}</div>
       </li>
     </div>
   </div>
+  <alert v-if="alertDara"
+         :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
 </div>
 </template>
 
 <script>
+import Alert from '../../../../common/Alert/Alert'
 export default {
   name: "MyCollection",
+  components: {Alert},
   props:{
     userId:Number,
+    list:[]
   },
+  data(){
+    return{
+      alertDara: ''
+    }
+  },
+ methods:{
+   alertBackFn: function(data) {
+     this.alertDara = '';
+     console.log("点击了取消",data)
+   },
+   alertSureFn:function(data){
+     this.alertDara = '';
+     console.log("点击了确定",data)
+   }
+ },
   created(){
     let _this = this
     $.ajax({
@@ -34,10 +54,21 @@ export default {
       async: true,
       type: 'GET',
       data: {
-        "id":this.userId.userId
+        "id":6
       },
       success: function (data) {
-       console.log(data)
+        this.list = data.data
+        if(this.list.length ===0 ){
+          alert("暂时没有消息！");
+          // let alertDara = {
+          //   content: "暂时没有消息！",
+          //   contentColor: "red",
+          //   btn: ["确定"],
+          //   btnColor: ["", ""]
+          // };
+          // _this.alertDara = alertDara;
+        }
+       console.log(data.data)
       },
       error: function () {
 

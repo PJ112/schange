@@ -1,40 +1,48 @@
 <template>
-  <div class="myPublish">
-    <h1 class="myPublish-h1">已发布</h1>
-    <h2 class="myPublish-h2" @click="Chose" v-show="list.length>0">勾选</h2>
-    <div>
-      <div class="content" v-for="item in list" >
-        <!--<div class="myPublish-li-chose" v-show="chose">-->
-          <!--<input-->
-            <!--type="checkbox"-->
-            <!--:value="index"-->
-            <!--v-model="selectArr"-->
-            <!--class="myPublish-li-chose-input"/>-->
-        <!--</div>-->
+  <div>
+    <div class="myPublish">
+      <h1 class="myPublish-h1">已发布</h1>
+      <h2 class="myPublish-h2" @click="Chose" v-show="list.length>0">勾选</h2>
+      <div  class="content" v-for="(item,index) in list" :key="index" >
+        <div class="myPublish-li-chose" v-show="chose">
+          <input
+            type="checkbox"
+            :value="index"
+            class="myPublish-li-chose-input"
+            @click="getIndex(item.goods.id)"
+          />
+        </div>
         <li class="myPublish-li">
           <div class="myPublish-li-left">
             <img class="myPublish-li-left-img" src="../../resource/商品.png"/>
           </div>
           <div class="myPublish-li-right">
             <div class="myPublish-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-            <div class="myPublish-li-right-jifen">价格:{{item.goods.id}}</div>
+            <div class="myPublish-li-right-jifen">价格:{{item.goods.price}}</div>
             <button class="myPublish-li-right-button" @click="goMarket">编辑</button>
           </div>
         </li>
       </div>
-      <div class="myPublish-bottom" v-show="list.length>0">
-      <span class="myPublish-bottom-qingkong"  @click="del">删除</span>
-      <span class="myPublish-bottom-quxiao" @click="QuXiao">取消</span>
+      <div class="myPublish-bottom" v-if="list.length>0">
+        <span class="myPublish-bottom-qingkong"  @click="del">删除</span>
+        <span class="myPublish-bottom-quxiao" @click="QuXiao">取消</span>
       </div>
+
+      <ul class="myOrder-page">
+        <li v-if="pageNum === 1" class="disabled forepage">上一页</li>
+        <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
+        <li
+          @click="LoadData(item)"
+          class="numberPage"
+          v-for="(item,index) in totalPages"
+          :key="index"
+          :class="index === ItemnumberPage"
+        >{{item}}</li>
+        <li v-if="pageNum === totalPages || totalPages === 0" class="disabled forepage">下一页</li>
+        <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
+      </ul>
     </div>
-    分页
-    <ul class="myOrder-page">
-      <li v-if="currentPage === 1" class="disabled forepage">上一页</li>
-      <li v-else @click="LoadData(currentPage-1)" class="forepage">上一页</li>
-      <li  @click="LoadData(item)" class="numberPage">12</li>
-      <li v-if="currentPage == totalPages || totalPages == 0" class="disabled forepage">下一页</li>
-      <li v-else @click="LoadData(currentPage+1)" class="forepage">下一页</li>
-    </ul>
+
   </div>
 </template>
 
@@ -47,24 +55,47 @@ export default {
   data() {
     return {
       list: [],
-      currentPage:1,
-      pageSize:5,
-      status:1
+      pageNum:1,
+      pageSize:3,
+      status:1,
+      total:Number,
+      chose:false,
+      choseIndex:Number
     }
   },
   methods: {
     Chose() {
-      this.chose = !this.chose
+      this.chose = true
     },
-    QuXiao() {
-     this.chose=false
+    QuXiao(){
+      this.chose = false
+    },
+    getIndex(index){
+     this.choseIndex = index
+      console.log(this.choseIndex)
+    },
+    del(){
+      let _this = this
+      $.ajax({
+        url:"/api/sunny/goods/delete",
+        async:true,
+        type:'GET',
+        data:{
+         "ids":_this.choseIndex
+        },
+        success:function (data) {
+
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
     },
     goMarket(){
       this.$router.push()
     },
-    LoadData(value) {  //设置每一页显示10条数据
-      this.currentPage = value
-      // this.newData = this.data.slice((value-1) * this.pageSize, value *this.pageSize)
+    LoadData(value) {
+      this.pageNum = value
     },
   },
   created(){
@@ -80,8 +111,9 @@ export default {
         "status":this.status
       },
       success:function (data) {
-        _this.list = data.data.rows
-        this.total = data.data.total
+        _this.list = data.data.rows;
+        _this.total = data.data.total;
+        _this.LoadData(1);
       },
       error:function () {
       },
@@ -90,7 +122,7 @@ export default {
   },
   computed: {
     totalPages () {
-      return Math.ceil(this.totalPage *1 / this.pageSize )
+      return Math.ceil(this.total *1 / this.pageSize )
     }
   },
 }
@@ -138,7 +170,7 @@ export default {
         .myPublish-li-left
           display:inline-block
           vertical-align:top;
-          height:180px;
+          height:calc(23vh);
           width:30%;
           border-radius:5px;
         .myPublish-li-right
@@ -154,11 +186,13 @@ export default {
             margin-left:5%;
           .myPublish-li-right-jifen
             display:inline-block;
-            margin-top:70px;
+            margin-top:25%;
             margin-left:5%;
+            width:30%;
           .myPublish-li-right-button
-            display:inline-block;
-            margin-left:60%;
+            display:inline-block
+            margin-top:-1%;
+            margin-left:30%;
             font-size:13px;
             border-radius:5px;
             width:60px;
@@ -188,4 +222,6 @@ export default {
     cursor:pointer;
     color:#85cab5;
     padding:5px;
+  .ItemnumberPage
+    color:red;
 </style>

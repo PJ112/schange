@@ -1,7 +1,6 @@
 <template>
   <div class="mylink">
     <img src="../../assets/imgs/my/gotop.png" @click="goTop"/>
-    123
     <img src="../../assets/imgs/my/sale.png"/>
     <img src="../../assets/imgs/my/购物车.png"/>
   </div>
@@ -20,13 +19,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.mylink
-  margin-top:30%;
-  cursor:pointer;
-  margin-left:5%;
-  img
-    width:50px;
-    height:50px;
-    background-size:50px 50px;
-    margin-top:10%;
+  .mylink
+    margin-top:30%;
+    cursor:pointer;
+    margin-left:5%;
+    img
+      width:50px;
+      height:50px;
+      background-size:50px 50px;
+      margin-top:10%;
 </style>

@@ -5,8 +5,9 @@ import App from './App';
 import router from './router';
 import '../src/assets/css/reset.css';
 import './assets/iconfont/iconfont.css'
-import store from './vuex/index'
-import $ from "jquery"
+import store from './vuex/index';
+import "element-ui/lib/theme-chalk/index.css";
+import $ from "jquery";
 
 
 
