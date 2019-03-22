@@ -108,7 +108,9 @@
           ></router-view>
         </div>
         <div class="my-link">
-          <my-link></my-link>
+          <img src="../../assets/imgs/my/gotop.png" @click="goTop"/>
+          <img src="../../assets/imgs/my/sale.png"/>
+          <img src="../../assets/imgs/my/购物车.png"/>
         </div>
       </div>
     </div>
@@ -118,14 +120,14 @@
 </template>
 
 <script>
-  import MyLink from '../../common/MyLink/Link';
+  import MyLink from '../../common/MyLink/Link'
   import Alert from '../../common/Alert/Alert'
   import {mapState} from 'vuex'
   export default {
     name: 'My',
     component:{
-      Alert,
-      MyLink
+      MyLink,
+      Alert
     },
     data(){
       return{
@@ -137,6 +139,11 @@
       }
     },
     methods:{
+      goTop () {
+        if(document.documentElement.scrollTop>0){
+          document.documentElement.scrollTop=0;
+        }
+      },
       goRes() {
         this.$router.push('./resgister')
       },
@@ -341,6 +348,11 @@
       .my-link
         display:inline-block;
         position:fixed;
-        width:6%;
-        height:80%;
+        width:calc(6vh);
+        height:calc(78vh)
+        img
+          margin-left:20%;
+          width:calc(8vh);
+          height:calc(8vh);
+          margin-top:100%;
 </style>

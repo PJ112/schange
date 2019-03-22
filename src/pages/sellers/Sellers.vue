@@ -195,5 +195,5 @@
       .my-link
         display:inline-block;
         position:fixed;
-        width:4%;
+        width:6%;
 </style>

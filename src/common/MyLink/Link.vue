@@ -24,7 +24,7 @@ export default {
     img
       float:right;
       margin-right:22%;
-      width:calc(9vh);
-      height:calc(9vh);
-      margin-top:20%;
+      width:calc(8vh);
+      height:calc(8vh);
+      margin-top:100%;
 </style>
