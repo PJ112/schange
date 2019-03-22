@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="myPublish">
+    <div class="myPublish" v-show="list.length>0">
       <h1 class="myPublish-h1">已发布</h1>
       <h2 class="myPublish-h2" @click="Chose" v-show="list.length>0">勾选</h2>
       <div  class="content" v-for="(item,index) in list" :key="index" >
@@ -14,10 +14,10 @@
         </div>
         <li class="myPublish-li">
           <div class="myPublish-li-left">
-            <img class="myPublish-li-left-img" src="../../resource/商品.png"/>
+            <img class="myPublish-li-left-img"/>
           </div>
           <div class="myPublish-li-right">
-            <div class="myPublish-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
+            <div class="myPublish-li-right-content">{{item.content}}</div>
             <div class="myPublish-li-right-jifen">价格:{{item.goods.price}}</div>
             <button class="myPublish-li-right-button" @click="goMarket">编辑</button>
           </div>
@@ -28,20 +28,20 @@
         <span class="myPublish-bottom-quxiao" @click="QuXiao">取消</span>
       </div>
 
-      <ul class="myOrder-page">
-        <li v-if="pageNum === 1" class="disabled forepage">上一页</li>
+      <ul class="myOrder-page" v-show="list.length>0">
+        <li v-if="pageNum === -1" class="disabled unforepage">上一页</li>
         <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
         <li
-          @click="LoadData(item)"
-          class="numberPage"
+          @click="LoadData(item-1)"
           v-for="(item,index) in totalPages"
           :key="index"
-          :class="index === ItemnumberPage"
+          :class="[index==pageNum?'ItemnumberPage':'numberPage']"
         >{{item}}</li>
-        <li v-if="pageNum === totalPages || totalPages === 0" class="disabled forepage">下一页</li>
+        <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
+    <div  class="myPublish-no" v-show="list.length==0">赶紧去发布物品吧!</div>
 
   </div>
 </template>
@@ -60,7 +60,7 @@ export default {
       status:1,
       total:Number,
       chose:false,
-      choseIndex:Number
+      choseIndex:Number,
     }
   },
   methods: {
@@ -71,20 +71,20 @@ export default {
       this.chose = false
     },
     getIndex(index){
-     this.choseIndex = index
-      console.log(this.choseIndex)
+     this.choseIndex.push = index
     },
     del(){
       let _this = this
+      // alert(jQuery.param(this.choseIndex,true))
       $.ajax({
         url:"/api/sunny/goods/delete",
         async:true,
         type:'GET',
         data:{
-         "ids":_this.choseIndex
+         "ids":this.choseIndex
         },
         success:function (data) {
-
+          _this.chose = false
         },
         error:function () {
         },
@@ -96,6 +96,23 @@ export default {
     },
     LoadData(value) {
       this.pageNum = value
+      let _this = this
+      $.ajax({
+        url:"/api/sunny/goods/newSearch",
+        async:true,
+        type:'GET',
+        data:{
+          "sellerId":_this.userId.userId,
+          "pageNum":_this.pageNum,
+          "pageSize":_this.pageSize,
+          "status":_this.status
+        },
+        success:function () {
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
     },
   },
   created(){
@@ -105,15 +122,15 @@ export default {
       async:true,
       type:'GET',
       data:{
-        // "sellerId":this.userId.userId,
-        "pageNum":this.pageNum,
-        "pageSize":this.pageSize,
-        "status":this.status
+        "sellerId":_this.userId.userId,
+        "pageNum":_this.pageNum,
+        "pageSize":_this.pageSize,
+        "status":_this.status
       },
       success:function (data) {
         _this.list = data.data.rows;
         _this.total = data.data.total;
-        _this.LoadData(1);
+        _this.LoadData(0);
       },
       error:function () {
       },
@@ -129,6 +146,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .myPublish-no
+    height:calc(78vh)
+    line-height:calc(78vh)
+    color:red;
+    width:100%;
+    margin-left:40%;
   .myPublish
     z-index:-1;
     margin-left:8%;
@@ -170,9 +193,13 @@ export default {
         .myPublish-li-left
           display:inline-block
           vertical-align:top;
-          height:calc(23vh);
-          width:30%;
+          height:calc(31vh);
+          width:34%;
           border-radius:5px;
+          img
+            width:100%;
+            height:100%;
+            background-size:100% 100%;
         .myPublish-li-right
           display:inline-block
           float:right;
@@ -214,14 +241,17 @@ export default {
   .myOrder-page
     display: inline-block
     margin:1% 30%;
-  .forepage
+  .forepage,.unforepage
     display: inline-block;
     cursor:pointer;
-  .numberPage
+  .unforepage
+    cursor:help
+    color:red
+  .numberPage,.ItemnumberPage
     display: inline-block
     cursor:pointer;
-    color:#85cab5;
+    color:black;
     padding:5px;
   .ItemnumberPage
-    color:red;
+    color:#85cab5;
 </style>

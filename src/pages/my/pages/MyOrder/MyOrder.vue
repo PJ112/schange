@@ -1,8 +1,8 @@
 <template>
-  <div class="myOrder">
-    <h1 class="myOrder-h1">已购入</h1>
+  <div class="myOrder" v-show="list.length >0">
+    <h1 class="myOrder-h1">订单管理</h1>
 
-    <li class="myOrder-li">
+    <li class="myOrder-li" v-for="(item,index) in list" :key="index">
       <div class="myOrder-li-left">
         <img class="myOrder-li-left-img" src="../../resource/商品.png"/>
       </div>
@@ -19,12 +19,17 @@
     </li>
 
     <!--分页-->
-    <ul class="myOrder-page">
-      <li v-if="currentPage === 1" class="disabled forepage">上一页</li>
-      <li v-else @click="LoadData(currentPage-1)" class="forepage">上一页</li>
-      <li  @click="LoadData(item)" class="numberPage">12</li>
-      <li v-if="currentPage == totalPages || totalPages == 0" class="disabled forepage">下一页</li>
-      <li v-else @click="LoadData(currentPage+1)" class="forepage">下一页</li>
+    <ul class="myOrder-page" v-show="list.length>0">
+      <li v-if="pageNum === -1" class="disabled unforepage">上一页</li>
+      <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
+      <li
+        @click="LoadData(item-1)"
+        v-for="(item,index) in totalPages"
+        :key="index"
+        :class="[index==pageNum?'ItemnumberPage':'numberPage']"
+      >{{item}}</li>
+      <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
+      <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
     </ul>
   </div>
 </template>
@@ -34,9 +39,11 @@ export default {
   name: "MyOrder",
   data() {
     return {
-      currentPage: 1,
-      pageSize:10,
-      totalPage: Number,
+      list: [],
+      pageNum:1,
+      pageSize:3,
+      status:1,
+      total:Number,
       pay:false
     }
   },
@@ -44,42 +51,61 @@ export default {
     userId:Number,
   },
   methods: {
-    LoadData(value) {  //设置每一页显示10条数据
-      this.currentPage = value
-      // this.newData = this.data.slice((value-1) * this.pageSize, value *this.pageSize)
-    },
     goPay(){
       this.pay = true
       alert("支付成功!")
-    }
+    },
+    LoadData(value) {
+      this.pageNum = value
+      let _this = this
+      $.ajax({
+        url:"/api/sunny/order/findPage",
+        async:true,
+        type:'GET',
+        data:{
+          // "id":_this.userId.userId,
+          "id":2,
+          "pageNum":_this.pageNum,
+          "pageSize":_this.pageSize,
+          "order":_this.status
+        },
+        success:function () {
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
+    },
+  },
+  created(){
+    let _this = this
+    $.ajax({
+      url:"/api/sunny/order/findPage",
+      async:true,
+      type:'GET',
+      data:{
+        // "id":_this.userId.userId,
+        "id":2,
+        "pageNum":_this.pageNum,
+        "pageSize":_this.pageSize,
+        "order":_this.status
+      },
+      success:function (data) {
+        _this.list = data.data.rows;
+        _this.total = data.data.total;
+        console.log(data)
+        _this.LoadData(0);
+      },
+      error:function () {
+      },
+      dataType:'json'
+    })
   },
   computed: {
     totalPages () {
-      return Math.ceil(this.totalPage *1 / this.pageSize )
+      return Math.ceil(this.total *1 / this.pageSize )
     }
   },
- created(){
-    let _this = this
-   $.ajax({
-     url: "/api/sunny/order/findPage",
-     async: true,
-     type: 'GET',
-     data: {
-     },
-     success: function (data) {
-       switch(data.message){
-         case "查询成功":{
-           console.log(data)
-           this.LoadData(1)  //默认加载第一页
-         }
-       }
-     },
-     error: function () {
-
-     },
-     dataType: 'json'
-   })
-}
 }
 </script>
 
@@ -146,9 +172,12 @@ export default {
     .myOrder-page
       display: inline-block
       margin:1% 30%;
-    .forepage
+    .forepage,.unforepage
       display: inline-block;
       cursor:pointer;
+    .unforepage
+      cursor:help
+      color:red
     .numberPage
       display: inline-block
       cursor:pointer;
