@@ -20,12 +20,11 @@ export default {
 
 <style lang="stylus" scoped>
   .mylink
-    margin-top:30%;
     cursor:pointer;
-    margin-left:5%;
     img
-      width:50px;
-      height:50px;
-      background-size:50px 50px;
-      margin-top:10%;
+      float:right;
+      margin-right:22%;
+      width:calc(9vh);
+      height:calc(9vh);
+      margin-top:20%;
 </style>

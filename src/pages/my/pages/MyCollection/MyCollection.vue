@@ -1,23 +1,24 @@
 <template>
 <div>
-  <div class="myCollection" v-show="list.length>0">
+  <div class="myCollection" v-show="this.list.length>0">
     <h1 class="myCollection-h1">我的消息</h1>
     <div>
-      <li class="myCollection-li" v-for="(item,index) in list">
-        <img class="myCollection-li-left-img" src="../../resource/商品.png"/>
+      <li class="myCollection-li" v-for="(item,index) in list" :key="index">
+        <img class="myCollection-li-left-img" :src="item.sendUser.image"/>
         <div class="myCollection-li-right">
             <div class="myCollection-li-right-header">
-              <span class="myCollection-li-right-header-name" >name</span>
+              <span class="myCollection-li-right-header-name" >{{item.sendUser.user.name}}</span>
               <span class="myCollection-li-right-header-img">
                 <img src="../../../../assets/imgs/my/mycollection/女.png"/>
               </span>
             </div>
-            <div class="myCollection-li-right-content">{{item.content}}</div>
+            <div class="myCollection-li-right-content">{{item.message.content}}</div>
         </div>
-        <div class="myCollection-li-time">{{item.createTime}}</div>
+        <div class="myCollection-li-time"></div>
       </li>
     </div>
   </div>
+  <div  class="myCollection-no" v-show="list.length==0">你还没有消息哦!</div>
   <alert v-if="alertDara"
          :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
 </div>
@@ -30,11 +31,11 @@ export default {
   components: {Alert},
   props:{
     userId:Number,
-    list:[]
   },
   data(){
     return{
-      alertDara: ''
+      alertDara: '',
+      list:[]
     }
   },
  methods:{
@@ -49,17 +50,20 @@ export default {
  },
   created(){
     let _this = this
+    alert(_this.userId.userId)
     $.ajax({
-      url: "/api/sunny/message/findMessage",
+      url: "/api/sunny/message/findNewMessage",
       async: true,
       type: 'GET',
       data: {
-        "id":6
+        // "reId":_this.userId.userId
+        "reId":1
       },
       success: function (data) {
-        this.list = data.data
+        _this.list = data.data
+        console.log(_this.list)
         if(this.list.length ===0 ){
-          alert("暂时没有消息！");
+          // alert("暂时没有消息！");
           // let alertDara = {
           //   content: "暂时没有消息！",
           //   contentColor: "red",
@@ -80,6 +84,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.myCollection-no
+  height:calc(78vh)
+  line-height:calc(78vh)
+  color:red;
+  width:100%;
+  margin-left:40%;
 .myCollection
   z-index:-1;
   margin-left:8%;
@@ -118,6 +128,9 @@ export default {
         color:black;
       .myCollection-li-right-header-img
         margin-left:3%;
+        img
+          background-size:100% 100%;
+          display:inline-block
     .myCollection-li-time
       display:inline-block;
       float:right;

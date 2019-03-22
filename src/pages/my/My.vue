@@ -5,7 +5,7 @@
         <div class="my-header">
           <img src="./resource/schange.png" class="my-logo"/>
           <span v-show="!user">
-          <span class="my-register" @click="goRes">|&nbsp;注册</span>
+          <span class="my-register" @click="goRes">| 注册</span>
           <span class="my-login" @click="goLogin">登录</span>
         </span>
           <span v-show="user">

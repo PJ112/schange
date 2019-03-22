@@ -1,37 +1,38 @@
 <template>
-  <div class="myOrder" v-show="list.length >0">
-    <h1 class="myOrder-h1">订单管理</h1>
-
-    <li class="myOrder-li" v-for="(item,index) in list" :key="index">
-      <div class="myOrder-li-left">
-        <img class="myOrder-li-left-img" src="../../resource/商品.png"/>
-      </div>
-      <div class="myOrder-li-right">
-        <div class="myOrder-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-       <div class="myOrder-li-right-top">
-         <div class="myOrder-li-right-jifen">价格:</div>
-         <button class="myOrder-li-right-button" @click="goPay" v-show="!pay">立即支付</button>
-         <div class="myOrder-li-right-text" v-show="!pay">待支付</div>
-         <button class="myOrder-li-right-button" @click="goPay" v-show="pay">付款成功</button>
-         <div class="myOrder-li-right-text" v-show="pay">已支付</div>
+ <div>
+   <div class="myOrder" v-if="list.length >0">
+     <h1 class="myOrder-h1">订单管理</h1>
+     <li class="myOrder-li" v-for="(item,index) in list" :key="index">
+       <div class="myOrder-li-left">
+         <img class="myOrder-li-left-img" src="../../resource/商品.png"/>
        </div>
-      </div>
-    </li>
-
-    <!--分页-->
-    <ul class="myOrder-page" v-show="list.length>0">
-      <li v-if="pageNum === -1" class="disabled unforepage">上一页</li>
-      <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
-      <li
-        @click="LoadData(item-1)"
-        v-for="(item,index) in totalPages"
-        :key="index"
-        :class="[index==pageNum?'ItemnumberPage':'numberPage']"
-      >{{item}}</li>
-      <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
-      <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
-    </ul>
-  </div>
+       <div class="myOrder-li-right">
+         <div class="myOrder-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
+         <div class="myOrder-li-right-top">
+           <div class="myOrder-li-right-jifen">价格:{{item.money}}</div>
+           <button class="myOrder-li-right-button" @click="goPay" v-show="status  == 1">立即支付</button>
+           <div class="myOrder-li-right-text" v-show="status  == 1">待支付</div>
+           <button class="myOrder-li-right-button"  v-show="status == 2">付款成功</button>
+           <div class="myOrder-li-right-text"  v-show="status == 2">已支付</div>
+         </div>
+       </div>
+     </li>
+     <!--分页-->
+     <ul class="myOrder-page" v-show="list.length>0">
+       <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
+       <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
+       <li
+         @click="LoadData(item-1)"
+         v-for="(item,index) in totalPages"
+         :key="index"
+         :class="[index==pageNum?'ItemnumberPage':'numberPage']"
+       >{{item}}</li>
+       <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
+       <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
+     </ul>
+   </div>
+   <div class="myOrder-no" v-else>您还没有任何订单哦！</div>
+ </div>
 </template>
 
 <script>
@@ -44,7 +45,6 @@ export default {
       pageSize:3,
       status:1,
       total:Number,
-      pay:false
     }
   },
   props:{
@@ -52,8 +52,24 @@ export default {
   },
   methods: {
     goPay(){
-      this.pay = true
-      alert("支付成功!")
+      let _this = this
+      //点击获取买家id
+      _this.status = 2
+      $.ajax({
+        url:"/api/sunny/order/findPage",
+        async:true,
+        type:'GET',
+        data:{
+          "buyerId":2,
+          "status":_this.status
+        },
+        success:function (data) {
+
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
     },
     LoadData(value) {
       this.pageNum = value
@@ -67,9 +83,9 @@ export default {
           "id":2,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize,
-          "order":_this.status
         },
-        success:function () {
+        success:function (data) {
+
         },
         error:function () {
         },
@@ -93,7 +109,7 @@ export default {
       success:function (data) {
         _this.list = data.data.rows;
         _this.total = data.data.total;
-        console.log(data)
+        console.log(data.data.rows)
         _this.LoadData(0);
       },
       error:function () {
@@ -110,6 +126,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .myOrder-no
+    height:calc(78vh)
+    line-height:calc(78vh)
+    color:red;
+    width:100%;
+    margin-left:40%;
   .myOrder
     margin-left:8%;
     margin-top:6%;
@@ -176,11 +198,12 @@ export default {
       display: inline-block;
       cursor:pointer;
     .unforepage
-      cursor:help
-      color:red
-    .numberPage
+      cursor:not-allowed;
+    .numberPage,.ItemnumberPage
       display: inline-block
       cursor:pointer;
-      color:#85cab5;
+      color:black;
       padding:5px;
+    .ItemnumberPage
+      color:#85cab5;
 </style>

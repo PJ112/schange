@@ -26,6 +26,19 @@
           </div>
         </li>
       </div>
+      <!--分页-->
+      <ul class="myHJudge-page" v-show="list.length>0">
+        <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
+        <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
+        <li
+          @click="LoadData(item-1)"
+          v-for="(item,index) in totalPages"
+          :key="index"
+          :class="[index==pageNum?'ItemnumberPage':'numberPage']"
+        >{{item}}</li>
+        <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
+        <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -35,7 +48,8 @@ export default {
   name: "MyHjudge",
   data() {
     return {
-
+      pageNum:1,
+      pageSize:3,
     }
   },
   props:{
@@ -48,7 +62,10 @@ export default {
       async: true,
       type: 'GET',
       data: {
-        "id":_this.userId.userId
+        // "buyerId":_this.userId.userId
+        "buyerId":1,
+        "pageNum":_this.pageNum,
+        "pageSize":_this.pageSize
       },
       success: function (data) {
         console.log(data)
@@ -128,4 +145,19 @@ export default {
         .myHJudge-li-right-time
           margin-top:2%;
           margin-left:5%;
+  .myHJudge-page
+    display: inline-block
+    margin:1% 30%;
+  .forepage,.unforepage
+    display: inline-block;
+    cursor:pointer;
+  .unforepage
+    cursor:not-allowed;
+  .numberPage,.ItemnumberPage
+    display: inline-block
+    cursor:pointer;
+    color:black;
+    padding:5px;
+  .ItemnumberPage
+    color:#85cab5;
 </style>

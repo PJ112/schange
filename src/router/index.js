@@ -167,24 +167,24 @@ export default new Router({
     //  path:'/contact-seller',
     //  component:ContactSeller
     // },
-    // {
-    //  path:'/sellers',
-    //  component:Sellers
-    // },
-    // {
-    //  path:'/sellersmes',
-    //  component:SellersMes,
-    //  redirect:'/sellershjudge',
-    //  children:[
-    //    {
-    //      path:'/sellershjudge',
-    //      component:SellersHJudge,
-    //    },
-    //    {
-    //      path:'/sellerspublish',
-    //      component:SellersPublish,
-    //    }
-    //  ]
-    // },
+    {
+     path:'/sellers',
+     component:Sellers
+    },
+    {
+     path:'/sellersmes',
+     component:SellersMes,
+     redirect:'/sellershjudge',
+     children:[
+       {
+         path:'/sellershjudge',
+         component:SellersHJudge,
+       },
+       {
+         path:'/sellerspublish',
+         component:SellersPublish,
+       }
+     ]
+    },
   ]
 })

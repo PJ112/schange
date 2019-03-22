@@ -1,39 +1,35 @@
 <template>
-<div class="myBuy">
-  <h1 class="myBuy-h1">已购入</h1>
-  <li class="myBuy-li" v-for="(item,index) in one" :key="index">
-   <div class="myBuy-li-content">
-     <div class="myBuy-li-left">
-       <img class="myBuy-li-left-img" src="../../resource/商品.png"/>
-     </div>
-     <div class="myBuy-li-right">
-       <div class="myBuy-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-       <div class="myBuy-li-right-jifen">价格:1212</div>
-       <button class="myBuy-li-right-button" @click="showAssess(index)" v-show="index == i">评价</button>
-       <button class="myBuy-li-right-button" v-show="index == showIndex">已评价</button>
-     </div>
-   </div>
-    <div class="myBuy-li-assess" v-show="index == i">
-      <input
-        type="text"
-        class="myBuy-li-assess-input"
-        placeholder="请输入评价"
-        v-model="inputValue"
-        @keyup.enter="goPublish(index)"
-        v-show="index == !showIndex"
-      />
-      <div class="myBuy-li-assess-button" v-show="!comment">
-        <button class="myBuy-li-assess-button-handin" @click="goPublish(index)">发表</button>
-        <button class="myBuy-li-assess-button-handout" @click="hidden()">取消</button>
+<div>
+  <div class="myBuy" v-show="BuyList.length>0">
+    <h1 class="myBuy-h1">已购入</h1>
+    <li class="myBuy-li" v-for="(item,index) in BuyList" :key="index" ref="buy">
+      <div class="myBuy-li-content">
+        <!--<div class="myBuy-li-left">-->
+        <!--<img class="myBuy-li-left-img" :src="item.imageList[0].address"/>-->
+        <!--</div>-->
+        <div class="myBuy-li-right">
+          <!--<div class="myBuy-li-right-content">{{item.content}}</div>-->
+          <!--<div class="myBuy-li-right-jifen">价格:{{item.goods.price}}</div>-->
+          <button class="myBuy-li-right-button" @click="showAssess(item,index)" v-show="">评价</button>
+          <button class="myBuy-li-right-button" v-show="">已评价</button>
+        </div>
       </div>
-      <input
-        v-show="index == showIndex"
-        type="text"
-        class="myBuy-li-assess-inputShow"
-        v-model="inputValue"
-      />
-    </div>
-  </li>
+      <div class="myBuy-li-assess" v-show="index ==i">
+        <input
+          type="text"
+          class="myBuy-li-assess-input"
+          placeholder="请输入评价"
+          @keyup.enter="goPublish()"
+          v-model="inputValue"
+        />
+        <div class="myBuy-li-assess-button">
+          <button class="myBuy-li-assess-button-handin" @click="goPublish(status)">发表</button>
+          <button class="myBuy-li-assess-button-handout" @click="goCancel">取消</button>
+        </div>
+      </div>
+    </li>
+  </div>
+  <div class="myBuy-no" v-show="BuyList.length===0">您还没有购买任何商品哦！</div>
 </div>
 </template>
 
@@ -43,39 +39,93 @@
     data() {
       return {
         i:-1,
-        one:[
-         1,2
-        ],
-        comment:false,
-        showIndex:-1,
-        EIndex:-1
+        BuyList:[],
+
+        comment:true,
+
+        //传递给后端的数据
+        sellerId:Number,
+        goodsId:Number,
+        inputValue:'',
       }
     },
+    props:{
+      userId:Number,
+    },
     methods:{
-      goPublish(index){
-        if(this.inputValue.value === ""){
-          alert('请输入评价信息!')
-        }else{
-          let date = new Date();
-          let year = date.getFullYear();
-          let month = date.getMonth()+1;
-          let day = date.getDate();
-          let hour = date.getHours();
-          let minute = date.getMinutes();
-          let second = date.getSeconds();
-          console.log(year+'年'+month+'月'+day+'日 '+hour +':'+minute+':'+second)
-          this.showIndex = index
-          this.comment = true
-          alert(this.showIndex)
-          alert('发表成功！')
-        }
-      },
-      showAssess(index){
-        this.i = index
-        alert(index)
-      },
-      hidden(){
+      goCancel(){
        this.i = -1
+      },
+      goPublish(){
+        this.i=-1
+        if(this.inputValue=== ""){
+          alert("请输入评价！")
+        }else{
+          let _this = this
+          $.ajax({
+            url: "/api/sunny/comment/add",
+            async: true,
+            type: 'GET',
+            data: {
+              // "reId":_this.userId.userId
+              "buyerId":1,
+              "sellerId":_this.sellerId,
+              "goodsId":_this.goodsId,
+              "TbContent":_this.inputValue
+            },
+            success: function (data) {
+              alert("评价成功！")
+            },
+            error: function () {
+            },
+            dataType: 'json'
+          })
+        }
+        // if(this.inputValue.value === ""){
+        //   alert('请输入评价信息!')
+        // }else{
+        //   let date = new Date();
+        //   let year = date.getFullYear();
+        //   let month = date.getMonth()+1;
+        //   let day = date.getDate();
+        //   let hour = date.getHours();
+        //   let minute = date.getMinutes();
+        //   let second = date.getSeconds();
+        //   console.log(year+'年'+month+'月'+day+'日 '+hour +':'+minute+':'+second)
+        //   this.showIndex = index
+        //   this.comment = true
+        //   alert(this.showIndex)
+        //   alert('发表成功！')
+        // }
+      },
+      showAssess(item,index){
+        this.i = index
+      },
+    },
+    created(){
+      let _this = this
+      alert(_this.userId.userId)
+      $.ajax({
+        url: "/api/sunny/goods/findBoughtGoods",
+        async: true,
+        type: 'GET',
+        data: {
+          // "reId":_this.userId.userId
+          "buyerId":1,
+        },
+        success: function (data) {
+          _this.BuyList = data.data
+          console.log(_this.BuyList)
+
+        },
+        error: function () {
+
+        },
+        dataType: 'json'
+      })
+    },
+    watch:{
+      count(){
       }
     }
   }
@@ -85,10 +135,17 @@
   .assess{
     display:none
   }
+  .myBuy-no
+    height:calc(78vh)
+    line-height:calc(78vh)
+    color:red;
+    width:100%;
+    margin-left:40%;
   .myBuy
     margin-left:8%;
     margin-top:32px;
     margin-bottom:3%;
+    min-height:calc(90vh)
     .myBuy-h1
       display:inline-block
       font-size:18px;

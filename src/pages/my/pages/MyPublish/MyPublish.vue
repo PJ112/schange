@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="myPublish" v-show="list.length>0">
+    <div class="myPublish" v-if="list.length>0">
       <h1 class="myPublish-h1">已发布</h1>
       <h2 class="myPublish-h2" @click="Chose" v-show="list.length>0">勾选</h2>
       <div  class="content" v-for="(item,index) in list" :key="index" >
@@ -28,8 +28,8 @@
         <span class="myPublish-bottom-quxiao" @click="QuXiao">取消</span>
       </div>
 
-      <ul class="myOrder-page" v-show="list.length>0">
-        <li v-if="pageNum === -1" class="disabled unforepage">上一页</li>
+      <ul class="myPublish-page" v-show="list.length>0">
+        <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
         <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
         <li
           @click="LoadData(item-1)"
@@ -41,8 +41,7 @@
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div  class="myPublish-no" v-show="list.length==0">赶紧去发布物品吧!</div>
-
+    <div  class="myPublish-no" v-else>赶紧去发布物品吧!</div>
   </div>
 </template>
 
@@ -75,7 +74,6 @@ export default {
     },
     del(){
       let _this = this
-      // alert(jQuery.param(this.choseIndex,true))
       $.ajax({
         url:"/api/sunny/goods/delete",
         async:true,
@@ -102,7 +100,8 @@ export default {
         async:true,
         type:'GET',
         data:{
-          "sellerId":_this.userId.userId,
+          // "sellerId":_this.userId.userId,
+          "sellerId":2,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize,
           "status":_this.status
@@ -117,12 +116,14 @@ export default {
   },
   created(){
     let _this = this
+    alert(this.list.length)
     $.ajax({
       url:"/api/sunny/goods/newSearch",
       async:true,
       type:'GET',
       data:{
-        "sellerId":_this.userId.userId,
+        // "sellerId":_this.userId.userId,
+        "sellerId":2,
         "pageNum":_this.pageNum,
         "pageSize":_this.pageSize,
         "status":_this.status
@@ -193,7 +194,7 @@ export default {
         .myPublish-li-left
           display:inline-block
           vertical-align:top;
-          height:calc(31vh);
+          height:calc(26.6vh);
           width:34%;
           border-radius:5px;
           img
@@ -238,15 +239,14 @@ export default {
       .myPublish-bottom-quxiao
         float:right;
         margin-right:12%;
-  .myOrder-page
+  .myPublish-page
     display: inline-block
     margin:1% 30%;
   .forepage,.unforepage
     display: inline-block;
     cursor:pointer;
   .unforepage
-    cursor:help
-    color:red
+    cursor:not-allowed;
   .numberPage,.ItemnumberPage
     display: inline-block
     cursor:pointer;
