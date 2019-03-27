@@ -14,39 +14,45 @@
             <div class="swiper-pagination"></div>
           </div>
         </div>
+
       </div>
-       <div class="index-bottom">
+      <div class="index-bottom">
          <div class="index-category">
            <div class="index-category-all">
              <div class="all">所有分类</div>
-             <router-link to="detail">
-               <div class="index-category-item" v-for="(item,index) of 8" :key="index">
-                 <div class="item-icon">
-                   <img src="../../assets/imgs/index/图书.png">
-                 </div>
-                 <div class="item-name">
-                   服饰
-                 </div>
-                 <div class="item-one" v-for="(item,index) of items" :key="index">
-                   {{item}}
-                 </div>
-               </div>
-             </router-link>
+             <div class="index-category-items">
+                   <div class="index-category-item" v-for="(item,index) of categories" :key="index" >
+                     <router-link :to="'/detail?typeId='+item.tbType.id">
+                       <div class="item-icon">
+                         <img src="../../assets/imgs/index/图书.png">
+                       </div>
+                       <div class="item-name">
+                         {{item.tbType.type}}
+                       </div>
+                       <div class="item-one" v-for="(type,index) of item.tbTypeList" :key="index">
+                         {{type.type}}
+                       </div>
+                     </router-link>
+                   </div>
+             </div>
+
            </div>
            <div class="index-category-recommend">
              <div class="all">热门推荐</div>
              <div class="recommend-items">
-               <div class="item" v-for="(item,index) of 6" :key="index">
-                 <router-link to="/sale-product">
-                   <div class="item-img">
-                     <img src="../../assets/imgs/index/iphone.jpg"/>
+               <div class="item" v-for="(item,index) of products" :key="index"
+                    v-if="item.imageList[0].address.endsWith('.jpg')"
+               >
+                 <router-link :to="'/sale-product?id='+item.goods.id">
+                   <div class="item-img" >
+                     <img :src="getImgUrl(item.imageList[0].address)"  />
                    </div>
                    <div class="item-description">
                      <div class="item-name">
-                       个人闲置苹果X国行
+                       {{item.goods.name}}
                      </div>
                      <div class="item-price">
-                       价格：3599元
+                       价格：{{item.goods.price}}
                      </div>
                    </div>
                  </router-link>
@@ -54,6 +60,8 @@
                </div>
              </div>
            </div>
+           <icon-common></icon-common>
+
          </div>
          <div class="index-copyright">
                Copyright @ 2019 Team Sunny
@@ -63,25 +71,70 @@
 </template>
 
 <script>
-    import NavCommon from '../nav/Nav'
+    import $ from 'jquery'
+    import NavCommon from '../../common/nav/Nav'
     import  Swiper from 'swiper'
+    import Icon from '../../common/indexIcon/Icon'
     export default {
         name: "Index",
         components:{
-          "nav-common":NavCommon
+          "nav-common":NavCommon,
+          "icon-common":Icon,
+
         },
         data(){
           return{
-            items:["女装","男装","鞋靴","箱包"]
+            items:["女装","男装","鞋靴","箱包"],
+            user:this.$store.state.user,
+            products:[],
+            imgUrl:'http://119.23.12.250:8090/images',
+            categories:[]
           }
         },
         created() {
+            let _this=this;
             new Swiper ('.swiper-container', {
               loop: true,
               pagination: {
                 el: '.swiper-pagination',
               }
             });
+            $.ajax({
+            url:'/api/sunny/goods/newSearch',
+            async:true,
+            data:{"pageNum":1,"pageSize":6},
+            success:function (data) {
+              _this.products=data.data.rows;
+            },
+            error:function (error) {
+              console.log(error);
+            }
+          });
+            $.ajax({
+              url:'/api/sunny/type/findAll',
+              async:true,
+              data:{},
+              success:function (data) {
+                _this.categories=data.data;
+                console.log(_this.categories);
+              },
+              error:function (error) {
+                console.log(error);
+              }
+            })
+
+        },
+        computed:{
+          getImgUrl() {
+
+            return function (icon) {
+
+              return this.imgUrl+icon;
+            }
+
+          },
+
+
 
 
         }
@@ -135,41 +188,48 @@
         height :auto;
         padding-top:100px;
         padding-bottom :40px;
+        position: relative;
         .index-category-all{
           .all{
             font-size :30px;
             margin-bottom :60px;
           }
-          .index-category-item{
-            display :inline-block;
-            width :180px;
-            background :#fff;
-            height :275px;
-            margin-right :30px;
-            margin-left :20px;
-            margin-bottom :20px;
-            border-radius :10px;
-            text-align :center;
-            padding :0 8px;
-            box-shadow :0 0 10px #ccc;
-            transition: All 0.4s ease-in-out;
-            -webkit-transition: All 0.4s ease-in-out;
-            -moz-transition: All 0.4s ease-in-out;
-            -o-transition: All 0.4s ease-in-out;
-            .item-name{
-              font-size :18px;
-              color :#323232;
-              margin-bottom :6px;
-            }
-            .item-one{
-              font-size :15px;
-              color: #858383;
-              padding-top :8px;
-              border-top:2px solid #f5f7f9;
-              margin-bottom :8px;
+          .index-category-items{
+            width 100%;
+            padding-right 7px;
+            .index-category-item{
+              display :inline-block;
+              background :#fff;
+              vertical-align top;
+              width 15%;
+              margin-left :3%;
+              height :275px;
+              margin-right :30px;
+              margin-bottom :20px;
+              border-radius :10px;
               text-align :center;
+              padding :0 8px;
+              box-shadow :0 0 10px #ccc;
+              transition: All 0.4s ease-in-out;
+              -webkit-transition: All 0.4s ease-in-out;
+              -moz-transition: All 0.4s ease-in-out;
+              -o-transition: All 0.4s ease-in-out;
+              .item-name{
+                font-size :18px;
+                color :#323232;
+                margin-bottom :6px;
+              }
+              .item-one{
+                font-size :15px;
+                color: #858383;
+                padding-top :8px;
+                border-top:2px solid #f5f7f9;
+                margin-bottom :8px;
+                text-align :center;
+              }
             }
           }
+
         }
         .index-category-recommend{
            margin-top :100px;

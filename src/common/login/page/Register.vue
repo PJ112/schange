@@ -58,7 +58,7 @@
         verifyImg:"",
         verifyText:"",
         alertDara: '',
-        scholl:''
+        school:''
       }
     },
     methods: {
@@ -107,7 +107,7 @@
               "username":this.user,
               "password":this.pass,
               "address":this.cityChange,
-              "school":this.scholl
+              "school":this.school
             },
             success:function (data) {
               //注册成功

@@ -7,7 +7,9 @@ import '../src/assets/css/reset.css';
 import './assets/iconfont/iconfont.css'
 import store from './vuex/index';
 import "element-ui/lib/theme-chalk/index.css";
-import $ from "jquery";
+import VueSource from 'vue-resource'
+
+Vue.use(VueSource);
 
 
 

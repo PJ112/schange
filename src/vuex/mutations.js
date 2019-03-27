@@ -11,4 +11,7 @@ export default  {
   updateSchool(state, school) {
     state.school = school
   },
+
+  //shop  LT
+
 }

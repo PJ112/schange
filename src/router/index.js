@@ -19,23 +19,23 @@ import SellersPublish from '../pages/sellers/SellersMes/pages/SellersPublish'
 import SellersHJudge from '../pages/sellers/SellersMes/pages/SellersHJudge'
 
 
-// import Index from '../common/index/Index'
-// import IndexShopping from '../common/index/components/Shopping'
-// import IndexCollection from '../common/index/components/Collection'
-// import IndexIntegral from '../common/index/components/Integral'
-// import IndexProfile from '../common/index/components/Profile'
-// import IndexOrdering from '../common/index/components/Ordering'
-// import IndexPrivateLetter from '../common/index/components/PrivateLetter'
-//
-// import ConfirmOrdering from '../common/index/pages/ConfirmOrdering'
-//
-// import Publish from '../common/index/pages/Publish'
-//
-// import SaleProduct from '../common/index/pages/SaleProduct'
-//
-// import Detail from '../common/index/pages/Detail'
-//
-// import ContactSeller from '../common/index/pages/ContactSeller'
+import Index from '../pages/index/Index'
+import IndexShopping from '../pages/index/components/Shopping'
+import IndexCollection from '../pages/index/components/Collection'
+import IndexIntegral from '../pages/index/components/Integral'
+import IndexProfile from '../pages/index/components/Profile'
+import IndexOrdering from '../pages/index/components/Ordering'
+import IndexPrivateLetter from '../pages/index/components/PrivateLetter'
+
+import ConfirmOrdering from '../pages/index/pages/ConfirmOrdering'
+
+import Publish from '../pages/index/pages/Publish'
+
+import SaleProduct from '../pages/index/pages/SaleProduct'
+
+import Detail from '../pages/index/pages/Detail'
+
+import ContactSeller from '../pages/index/pages/ContactSeller'
 
 
 Vue.use(Router);
@@ -118,55 +118,55 @@ export default new Router({
         },
       ]
     },
-    // {
-    //  path:'/index',
-    //  component:Index
-    // },
-    // {
-    //  path:'/index-shopping',
-    //  component:IndexShopping
-    //
-    // },
-    // {
-    //  path:'/index-collection',
-    //  component:IndexCollection
-    // },
-    // {
-    //  path:'/index-integral',
-    //  component:IndexIntegral
-    // },
-    // {
-    //  path:'/index-profile',
-    //  component:IndexProfile
-    // },
-    // {
-    //  path:'/index-private-letter',
-    //  component:IndexPrivateLetter
-    // },
-    // {
-    //  path:'/index-ordering',
-    //  component:IndexOrdering
-    // },
-    // {
-    //  path:'/confirm-ordering',
-    //  component:ConfirmOrdering
-    // },
-    // {
-    //  path:'/publish',
-    //  component:Publish
-    // },
-    // {
-    //  path:'/sale-product',
-    //  component:SaleProduct
-    // },
-    // {
-    //  path:'/detail',
-    //  component:Detail
-    // },
-    // {
-    //  path:'/contact-seller',
-    //  component:ContactSeller
-    // },
+    {
+     path:'/index',
+     component:Index
+     },
+    {
+     path:'/index-shopping',
+     component:IndexShopping
+
+    },
+    {
+     path:'/index-collection',
+     component:IndexCollection
+    },
+    {
+     path:'/index-integral',
+     component:IndexIntegral
+    },
+    {
+     path:'/index-profile',
+     component:IndexProfile
+    },
+    {
+     path:'/index-private-letter',
+     component:IndexPrivateLetter
+    },
+    {
+     path:'/index-ordering',
+     component:IndexOrdering
+    },
+    {
+     path:'/confirm-ordering',
+     component:ConfirmOrdering
+    },
+    {
+     path:'/publish',
+     component:Publish
+    },
+    {
+     path:'/sale-product',
+     component:SaleProduct
+    },
+    {
+     path:'/detail',
+     component:Detail
+    },
+    {
+     path:'/contact-seller',
+     component:ContactSeller
+    },
     {
      path:'/sellers',
      component:Sellers

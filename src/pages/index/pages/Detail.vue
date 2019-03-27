@@ -1,28 +1,31 @@
 <template>
   <div class="shopping">
-    <common-nav></common-nav>
-    <div class="shopping-container">
-      <div class="shopping-container-title">
-        运动
-      </div>
-      <div class="shopping-container-items"  v-for="(item,index) of 4">
-        <div class="shopping-item-intro">
-          <img  class="shopping-intro-img" src="../../../assets/imgs/index_shopping/book.png">
-          <div class="shopping-item-desc">
-            <div class="shopping-desc-title">
-              得力-尼龙网纱笔袋（男高中生笔袋文具盒）
+    <div class="shopping-box">
+      <common-nav></common-nav>
+      <div class="shopping-container">
+        <div class="shopping-container-title">
+          运动
+        </div>
+        <div class="shopping-container-items"  v-for="(item,index) of products">
+          <div class="shopping-item-intro">
+            <img  class="shopping-intro-img" src="../../../assets/imgs/index_shopping/book.png">
+            <div class="shopping-item-desc">
+              <div class="shopping-desc-title">
+                得力-尼龙网纱笔袋（男高中生笔袋文具盒）
+              </div>
+              <div class="shopping-desc-price">
+                <span>价格：</span>8.8元
+              </div>
             </div>
-            <div class="shopping-desc-price">
-              <span>价格：</span>8.8元
+            <div class="shopping-item-delete">
+              <span class="shop">加入购物车</span>
+              <span class="buy">立即购买</span>
             </div>
-          </div>
-          <div class="shopping-item-delete">
-            <span class="shop">加入购物车</span>
-            <span class="buy">立即购买</span>
           </div>
         </div>
       </div>
     </div>
+
 
   </div>
 </template>
@@ -34,8 +37,27 @@
     data(){
       return{
         show:true,
-        select:true
+        select:true,
+        typeId:this.$route.query.typeId,
+        products:[]
       }
+    },
+    created(){
+      let _this=this;
+      $.ajax({
+        url:'/api/sunny/goods/newSearch',
+        async:true,
+        data:{"typeId":this.typeId},
+        success:function (good) {
+         if (good.flag){
+           _this.products=good.data.rows;
+         }
+
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      });
     },
     components:{
       "common-nav":CommonNav
@@ -55,9 +77,15 @@
   .shopping{
     width:100%;
     height:100%;
-    background :#e7f4f0;
+    background :#fff;
     font-family :simsun;
     padding-bottom :100px;
+    .shopping-box{
+      margin-left:100px;
+      margin-right:100px;
+      background #e7f4f0;
+      padding-bottom :100px;
+    }
     .shopping-container{
       width:80%;
       margin: 10px auto;
@@ -83,7 +111,7 @@
         color:#99d2c0;
       }
       .shopping-container-items{
-        padding:0 100px;
+        padding:0 50px;
         margin-top :50px;
         display :flex;
         height:160px;

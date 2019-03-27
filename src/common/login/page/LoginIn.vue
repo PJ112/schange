@@ -38,7 +38,7 @@
         verifyText:'',
         verifyImg:'',
         alertDara: '',
-        userId:Number
+        userId:0
       }
     },
     methods:{
@@ -115,10 +115,12 @@
               //登陆失败:指定用户不存在
               switch (data.message){
                 case "登陆成功":{
-                  _this.$router.push("/mydata");
-                  _this.$store.dispatch('updateUserAsyc',_this.user);
+                  console.log(data.data.username+":"+data.data.id);
+                  _this.user=data.data.username;
+                  _this.$store.dispatch('updateUserAsyc',data.data.username);
                   _this.userId = data.data.id;
-                  _this.$store.dispatch('updateuserIdAsyc',_this.userId)
+                  _this.$store.dispatch('updateuserIdAsyc',data.data.id);
+                  _this.$router.push("/index");
                   break;
                 }
                 case "登陆失败:密码不正确":{

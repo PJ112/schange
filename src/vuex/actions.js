@@ -19,4 +19,6 @@ export default {
       school:data
     })
   },
+  //shop  LT
+
 }

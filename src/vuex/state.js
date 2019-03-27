@@ -1,8 +1,10 @@
+
+
 export default {
   //login
   user:'',
   pass:'',
-  id:Number,
+  userId:Number,
 
   //register
   school:'',
@@ -14,5 +16,8 @@ export default {
   myDateSch:'',
 
   //mymall
-  jifen:'0'
+  jifen:'0',
+
+  //shop
+
 }
