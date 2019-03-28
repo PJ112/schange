@@ -14,12 +14,12 @@
         </div>
         <li class="myPublish-li">
           <div class="myPublish-li-left">
-            <img class="myPublish-li-left-img"/>
+            <img class="myPublish-li-left-img" :src="item.imageList[0].address"/>
           </div>
           <div class="myPublish-li-right">
             <div class="myPublish-li-right-content">{{item.content}}</div>
             <div class="myPublish-li-right-jifen">价格:{{item.goods.price}}</div>
-            <button class="myPublish-li-right-button" @click="goMarket">编辑</button>
+            <button class="myPublish-li-right-button" @click="goMarket(item.goods.id)">编辑</button>
           </div>
         </li>
       </div>
@@ -60,6 +60,7 @@ export default {
       total:Number,
       chose:false,
       choseIndex:Number,
+      goodsId:''
     }
   },
   methods: {
@@ -70,7 +71,7 @@ export default {
       this.chose = false
     },
     getIndex(index){
-     this.choseIndex.push = index
+     this.choseIndex = index
     },
     del(){
       let _this = this
@@ -89,8 +90,12 @@ export default {
         dataType:'json'
       })
     },
-    goMarket(){
-      this.$router.push()
+    goMarket(id){
+      this.goodsId = id
+      this.$router.push({
+        path:'/publish',
+        params:{publish_goodsId:"goodsId"}
+      })
     },
     LoadData(value) {
       this.pageNum = value
@@ -100,8 +105,7 @@ export default {
         async:true,
         type:'GET',
         data:{
-          // "sellerId":_this.userId.userId,
-          "sellerId":2,
+          "sellerId":_this.userId.userId,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize,
           "status":_this.status
@@ -116,14 +120,12 @@ export default {
   },
   created(){
     let _this = this
-    alert(this.list.length)
     $.ajax({
       url:"/api/sunny/goods/newSearch",
       async:true,
       type:'GET',
       data:{
-        // "sellerId":_this.userId.userId,
-        "sellerId":2,
+        "sellerId":_this.userId.userId,
         "pageNum":_this.pageNum,
         "pageSize":_this.pageSize,
         "status":_this.status
@@ -131,6 +133,7 @@ export default {
       success:function (data) {
         _this.list = data.data.rows;
         _this.total = data.data.total;
+       // console.log(_this.list[0].imageList[0].address)
         _this.LoadData(0);
       },
       error:function () {

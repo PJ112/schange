@@ -1,41 +1,42 @@
 <template>
   <div>
-    <div class="myMall">
-      <h1 class="myMall-h1">积分商城</h1>
-      <h2 class="myMall-h2">已有积分:</h2>
-      <div>
-        <li class="myMall-li">
-          <div class="myMall-li-left">
-            <img class="myMall-li-left-img" src="../../resource/商品.png"/>
-          </div>
-          <div class="myMall-li-right">
-            <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-            <div class="myMall-li-right-jifen">所需积分</div>
-            <button class="myMall-li-right-button">兑换</button>
-          </div>
-        </li>
-        <li class="myMall-li">
-          <div class="myMall-li-left">
-            <img class="myMall-li-left-img" src="../../resource/商品.png"/>
-          </div>
-          <div class="myMall-li-right">
-            <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-            <div class="myMall-li-right-jifen">所需积分</div>
-            <button class="myMall-li-right-button">兑换</button>
-          </div>
-        </li>
-        <li class="myMall-li">
-          <div class="myMall-li-left">
-            <img class="myMall-li-left-img" src="../../resource/商品.png"/>
-          </div>
-          <div class="myMall-li-right">
-            <div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
-            <div class="myMall-li-right-jifen">所需积分</div>
-            <button class="myMall-li-right-button">兑换</button>
-          </div>
-        </li>
-      </div>
-    </div>
+    <div class="myMall-no">暂无商品，敬请期待！</div>
+    <!--<div class="myMall">-->
+      <!--<h1 class="myMall-h1">积分商城</h1>-->
+      <!--<h2 class="myMall-h2">已有积分:</h2>-->
+      <!--<div>-->
+        <!--<li class="myMall-li">-->
+          <!--<div class="myMall-li-left">-->
+            <!--<img class="myMall-li-left-img" src="../../resource/商品.png"/>-->
+          <!--</div>-->
+          <!--<div class="myMall-li-right">-->
+            <!--<div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>-->
+            <!--<div class="myMall-li-right-jifen">所需积分</div>-->
+            <!--<button class="myMall-li-right-button">兑换</button>-->
+          <!--</div>-->
+        <!--</li>-->
+        <!--<li class="myMall-li">-->
+          <!--<div class="myMall-li-left">-->
+            <!--<img class="myMall-li-left-img" src="../../resource/商品.png"/>-->
+          <!--</div>-->
+          <!--<div class="myMall-li-right">-->
+            <!--<div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>-->
+            <!--<div class="myMall-li-right-jifen">所需积分</div>-->
+            <!--<button class="myMall-li-right-button">兑换</button>-->
+          <!--</div>-->
+        <!--</li>-->
+        <!--<li class="myMall-li">-->
+          <!--<div class="myMall-li-left">-->
+            <!--<img class="myMall-li-left-img" src="../../resource/商品.png"/>-->
+          <!--</div>-->
+          <!--<div class="myMall-li-right">-->
+            <!--<div class="myMall-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>-->
+            <!--<div class="myMall-li-right-jifen">所需积分</div>-->
+            <!--<button class="myMall-li-right-button">兑换</button>-->
+          <!--</div>-->
+        <!--</li>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -55,6 +56,12 @@
 </script>
 
 <style lang="stylus" scoped>
+  .myMall-no
+    height:calc(78vh)
+    line-height:calc(78vh)
+    color:red;
+    width:100%;
+    margin-left:40%;
   .myMall
     margin-left:8%;
     margin-top:32px;

@@ -115,11 +115,11 @@
               //登陆失败:指定用户不存在
               switch (data.message){
                 case "登陆成功":{
-                  console.log(data.data.username+":"+data.data.id);
+                  // console.log(data.data.username+":"+data.data.id);
                   _this.user=data.data.username;
-                  _this.$store.dispatch('updateUserAsyc',data.data.username);
                   _this.userId = data.data.id;
-                  _this.$store.dispatch('updateuserIdAsyc',data.data.id);
+                  _this.$store.dispatch('updateUserAsyc',data.data.username);
+                  _this.$store.dispatch('updateuserIdAsyc', _this.userId);
                   _this.$router.push("/index");
                   break;
                 }
@@ -164,12 +164,7 @@
       }
     },
     created(){
-      this.verifyImg = "http://119.23.12.250/sunny/verify"
-      setInterval((this.changeverifyImg),100000000000)
     },
-    watch:{
-
-    }
   }
 </script>
 

@@ -64,7 +64,7 @@
               <div class="sale-product-top-age">
                 圈龄{{day}}个月
               </div>
-              <router-link :to="'/sellerspublish?id='+sellerId">
+              <router-link :to="'/sellersmes?id='+sellerId">
                 <div class="sale-product-top-index">卖家主页</div>
               </router-link>
               <router-link :to="'/contact-seller?id='+id">
@@ -155,7 +155,6 @@
           getImgUrl(){
             if (this.details.imageList){
               return this.httpUrl+this.details.imageList[0].address;
-
             }
           }
         },

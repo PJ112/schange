@@ -78,7 +78,7 @@
               },
               {
                 info:'个人中心',
-                path:'/index-profile'
+                path:'/my'
               },
               {
                 info:'订单管理',

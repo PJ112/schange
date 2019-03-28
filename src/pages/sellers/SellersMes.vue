@@ -2,20 +2,19 @@
   <div class="my">
     <div class="my-content">
       <div class="my-header">
-        <img src="../../../assets/imgs/sellers/schange.png" class="my-logo"/>
+        <img src="../../assets/imgs/sellers/schange.png" class="my-logo"/>
         <span>
-           <span class="my-header-loginout">退出</span>
-          <img src="../../../assets/imgs/sellers/userIcon.png" class="my-userIcon"/>
+           <span class="my-header-loginout" @click="goOut">退出</span>
+          <img  class="my-userIcon"/>
         </span>
       </div>
       <div class="my-left">
         <div class="my-top">
-          <img src="../../../assets/imgs/sellers/userIcon.png" class="my-icon" v-show="!img"/>
-          <img :src="img.img" v-show="img" class="my-changeIcon"/>
-          <div class="my-name">Judu</div>
-          <div class="my-year">圈龄</div>
-          <div class="my-scholl">学校：巢湖学院</div>
-          <div class="my-LeftButton" >私信卖家</div>
+          <img   class="my-changeIcon"/>
+          <div class="my-name">{{user}}</div>
+          <div class="my-year">圈龄{{day}}个月</div>
+          <div class="my-scholl">学校：{{school}}</div>
+          <div class="my-LeftButton" @click="goMes" >私信卖家</div>
         </div>
       </div>
       <div class="my-right">
@@ -23,7 +22,7 @@
           <router-link to="./sellerspublish" class="my-right-header-link">已发布</router-link>
           <router-link to="./sellershjudge" class="my-right-header-link">历史评价</router-link>
         </div>
-        <router-view></router-view>
+        <router-view :sellerId="sellerId"></router-view>
       </div>
       <div class="my-link">
         <my-link></my-link>
@@ -33,30 +32,53 @@
 </template>
 
 <script>
-  import MyLink from '../../../common/MyLink/Link'
-  import {mapState} from 'vuex'
+  import MyLink from '../../common/MyLink/Link'
   export default {
-    name: 'Sellers',
+    name: 'SellersMes',
     data(){
       return{
-
+        sellerId:this.$route.query.id,
+        user:'',
+        day:'',
+        school:''
       }
     },
     methods:{
-      goRes() {
-        this.$router.push('./resgister')
+      goOut(){
+        this.$router.push('./sale-product')
       },
-      goLogin () {
-        this.$router.push('./loginin')
-      },
-
+      goMes(){
+        this.$router.push({
+          path:'./contact-seller'
+        })
+      }
     },
     components:{
       MyLink
     },
-    computed:{
-      ...mapState(['user']),
-      ...mapState(['img'])
+    created(){
+      let _this = this
+      // alert(this.sellerId)
+      $.ajax({
+        url:"/api/sunny/user/findOne",
+        async:true,
+        type:'GET',
+        data:{
+          "id":_this.sellerId,
+        },
+        success:function (data) {
+          _this.user = data.data.username
+          let nowTime=new Date().getTime();
+          let createTime=data.data.creatTime;
+          let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
+          _this.day = day
+          let school = data.data.school
+          _this.school = school
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
     },
   }
 </script>
@@ -89,7 +111,7 @@
         .my-header-loginout
           float:right;
           margin-top:2%;
-          margin-right:6%;
+          margin-right:10%;
           margin-left:1%;
           color:#85cab5;
           font-size:16px;

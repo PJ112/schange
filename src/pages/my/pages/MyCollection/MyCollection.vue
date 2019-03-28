@@ -4,7 +4,8 @@
     <h1 class="myCollection-h1">我的消息</h1>
     <div>
       <li class="myCollection-li" v-for="(item,index) in list" :key="index">
-        <img class="myCollection-li-left-img" :src="item.sendUser.image"/>
+        <img class="myCollection-li-left-img" :src="item.sendUser.image.address" v-if="item.sendUser.image.address"/>
+        <img class="myCollection-li-left-img" src="../../../../assets/imgs/index_shopping/user.png" v-else />
         <div class="myCollection-li-right">
             <div class="myCollection-li-right-header">
               <span class="myCollection-li-right-header-name" >{{item.sendUser.user.name}}</span>
@@ -50,28 +51,18 @@ export default {
  },
   created(){
     let _this = this
-    alert(_this.userId.userId)
+    // alert(_this.userId.userId)
     $.ajax({
       url: "/api/sunny/message/findNewMessage",
       async: true,
       type: 'GET',
       data: {
-        // "reId":_this.userId.userId
-        "reId":1
+        "reId":_this.userId.userId
+        // "reId":1
       },
       success: function (data) {
         _this.list = data.data
         console.log(_this.list)
-        if(this.list.length ===0 ){
-          // alert("暂时没有消息！");
-          // let alertDara = {
-          //   content: "暂时没有消息！",
-          //   contentColor: "red",
-          //   btn: ["确定"],
-          //   btnColor: ["", ""]
-          // };
-          // _this.alertDara = alertDara;
-        }
        console.log(data.data)
       },
       error: function () {

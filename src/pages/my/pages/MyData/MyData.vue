@@ -3,7 +3,12 @@
       <div class="myData">
         <h1 class="myData-h1">编辑个人资料</h1>
         用户名<br>
-        <input type="text"  class="myData-userInput" placeholder="username" :value="user.user"/>
+        <input
+          type="text"
+          class="myData-userInput"
+          placeholder="username"
+          v-model="username"
+        />
         <div class="myData-sex">
           性别
           <div class="myData-sex-detail">
@@ -49,51 +54,37 @@ export default {
         avatar: ''
       },
       alertDara:'',
-      userId:Number,
       wechat:'',
       sex:'',
-      phone:''
+      phone:'',
+      username:'',
+      id:Number
     }
   },
   props:{
     user:'',
-    userId:Number,
+    userId:'',
     school:''
   },
   methods: {
-    // 打开图片上传
-    uploadHeadImg () {
-      this.$el.querySelector('.hiddenInput').click()
-    },
-    // 将头像显示
-    handleFile(e) {
-      let $target = e.target || e.srcElement
-      let file = $target.files[0]
-      var reader = new FileReader()
-      reader.onload = (data) => {
-        let res = data.target || data.srcElement
-        this.userInfo.avatar = res.result
-      }
-      reader.readAsDataURL(file)
-    },
     goBao() {
       let _this = this;
       this.sex=$("input:radio[name='sex']:checked").val();
+      this.id = this.userId.userId;
       $.ajax({
         url: "/api/sunny/user/update",
         async: true,
         type: 'GET',
         data: {
-          "username": this.username,
-          "phone": this.phone,
-          "school": this.school,
-          "wechat":this.wechat,
-          "id":this.userId.userId,
-          'sex':this.sex
+          "username": _this.username,
+          "phone": _this.phone,
+          "wechat":_this.wechat,
+          "id":_this.id,
+          'sex':_this.sex
         },
         success: function (data) {
           switch(data.message){
-            case "修改成功":{
+            case "更新成功":{
               let alertDara = {
                 title: "",
                 titleColor: "#abd9ca",
@@ -129,12 +120,15 @@ export default {
     }
   },
   created(){
-    // console.log(this.schoolChange)
+    this.username = this.user.user
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+  input{
+    padding-left:10px;
+  }
   .myData
     margin-left:8%;
     margin-top:32px;
@@ -163,6 +157,7 @@ export default {
     .myData-tel
       margin-top:6%;
       .myData-tel-detail
+        display:inline-block
         margin-top:10px;
         width:80%;
         height:45px;

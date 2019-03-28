@@ -1,2 +1,28 @@
-MyBuy
- 评价状态
+order
+  商品查找页面 只有money
+
+user
+  根据sellers 的 id查找用户的图片
+
+历史评价
+  中两张图片都是地址都是address
+
+
+已购买
+  给我的全部是对象 没有办法 最好给我数组 我进行循环展示
+    // if(this.inputValue.value === ""){
+        //   alert('请输入评价信息!')
+        // }else{
+        //   let date = new Date();
+        //   let year = date.getFullYear();
+        //   let month = date.getMonth()+1;
+        //   let day = date.getDate();
+        //   let hour = date.getHours();
+        //   let minute = date.getMinutes();
+        //   let second = date.getSeconds();
+        //   console.log(year+'年'+month+'月'+day+'日 '+hour +':'+minute+':'+second)
+        //   this.showIndex = index
+        //   this.comment = true
+        //   alert(this.showIndex)
+        //   alert('发表成功！')
+        // }

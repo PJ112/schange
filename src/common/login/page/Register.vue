@@ -10,7 +10,7 @@
       </span>
        <span>
       <select  class="school-school" v-model="schoolChange">
-          <option :value="item.id" v-for="item in newList" :key="item.id" v-model="scholl">{{item.name}}</option>
+          <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="scholl">{{item.name}}</option>
       </select>
      </span>
      </div>
@@ -58,7 +58,7 @@
         verifyImg:"",
         verifyText:"",
         alertDara: '',
-        school:''
+        scholl:''
       }
     },
     methods: {
@@ -71,7 +71,9 @@
        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
       },
       go() {
+        this.scholl = this.newList.find(item => item.id === this.schoolChange)['name']
         let _this = this;
+        // alert(_this.scholl)
         if(this.user===""  || this.pass===""){
           let alertDara = {
             content: "请输入用户名或密码！",
@@ -116,7 +118,7 @@
               switch (data.message){
                 case "注册成功":{
                   _this.$router.push("/loginin");
-                  _this.$store.dispatch('updateschoolAsyc',_this.school);
+                  _this.$store.dispatch('updateschoolAsyc',_this.scholl);
                   break;
                 }
                 case "注册失败:用户信息异常":
@@ -178,8 +180,6 @@
         this.university = data.university
         this.cityChange()
       })
-      this.verifyImg = "http://119.23.12.250/sunny/verify"
-      setInterval((this.changeverifyImg),10000)
     },
   }
 </script>

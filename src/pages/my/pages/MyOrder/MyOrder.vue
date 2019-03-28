@@ -10,7 +10,7 @@
          <div class="myOrder-li-right-content">晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光晨光</div>
          <div class="myOrder-li-right-top">
            <div class="myOrder-li-right-jifen">价格:{{item.money}}</div>
-           <button class="myOrder-li-right-button" @click="goPay" v-show="status  == 1">立即支付</button>
+           <button class="myOrder-li-right-button" @click="goPay(item.goodsId)" v-show="status  == 1">立即支付</button>
            <div class="myOrder-li-right-text" v-show="status  == 1">待支付</div>
            <button class="myOrder-li-right-button"  v-show="status == 2">付款成功</button>
            <div class="myOrder-li-right-text"  v-show="status == 2">已支付</div>
@@ -53,14 +53,13 @@ export default {
   methods: {
     goPay(){
       let _this = this
-      //点击获取买家id
       _this.status = 2
       $.ajax({
         url:"/api/sunny/order/findPage",
         async:true,
         type:'GET',
         data:{
-          "buyerId":2,
+          "buyerId":_this.userId.userId,
           "status":_this.status
         },
         success:function (data) {
@@ -79,13 +78,11 @@ export default {
         async:true,
         type:'GET',
         data:{
-          // "id":_this.userId.userId,
-          "id":2,
+          "buyerId":_this.userId.userId,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize,
         },
         success:function (data) {
-
         },
         error:function () {
         },
@@ -100,8 +97,7 @@ export default {
       async:true,
       type:'GET',
       data:{
-        // "id":_this.userId.userId,
-        "id":2,
+        "buyerId":_this.userId.userId,
         "pageNum":_this.pageNum,
         "pageSize":_this.pageSize,
         "order":_this.status

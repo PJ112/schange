@@ -1,35 +1,35 @@
 <template>
   <div>
-    <div class="MyHJudge" v-if="list.length>0">
-      <h1 class="MyHJudge-h1">历史评价</h1>
+    <div class="SellersHJudge" v-if="list.length>0">
+      <h1 class="SellersHJudge-h1">历史评价</h1>
       <div>
-        <li class="MyHJudge-li" v-for="(item,index) in list">
-          <div class="MyHJudge-li-assess">
-            <img class="myCollection-li-left-img" :src="item[4].address" />
+        <li class="SellersHJudge-li" v-for="(item,index) in list">
+          <div class="SellersHJudge-li-assess">
+            <img class="myCollection-li-left-img" :src="item[3].address" />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
-                <span class="myCollection-li-right-header-name">{{item[4].username}}</span>
+                <span class="myCollection-li-right-header-name">{{item[3].username}}</span>
                 <span class="myCollection-li-right-header-img">
-                <img src="../../../../assets/imgs/my/mycollection/女.png" v-show="item[4].sex ===2"/>
-                <img src="../../../../assets/imgs/my/mycollection/男.png" v-show="item[4].sex ===1"/>
-                <img src="../../../../assets/imgs/my/mycollection/保密.png" v-show="item[4].sex ===3"/>
+                <img src="../../../assets/imgs/my/mycollection/女.png" v-show="item[3].sex ===2"/>
+                <img src="../../../assets/imgs/my/mycollection/男.png" v-show="item[3].sex ===1"/>
+                <img src="../../../assets/imgs/my/mycollection/保密.png" v-show="item[3].sex ===3"/>
               </span>
               </div>
               <div class="myCollection-li-right-content">{{item[5].contents}}</div>
             </div>
             <!--<div class="myCollection-li-time">2019-01-26 12:24:01</div>-->
           </div>
-          <div class="MyHJudge-li-goods">
-            <img class="MyHJudge-li-left-img" :src="item[2].address" v-if="item[4].id === userId.userId"/>
-            <div class="MyHJudge-li-right">
-              <div class="MyHJudge-li-right-content">{{item[1].contents}}</div>
-              <!--<div class="MyHJudge-li-right-time">2019-01-26 12:24:01</div>-->
+          <div class="SellersHJudge-li-goods">
+            <img class="SellersHJudge-li-left-img" :src="item[2].address" v-if="item[4].id === sellerId"/>
+            <div class="SellersHJudge-li-right">
+              <div class="SellersHJudge-li-right-content">{{item[1].contents}}</div>
+              <!--<div class="SellersHJudge-li-right-time">2019-01-26 12:24:01</div>-->
             </div>
           </div>
         </li>
       </div>
       <!--分页-->
-      <ul class="MyHJudge-page" v-show="list.length>0">
+      <ul class="SellersHJudge-page" v-show="list.length>0">
         <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
         <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
         <li
@@ -42,13 +42,13 @@
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div class="MyHJudge-no" v-else>暂无历史评价！</div>
+    <div class="SellersHJudge-no" v-else>暂无历史评价！</div>
   </div>
 </template>
 
 <script>
   export default {
-    name: "MyHJudge",
+    name: "SellersHJudge",
     data() {
       return {
         total:Number,
@@ -58,7 +58,7 @@
       }
     },
     props:{
-      userId:Number,
+      sellerId:Number
     },
     methods:{
       LoadData(value) {
@@ -69,7 +69,7 @@
           async:true,
           type:'GET',
           data:{
-            "buyId":_this.userId.userId,
+            "sellerId":_this.sellerId,
             "pageNum":_this.pageNum,
             "pageSize":_this.pageSize
           },
@@ -88,7 +88,7 @@
         async: true,
         type: 'GET',
         data: {
-          "buy":_this.userId.userId,
+          "sellerId":_this.userId.userId,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize
         },
@@ -112,22 +112,22 @@
 </script>
 
 <style lang="stylus" scoped>
-  .MyHJudge-no
+  .SellersHJudge-no
     height:calc(78vh)
     line-height:calc(78vh)
     color:red;
     width:100%;
     margin-left:40%;
-  .MyHJudge
+  .SellersHJudge
     margin-left:8%;
     margin-top:32px;
     margin-bottom:3%;
-    .MyHJudge-h1
+    .SellersHJudge-h1
       display:inline-block
       font-size:18px;
       color:#2b2a2a
       margin-bottom:3%;
-    .MyHJudge-li
+    .SellersHJudge-li
       list-style:none;
       margin-top:20px;
       width:90%;
@@ -135,7 +135,7 @@
       border-radius:5px;
       height:165px
       margin-bottom:3%;
-      .MyHJudge-li-assess
+      .SellersHJudge-li-assess
         width:100%;
         height:60px;
       .myCollection-li-left-img
@@ -160,30 +160,30 @@
         float:right;
         margin-top:1%;
         margin-right:3%;
-    .MyHJudge-li-goods
+    .SellersHJudge-li-goods
       width:100%;
       display:flex
       margin-top:3%;
       height:70px;
-      .MyHJudge-li-left-img
+      .SellersHJudge-li-left-img
         display:inline-block;
         vertical-align:top;
         margin-left:20px;
         width:60px;
         height:70px;
         background-size:60px 70px;
-      .MyHJudge-li-right
+      .SellersHJudge-li-right
         flex:1;
         display:inline-block
         background: rgba(141, 141, 141, 0.39);
-        .MyHJudge-li-right-content
+        .SellersHJudge-li-right-content
           margin-top:10px;
           margin-left:3%;
           margin-right:3%
-        .MyHJudge-li-right-time
+        .SellersHJudge-li-right-time
           margin-top:2%;
           margin-left:5%;
-  .MyHJudge-page
+  .SellersHJudge-page
     display: inline-block
     margin:1% 30%;
   .forepage,.unforepage

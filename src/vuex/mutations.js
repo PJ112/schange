@@ -7,6 +7,7 @@ export default  {
   },
   updateuserId (state, userId) {
     state.userId = userId
+    console.log(state.userId)
   },
   updateSchool(state, school) {
     state.school = school

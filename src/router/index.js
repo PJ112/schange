@@ -13,12 +13,11 @@ import MyHJudge from '../pages/my/pages/MyHJudge/MyHJudge'
 import MyOrder from '../pages/my/pages/MyOrder/MyOrder'
 import MyPublish from '../pages/my/pages/MyPublish/MyPublish'
 
-import Sellers from '../pages/sellers/Sellers'
-import SellersMes from '../pages/sellers/SellersMes/SellersMes'
-import SellersPublish from '../pages/sellers/SellersMes/pages/SellersPublish'
-import SellersHJudge from '../pages/sellers/SellersMes/pages/SellersHJudge'
+import SellersMes from '../pages/sellers/SellersMes'
+import SellersPublish from '../pages/sellers/pages/SellersPublish'
+import SellersHJudge from '../pages/sellers/pages/SellersHJudge'
 
-
+import test from '../pages/test'
 import Index from '../pages/index/Index'
 import IndexShopping from '../pages/index/components/Shopping'
 import IndexCollection from '../pages/index/components/Collection'
@@ -42,6 +41,10 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path:`/test`,
+      component:test
+    },
     {
       path: '/',
       name: 'Login',
@@ -168,13 +171,9 @@ export default new Router({
      component:ContactSeller
     },
     {
-     path:'/sellers',
-     component:Sellers
-    },
-    {
      path:'/sellersmes',
      component:SellersMes,
-     redirect:'/sellershjudge',
+     redirect:'/sellerspublish',
      children:[
        {
          path:'/sellershjudge',
