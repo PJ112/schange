@@ -1,40 +1,40 @@
 <template>
- <div>
-   <div class="register">
-     <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
-     <div class="register-school">
+  <div>
+    <div class="register">
+      <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
+      <div class="register-school">
       <span >
         <select class="school-city"  v-model="cityChange">
-          <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option> <!---->
+          <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option>
         </select>
       </span>
-       <span>
+        <span>
       <select  class="school-school" v-model="schoolChange">
           <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="scholl">{{item.name}}</option>
       </select>
      </span>
-     </div>
-     <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
-     <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
-     <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-     <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
-     <a
-       href="#"
-       @click="changeverifyImg()"
-     >
-       <img class="register-img"  :src="verifyImg"  alt="图片加载失败"/>
-     </a>
-     <button class="register-button" @click="go">注册</button>
-     <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
-     <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
-   </div>
-   <transition
-     name="fade"
-   >
-     <alert v-if="alertDara"
+      </div>
+      <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
+      <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
+      <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
+      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
+      <a
+        href="#"
+        @click="changeverifyImg()"
+      >
+        <img class="register-img"  :src="verifyImg"  alt="图片加载失败"/>
+      </a>
+      <button class="register-button" @click="go">注册</button>
+      <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
+      <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
+    </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
              :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
-   </transition>
- </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -58,7 +58,8 @@
         verifyImg:"",
         verifyText:"",
         alertDara: '',
-        scholl:''
+        scholl:'',
+        verify:String
       }
     },
     methods: {
@@ -67,24 +68,16 @@
         this.isShow = !this.isShow
       },
       changeverifyImg(){
-       let num = Math.ceil(Math.random() *10);
-       this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
+        let num = Math.ceil(Math.random() *10);
+        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
       },
       go() {
-        this.scholl = this.newList.find(item => item.id === this.schoolChange)['name']
+        this.scholl = this.newList.find(item => item.id === this.schoolChange)['name'];
+        this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
         let _this = this;
-        // alert(_this.scholl)
-        if(this.user===""  || this.pass===""){
+        if(_this.user===""  || _this.pass==="" || _this.verifyText === "" ){
           let alertDara = {
-            content: "请输入用户名或密码！",
-            contentColor: "red",
-            btn: ["确定"],
-            btnColor: ["", ""]
-          };
-          this.alertDara = alertDara;
-        }else if(this.verifyText === ""){
-          let alertDara = {
-            content: "请输入验证码！",
+            content: "信息填写不完整！",
             contentColor: "red",
             btn: ["确定"],
             btnColor: ["", ""]
@@ -100,6 +93,16 @@
           this.alertDara = alertDara;
           this.pass =""
           this.NewPassword =""
+        }else if(this.pass.length<5){
+          let alertDara = {
+            content: "请输入正确的密码格式！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          this.alertDara = alertDara;
+          this.pass =""
+          this.NewPassword =""
         }else{
           $.ajax({
             url:"/api/sunny/user/register",
@@ -108,7 +111,7 @@
             data:{
               "username":this.user,
               "password":this.pass,
-              "address":this.cityChange,
+              "address":this.city,
               "school":this.school
             },
             success:function (data) {
@@ -139,19 +142,6 @@
 
             },
             dataType:'json'
-          }),
-            //验证码判断
-          $.ajax({
-            url:"/api/sunny/verify",
-            async:true,
-            type:'GET',
-            data:{
-            },
-            success:function (data) {
-            },
-            error:function () {
-            },
-            dataType:'json'
           })
         }
       },
@@ -168,10 +158,10 @@
       cityChange(){
         for(let i=0;i<this.university.length;i++) {
           if (this.cityChange === this.university[i].zone) {
-           this.newList.push(this.university[i])
+            this.newList.push(this.university[i])
           }
         }
-        }
+      }
     },
     created(){
       axios.get('../../../static/school.json').then((res)=>{

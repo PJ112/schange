@@ -4,26 +4,30 @@
       <common-nav></common-nav>
       <div class="shopping-container">
         <div class="shopping-container-title">
-          运动
+          {{name}}
         </div>
-        <div class="shopping-container-items"  v-for="(item,index) of products">
+        <div class="shopping-container-items" v-if="products.length>0"  v-for="(item,index) of products" :key="index">
           <div class="shopping-item-intro">
-            <img  class="shopping-intro-img" src="../../../assets/imgs/index_shopping/book.png">
+            <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
             <div class="shopping-item-desc">
               <div class="shopping-desc-title">
-                得力-尼龙网纱笔袋（男高中生笔袋文具盒）
+               {{item.goods.name}}
               </div>
               <div class="shopping-desc-price">
-                <span>价格：</span>8.8元
+                <span>价格：</span>{{item.goods.price}}元
               </div>
             </div>
             <div class="shopping-item-delete">
-              <span class="shop">加入购物车</span>
-              <span class="buy">立即购买</span>
+              <span class="shop" @click="addProduct(item.goods.id)">加入购物车</span>
+              <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
             </div>
           </div>
         </div>
+        <div class="shopping-container-items1" v-if="products.length===0"  style="text-align: center;color: red;padding: 20px;padding-top: 40px;">
+          <span>不好意思哦,该分类还没有发布商品!</span>
+        </div>
       </div>
+      <common-icon v-if="products.length>0"></common-icon>
     </div>
 
 
@@ -32,6 +36,7 @@
 
 <script>
   import CommonNav from '../../../common/nav/Nav'
+  import Icon from '../../../common/indexIcon/Icon'
   export default {
     name: "Shopping",
     data(){
@@ -39,15 +44,19 @@
         show:true,
         select:true,
         typeId:this.$route.query.typeId,
-        products:[]
+        products:[],
+        name:this.$route.query.name,
+        imgUrl:'http://119.23.12.250:8090/images',
+        userId:this.$store.state.userId.userId
       }
     },
     created(){
+      console.log(this.typeId);
       let _this=this;
       $.ajax({
         url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{"typeId":this.typeId},
+        data:{"typeId":this.typeId,"pageNum":1,"pageSize":6},
         success:function (good) {
          if (good.flag){
            _this.products=good.data.rows;
@@ -59,18 +68,62 @@
         }
       });
     },
-    components:{
-      "common-nav":CommonNav
+    computed:{
+      getUrlImg(){
+        return function (icon) {
+
+          return this.imgUrl+icon;
+        }
+      }
     },
     methods:{
-      toggleSelect(){
-        this.select=!this.select;
+      addProduct(id){
+        if (this.$store.state.user){
+          let _this=this;
+          $.ajax({
+            url:'/api/sunny/cart/add',
+            async:true,
+            data:{"buyerId":this.userId,"goodsId":id,"number":1},
+            success:function (product) {
+              _this.$router.push('/index-shopping');
+            },
+            error:function (error) {
+              console.log(error);
+            }
+          })
+        } else{
+          this.$router.push('/loginin');
+        }
+
+      },
+      confirmOrdering(id){
+        if (this.$store.state.user){
+          this.$router.push({
+            path:'/confirm-ordering',
+            query:{
+              id:id
+            }
+          })
+        }else{
+          this.$router.push('/loginin');
+        }
       }
+
+    },
+    components:{
+      "common-nav":CommonNav,
+      "common-icon":Icon
     }
   }
 </script>
 
 <style scoped lang="stylus">
+  .shop:hover{
+    cursor pointer
+  }
+  .buy:hover{
+    cursor: pointer;
+  }
   .shopping-container-count span:hover{
     cursor :pointer;
   }
@@ -167,12 +220,24 @@
               border-radius :5px;
               color:#fff;
               font-size :14px;
+              a{
+                text-decoration none;
+                color #fff;
+                display inline-block;
+
+              }
             }
+
 
           }
         }
       }
     }
+  }
+  .shopping .icon{
+    position: fixed;
+    right: 131px;
+    top: 500px;
   }
 </style>
 

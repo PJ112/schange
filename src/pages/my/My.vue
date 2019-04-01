@@ -22,18 +22,14 @@
               <img
                 src="./resource/userIcon.png"
                 class="my-changeImg"
-                v-show="!userInfo.avatar"
+                v-show="!UserAddress"
               />
+
               <img
-                :src="userInfo.avatar"
+                :src="UserAddress"
                 class="my-changeImg"
-                v-show="userInfo.avatar"
+                v-show="UserAddress"
               />
-              <!--<img-->
-                <!--:src="UserAddress"-->
-                <!--class="my-changeImg"-->
-                <!--v-show="UserAddress"-->
-              <!--/>-->
               <div
                 class="iconfont my-choseFile"
                 @click.stop="uploadHeadImg"
@@ -56,7 +52,7 @@
                 <img src="../../assets/imgs/my/mycollection/保密.png" v-show="UserSex !==1 && UserSex!==2"/>
               </div>
             </div>
-            <div class="my-year">圈龄</div>
+            <div class="my-year">圈龄{{day}}天</div>
             <router-link class="my-LeftButton" to="/mydata">编辑资料</router-link>
           </div>
           <div class="my-bottom" >
@@ -159,7 +155,8 @@
         UserSex:Number,
         UserWechat:'',
         UserPhone:'',
-        UserAddress:''
+        UserAddress:'',
+        httpUrl:'http://119.23.12.250:8090/images',
 
       }
     },
@@ -169,14 +166,6 @@
       },
       goLogin () {
         this.$router.push('./loginin')
-      },
-      loginOut(){
-        this.$router.push('./index')
-        this.userId.userId = null
-        this.user.user = null
-        this.img.img = null
-        this.$store.dispatch('updateUserAsyc',this.user.user);
-        this.$store.dispatch('updateuserIdAsyc',this.userId.userId);
       },
       showAddUserImg(){
         this.changeuserImg = true
@@ -256,17 +245,36 @@
         },
         success: function (data) {
           _this.UserSrc=  data.data.address;
-          // alert( _this.UserSrc)
           _this.UserSex = data.data.sex
           _this.UserWechat = data.data.wechat
           _this.UserPhone = data.data.phone
-          _this.UserAddress =data.data.address
-    },
+          let nowTime=new Date().getTime();
+          let createTime=data.data.creatTime;
+          let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
+          _this.day = day
+        },
         error: function () {
 
         },
         dataType: 'json'
-      })
+      }),
+        $.ajax({
+          url: "/api/sunny/image/findImageAddress",
+          async: true,
+          type: 'GET',
+          data: {
+            "kindId":_this.userId.userId
+          },
+          success: function (data) {
+            _this.address =data.data.address
+            _this.UserAddress = _this.httpUrl+_this.address
+            alert( _this.UserAddress)
+          },
+          error: function () {
+
+          },
+          dataType: 'json'
+        })
     }
   }
 </script>
@@ -436,3 +444,4 @@
         width:6%;
         height:80%;
 </style>
+

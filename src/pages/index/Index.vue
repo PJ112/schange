@@ -22,7 +22,6 @@
              <div class="all">所有分类</div>
              <div class="index-category-items">
                    <div class="index-category-item" v-for="(item,index) of categories" :key="index" >
-                     <router-link :to="'/detail?typeId='+item.tbType.id">
                        <div class="item-icon">
                          <img src="../../assets/imgs/index/图书.png">
                        </div>
@@ -30,9 +29,10 @@
                          {{item.tbType.type}}
                        </div>
                        <div class="item-one" v-for="(type,index) of item.tbTypeList" :key="index">
-                         {{type.type}}
+                         <router-link :to="'/detail?typeId='+type.id+'&name='+type.type">
+                            {{type.type}}
+                         </router-link>
                        </div>
-                     </router-link>
                    </div>
              </div>
 
@@ -41,7 +41,6 @@
              <div class="all">热门推荐</div>
              <div class="recommend-items">
                <div class="item" v-for="(item,index) of products" :key="index"
-                    v-if="item.imageList[0].address.endsWith('.jpg')"
                >
                  <router-link :to="'/sale-product?id='+item.goods.id">
                    <div class="item-img" >
@@ -105,6 +104,7 @@
             data:{"pageNum":1,"pageSize":6},
             success:function (data) {
               _this.products=data.data.rows;
+              console.log(_this.products);
             },
             error:function (error) {
               console.log(error);
@@ -116,7 +116,6 @@
               data:{},
               success:function (data) {
                 _this.categories=data.data;
-                console.log(_this.categories);
               },
               error:function (error) {
                 console.log(error);
@@ -226,6 +225,11 @@
                 border-top:2px solid #f5f7f9;
                 margin-bottom :8px;
                 text-align :center;
+                a{
+                  text-decoration none;
+                  color #000;
+                  display inline-block;
+                }
               }
             }
           }
@@ -291,5 +295,10 @@
         font-size :18px;
       }
     }
+  }
+  .index .icon{
+     position: fixed;
+     right 155px;
+
   }
 </style>

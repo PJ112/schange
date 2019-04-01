@@ -5,16 +5,17 @@
         <img src="../../assets/imgs/sellers/schange.png" class="my-logo"/>
         <span>
            <span class="my-header-loginout" @click="goOut">退出</span>
-          <img  class="my-userIcon"/>
+          <img  class="my-userIcon" :src="sellersImg" v-if="sellersImg"/>
+          <img  class="my-userIcon" src="../../assets/imgs/index/person.png" v-else/>
         </span>
       </div>
       <div class="my-left">
         <div class="my-top">
-          <img   class="my-changeIcon"/>
+          <img   class="my-changeIcon" :src="sellersImg" v-if="sellersImg"/>
+          <img  class="my-changeIcon" src="../../assets/imgs/index/person.png" v-else/>
           <div class="my-name">{{user}}</div>
-          <div class="my-year">圈龄{{day}}个月</div>
+          <div class="my-year">圈龄{{day}}天</div>
           <div class="my-scholl">学校：{{school}}</div>
-          <div class="my-LeftButton" @click="goMes" >私信卖家</div>
         </div>
       </div>
       <div class="my-right">
@@ -40,7 +41,9 @@
         sellerId:this.$route.query.id,
         user:'',
         day:'',
-        school:''
+        school:'',
+        httpUrl:'http://119.23.12.250:8090/images',
+        sellersImg:''
       }
     },
     methods:{
@@ -58,7 +61,6 @@
     },
     created(){
       let _this = this
-      // alert(this.sellerId)
       $.ajax({
         url:"/api/sunny/user/findOne",
         async:true,
@@ -74,6 +76,24 @@
           _this.day = day
           let school = data.data.school
           _this.school = school
+        },
+        error:function () {
+        },
+        dataType:'json'
+      })
+      $.ajax({
+        url:"/api/sunny/image/findImageAddress",
+        async:true,
+        type:'GET',
+        data:{
+          "kindId":_this.sellerId,
+        },
+        success:function (data) {
+          if (data.data){
+            _this.address = data.data.address
+            _this.sellersImg=_this.httpUrl+_this.address
+          }
+
         },
         error:function () {
         },

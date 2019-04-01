@@ -32,7 +32,7 @@
             </div>
             <div class="sale-product-container-center">
               <span @click="addProduct"><img src="../../../assets/imgs/sale-product/shop.png"><span>加入购物车</span></span>
-              <span><router-link :to="'/confirm-ordering?id='+id"><img src="../../../assets/imgs/sale-product/cursor.png"><span>立即购买</span></router-link></span>
+              <span @click="confirmOrdering"><img src="../../../assets/imgs/sale-product/cursor.png"><span>立即购买</span></span>
             </div>
             <div class="sale-product-container-bottom">
               <div class="sale-product-bottom-info">
@@ -57,34 +57,41 @@
               价格：{{details.price}}元
             </h1>
             <div class="sale-product-price-bottom">
-              <img src="../../../assets/imgs/sale-product/img.png">
+              <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+              <img :src="userImg" v-else/>
               <div class="sale-product-top-name">
                 {{username}}
               </div>
               <div class="sale-product-top-age">
-                圈龄{{day}}个月
+                圈龄{{day}}天
               </div>
-              <router-link :to="'/sellersmes?id='+sellerId">
-                <div class="sale-product-top-index">卖家主页</div>
-              </router-link>
-              <router-link :to="'/contact-seller?id='+id">
-                <div class="sale-product-top-producer">私信卖家</div>
-              </router-link>
+              <div class="sale-product-top-router">
+                  <div class="sale-product-top-index" @click="sellerIndex">
+                       卖家主页
+                  </div>
+                  <div class="sale-product-top-producer" @click="contactSeller">
+                       私信卖家
+                  </div>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
 
+      </div>
+      <icon-common></icon-common>
     </div>
 
 </template>
 
 <script>
     import Nav from '../../../common/nav-nosearch/Nav'
+    import Icon from '../../../common/indexIcon/Icon'
     export default {
         name: "SaleProduct",
         components:{
-          "nav-common":Nav
+          "nav-common":Nav,
+          "icon-common":Icon
         },
         data(){
           return{
@@ -102,7 +109,8 @@
             mean:'',
             userId:this.$store.state.userId.userId,
             day:0,
-            sellerId:''
+            sellerId:'',
+            userImg:''
           }
         },
         created(){
@@ -123,14 +131,13 @@
                   }
               }
               for (var j=0;j<_this.means.length;j++){
-
                   if (mean===_this.means[j].id){
                       _this.mean=_this.means[j].name;
                   }
               }
               if (sellerId){
                 $.ajax({
-                  url:'/api/sunny/user/findOne ',
+                  url:'/api/sunny/user/findOne',
                   async:true,
                   data:{"id":sellerId},
                   success:function (user) {
@@ -138,7 +145,22 @@
                     let createTime=user.data.creatTime;
                     let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
                     _this.day=day;
-                   _this.username=user.data.username;
+                    _this.username=user.data.username;
+                    $.ajax({
+                      url:'/api/sunny/image/findImageAddress',
+                      async:true,
+                      data:{"kindId":sellerId},
+                      success:function (user) {
+                        if (user.flag){
+                          if (user.data){
+                            _this.userImg=_this.httpUrl+user.data.address;
+                          }
+                        }
+                      },
+                      error:function (error) {
+                        console.log(error);
+                      }
+                    })
                   },
                   error:function (error) {
                     console.log(error);
@@ -160,27 +182,62 @@
         },
         methods:{
           addProduct(){
-                 let _this=this;
-                  $.ajax({
-                    url:'/api/sunny/cart/add',
-                    async:true,
-                    data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
-                    success:function (product) {
-                      if (product.flag){
-                        _this.$router.push('/index-shopping');
-                      }
-                    },
-                    error:function (error) {
-                      console.log(error);
-                    }
-                  })
+
+            if (this.$store.state.user){
+              let _this=this;
+              $.ajax({
+                url:'/api/sunny/cart/add',
+                async:true,
+                data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
+                success:function (product) {
+                    _this.$router.push('/index-shopping');
+
+                },
+                error:function (error) {
+                  console.log(error);
+                }
+              })
+            } else{
+              this.$router.push('/loginin');
+            }
+
+
+          },
+          confirmOrdering(){
+            if (this.$store.state.user){
+              this.$router.push({path:"/confirm-ordering",query:{id:this.id}});
+            }else{
+              this.$router.push('/loginin');
+            }
+          },
+          sellerIndex(){
+            if (this.$store.state.user){
+              this.$router.push({path:"/sellersmes",query:{id:this.sellerId}});
+            }else{
+              this.$router.push('/loginin');
+            }
+          },
+          contactSeller(){
+            if (this.$store.state.user){
+              this.$router.push({path:"/contact-seller",query:{id:this.id}});
+            }else{
+              this.$router.push('/loginin');
+            }
           }
         }
+
 
     }
 </script>
 
 <style scoped lang="stylus">
+  .sale-product-top-index:hover{
+    cursor pointer
+  }
+  .sale-product-top-producer:hover{
+    cursor: pointer
+  }
+
   .sale-product-container-center span:hover{
     cursor pointer;
   }
@@ -304,13 +361,14 @@
           .sale-product-price-bottom{
             padding:0 80px;
             text-align :center;
-            position: relative;
+            z-index :1;
             img{
               text-align :center;
               width:120px;
               height :120px;
               margin-top :48px;
               margin-bottom :38px;
+              z-index :1;
             }
             .sale-product-top-name{
               color :#323232;
@@ -323,39 +381,54 @@
               font-weight :bold;
               margin-bottom :43px;
             }
-            .sale-product-top-index{
-              width:120px;
-              height:40px;
-              line-height :40px;
-              background :#85cab5;
-              margin-bottom:20px;
-              border-radius :8px;
-              color :#fff;
-              font-weight :bold;
-              position: absolute;
-              left :50%;
-              margin-left -60px;
-              top:280px;
+            .sale-product-top-router{
+              position: relative;
+              .sale-product-top-index{
+                width:120px;
+                height:40px;
+                line-height :40px;
+                background :#85cab5;
+                margin-bottom:20px;
+                border-radius :8px;
+                color :#fff;
+                font-weight :bold;
+                position: absolute;
+                left :50%;
+                margin-left -60px;
+                top:10px;
+                a{
+                  color #fff;
+                  display inline-block;
+                }
+              }
+              .sale-product-top-producer{
+                width:120px;
+                height:40px;
+                line-height :40px;
+                background :#85cab5;
+                margin-bottom:20px;
+                border-radius :8px;
+                color :#fff;
+                font-weight :bold;
+                position: absolute;
+                left 50%;
+                margin-left -60px;
+                top:70px;
+                a{
+                  color #fff;
+                  display inline-block;
+                }
+              }
             }
-            .sale-product-top-producer{
-              width:120px;
-              height:40px;
-              line-height :40px;
-              background :#85cab5;
-              margin-bottom:20px;
-              border-radius :8px;
-              color :#fff;
-              font-weight :bold;
-              position: absolute;
-              left 50%;
-              margin-left -60px;
-              top:340px;
 
-            }
           }
         }
       }
     }
 
+  }
+  .sale-product  .icon{
+    position: fixed;
+    right 108px;
   }
 </style>

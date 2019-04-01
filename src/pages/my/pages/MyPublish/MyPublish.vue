@@ -91,10 +91,10 @@ export default {
       })
     },
     goMarket(id){
-      this.goodsId = id
+      this.goodsId = id;
       this.$router.push({
         path:'/publish',
-        params:{publish_goodsId:"goodsId"}
+        query:{"id":this.goodsId}
       })
     },
     LoadData(value) {

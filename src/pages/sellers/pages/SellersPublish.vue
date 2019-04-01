@@ -3,15 +3,16 @@
     <div  class="content" v-for="(item,index) in list" :key="index" >
       <li class="SellersPublish-li">
         <div class="SellersPublish-li-left">
-          <img class="SellersPublish-li-left-img"/>
+          <img class="SellersPublish-li-left-img" :src="httpUrl+item.imageList[0].address"/>
         </div>
         <div class="SellersPublish-li-right">
           <div class="SellersPublish-li-right-content">{{item.content}}</div>
           <div class="SellersPublish-li-right-jifen">价格:{{item.goods.price}}</div>
+          <div class="SellersPublish-li-right-button" @click="goMes(item.goods.id)" >私信卖家</div>
         </div>
       </li>
     </div>
-    <ul class="SellersPublish-page" v-show="list.length>0">
+    <ul class="SellersPublish-page" v-show="list">
       <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
       <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
       <li
@@ -27,23 +28,23 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
     name: "SellersPublish",
-    props:{
-      sellerId:Number
-    },
+    props:['sellerId'],
     data() {
       return {
         list: [],
         pageNum:1,
         pageSize:3,
-        total:Number,
+        total:0,
+        httpUrl:'http://119.23.12.250:8090/images',
       }
     },
     methods: {
       LoadData(value) {
-        this.pageNum = value
-        let _this = this
+        this.pageNum = value;
+        let _this = this;
         $.ajax({
           url:"/api/sunny/goods/newSearch",
           async:true,
@@ -60,9 +61,15 @@
           dataType:'json'
         })
       },
+      goMes(goodsId){
+        this.$router.push({
+          path:'/contact-seller',
+          query:{id:goodsId}
+        })
+      }
     },
     created(){
-      let _this = this
+      let _this = this;
       $.ajax({
         url:"/api/sunny/goods/newSearch",
         async:true,
@@ -76,7 +83,6 @@
         success:function (data) {
           _this.list = data.data.rows;
           _this.total = data.data.total;
-          // console.log(_this.list[0].imageList[0].address)
           _this.LoadData(0);
         },
         error:function () {
@@ -84,10 +90,11 @@
         dataType:'json'
       })
     },
-    computed: {
+    computed:{
       totalPages () {
         return Math.ceil(this.total *1 / this.pageSize )
-      }
+      },
+      ...mapState(['userId'])
     },
   }
 </script>
@@ -128,7 +135,7 @@
         .SellersPublish-li-left
           display:inline-block
           vertical-align:top;
-          height:calc(26.6vh);
+          height:100%;
           width:34%;
           border-radius:5px;
           img
@@ -153,12 +160,14 @@
             width:30%;
           .SellersPublish-li-right-button
             display:inline-block
-            margin-top:-1%;
+            margin-top:-2%;
             margin-left:30%;
             font-size:13px;
             border-radius:5px;
             width:60px;
+            text-align:center
             height:25px;
+            line-height:25px;
             color: white;
             cursor:pointer;
             background:#85cab5;

@@ -6,34 +6,40 @@
           <div class="shopping-container-title">
             购物车
           </div>
-          <div class="shopping-container-items"  v-for="(item,index) of shopCarts" :key="index" >
-            <div class="shopping-item-select">
-              <input type="radio" id="input" name="radio"  @click="toggleChange(item.data[0].goodsId,item.data[1].price)" class="shopping-select-input"/>
-            </div>
-            <div class="shopping-item-intro">
-              <img  class="shopping-intro-img" :src="getImgUrl(item.data[3].address)">
-              <div class="shopping-item-desc">
-                <div class="shopping-desc-title">
-                 {{item.data[1].name}}
+          <div v-if="shopCarts.length>0">
+            <div class="shopping-container-items"  v-for="(item,index) of shopCarts" :key="index" >
+              <div class="shopping-item-select">
+                <input type="radio" id="input" name="radio"  @click="toggleChange(item.data[0].goodsId,item.data[1].price)" class="shopping-select-input" />
+              </div>
+              <div class="shopping-item-intro">
+                <img  class="shopping-intro-img" :src="getImgUrl(item.data[3].address)">
+                <div class="shopping-item-desc">
+                  <div class="shopping-desc-title">
+                    {{item.data[1].name}}
+                  </div>
+                  <div class="shopping-desc-price">
+                    <span>价格：</span>{{item.data[1].price}}元
+                  </div>
                 </div>
-                <div class="shopping-desc-price">
-                  <span>价格：</span>{{item.data[1].price}}元
+                <div class="shopping-item-delete">
+                  <span @click="deleteProduct(item.data[0].id)">删除</span>
                 </div>
               </div>
-              <div class="shopping-item-delete">
-                <span @click="deleteProduct(item.data[0].id)">删除</span>
-              </div>
+            </div>
+            <div class="shopping-container-money" >
+              <span v-if="!total">合计：0元</span>
+              <span v-else>合计：{{total}}元</span>
+            </div>
+            <div class="shopping-container-count">
+              <span v-if="!total">结算</span>
+              <router-link v-if="total" tag="span" :to="'/confirm-ordering?id='+radio+'&total='+total">结算</router-link>
             </div>
           </div>
-          <div class="shopping-container-money" >
-            <span v-if="!total">合计：0元</span>
-            <span v-else>合计：{{total}}元</span>
-          </div>
-          <div class="shopping-container-count">
-            <router-link tag="span" :to="'/confirm-ordering?id='+radio">结算</router-link>
+          <div v-else style="text-align: center;margin-top: 30px;color: red;height: 100px;box-sizing: border-box">
+            您的购物车里还没有商品哦，赶快来添加吧！
           </div>
         </div>
-
+        <icon-common v-if="shopCarts.length>0"></icon-common>
       </div>
 
 
@@ -64,7 +70,7 @@
         },
       components:{
         "nav-common":Nav,
-        "icon":Icon
+        "icon-common":Icon
       },
       created(){
           let _this=this;
@@ -74,10 +80,6 @@
             data:{"buyerId":this.userId},
             success:function (good) {
               _this.shopCarts=good.data;
-              for (let i=0;i<_this.shopCarts.length;i++){
-                _this.shopCarts[i].data[1].selected=false;
-              }
-              console.log(_this.shopCarts);
 
             },
             error:function (error) {
@@ -136,9 +138,6 @@
 </script>
 
 <style scoped lang="stylus">
-  .icon{
-    right 0;
-  }
 
   .shopping-item-delete span:hover{
     cursor pointer;
@@ -227,6 +226,7 @@
              height:25px;
              line-height :160px;
              margin-right :50px;
+             margin-top 68px;
              .shopping-select-input{
                display :block;
                height 25px;
@@ -310,4 +310,9 @@
      }
 
    }
+  .shopping .icon{
+    position: fixed;
+    right: 171px;
+    top: 328px;
+  }
 </style>

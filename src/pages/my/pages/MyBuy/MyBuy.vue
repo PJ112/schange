@@ -1,37 +1,36 @@
 <template>
-<div>
-  <div class="myBuy" v-show="BuyList.length>0">
-    <h1 class="myBuy-h1">已购入</h1>
-    <li class="myBuy-li" v-for="(item,index) in BuyList" :key="index">
-      <div class="myBuy-li-content">
-        <div class="myBuy-li-left">
-        <img class="myBuy-li-left-img" :src="item.imageList.address"/>
+  <div>
+    <div class="myBuy" v-show="BuyList.length>0">
+      <h1 class="myBuy-h1">已购入</h1>
+      <li class="myBuy-li" v-for="(item,index) in BuyList" :key="index">
+        <div class="myBuy-li-content">
+          <div class="myBuy-li-left">
+            <img class="myBuy-li-left-img" :src="httpUrl+item.imageList.address"/>
+          </div>
+          <div class="myBuy-li-right">
+            <div class="myBuy-li-right-content">{{item.content}}</div>
+            <div class="myBuy-li-right-jifen">价格:{{item.goods.price}}</div>
+            <button class="myBuy-li-right-Abutton" @click="showAssess(item.goods.id,item.goods.sellerId)">评价</button>
+            <button class="myBuy-li-right-button" @click="lookCommence">查看评价</button>
+          </div>
         </div>
-        <div class="myBuy-li-right">
-          <div class="myBuy-li-right-content">{{item.content}}</div>
-          <div class="myBuy-li-right-jifen">价格:{{item.goods.price}}</div>
-          <!--点击评价的时候把商品的id传递-->
-          <button class="myBuy-li-right-Abutton" @click="showAssess(item.goods.id,item.goods.sellerId)">评价</button>
-          <button class="myBuy-li-right-button" @click="lookCommence">查看评价</button>
-        </div>
-      </div>
-    </li>
-  </div>
-  <div class="myBuy-li-assess" v-show="showCommence">
-    <input
-      type="text"
-      class="myBuy-li-assess-input"
-      placeholder="请输入评价"
-      @keyup.enter="goPublish()"
-      v-model="inputValue"
-    />
-    <div class="myBuy-li-assess-button">
-      <button class="myBuy-li-assess-button-handin" @click="goPublish()">发表</button>
-      <button class="myBuy-li-assess-button-handout" @click="goCancel">取消</button>
+      </li>
     </div>
+    <div class="myBuy-li-assess" v-show="showCommence">
+      <input
+        type="text"
+        class="myBuy-li-assess-input"
+        placeholder="请输入评价"
+        @keyup.enter="goPublish()"
+        v-model="inputValue"
+      />
+      <div class="myBuy-li-assess-button">
+        <button class="myBuy-li-assess-button-handin" @click="goPublish()">发表</button>
+        <button class="myBuy-li-assess-button-handout" @click="goCancel">取消</button>
+      </div>
+    </div>
+    <div class="myBuy-no" v-show="BuyList.length===0">您还没有购买任何商品哦！</div>
   </div>
-  <div class="myBuy-no" v-show="BuyList.length===0">您还没有购买任何商品哦！</div>
-</div>
 </template>
 
 <script>
@@ -47,7 +46,8 @@
         sellerId:Number,
         goodsId:Number,
         inputValue:'',
-        contentStatus:1
+        contentStatus:1,
+        httpUrl:'http://119.23.12.250:8090/images',
       }
     },
     props:{
@@ -76,7 +76,7 @@
             },
             success: function (data) {
               _this.showCommence = false
-             alert("发表成功！")
+              alert("发表成功！")
             },
             error: function () {
             },
@@ -100,8 +100,7 @@
           "buyerId":_this.userId.userId,
         },
         success: function (data) {
-          // _this.BuyList = data.data
-          // alert(_this.BuyList)
+          _this.BuyList = data.data
         },
         error: function () {
 

@@ -4,7 +4,7 @@ export default {
   //login
   user:'',
   pass:'',
-  userId:Number,
+  userId:0,
 
   //register
   school:'',

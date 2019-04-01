@@ -23,24 +23,25 @@
             <form>
               <div class="confirm-ordering-input">
                 <div class="confirm-ordering-form-name">真实姓名：</div>
-                <input type="text" class="confirm-ordering-input-name">
+                <input type="text" class="confirm-ordering-input-name" v-model="name">
               </div>
               <div class="confirm-ordering-input">
                 <div class="confirm-ordering-form-name">联系电话：</div>
-                <input type="text" class="confirm-ordering-input-phone">
+                <input type="text" class="confirm-ordering-input-phone" v-model="phone">
               </div>
               <div class="confirm-ordering-input">
                 <div class="confirm-ordering-form-name">交易地址：</div>
-                <input type="text" class="confirm-ordering-input-address">
+                <input type="text" class="confirm-ordering-input-address" v-model="buyerAddress">
               </div>
 
             </form>
           </div>
           <div class="confirm-ordering-container-sure">
-            <router-link to="/publish"><span>确定</span></router-link>
+            <span @click="addOrder">确定</span>
 
           </div>
         </div>
+        <icon-common></icon-common>
       </div>
 
     </div>
@@ -48,18 +49,27 @@
 
 <script>
     import Nav from '../../../common/nav-nosearch/Nav'
+    import Icon from '../../../common/indexIcon/Icon'
     import $ from 'jquery'
     export default {
         name: "ConfirmOrdering",
         components:{
           "nav-common":Nav,
-
+          "icon-common":Icon
         },
         data(){
           return{
             id:this.$route.query.id,
             httpUrl:'http://119.23.12.250:8090/images',
-            details:{}
+            details:{},
+            userId:this.$store.state.userId.userId,
+            sellerId:'',
+            buyerAddress:"",
+            sellerAddress:'',
+            status:1,
+            phone:'',
+            name:'',
+            total:''
           }
         },
       created(){
@@ -70,6 +80,20 @@
           data:{"id":_this.id},
           success:function (good) {
             _this.details=good.data;
+            _this.total=good.data.price;
+            _this.sellerId=good.data.sellerId;
+            $.ajax({
+              url:'/api/sunny/user/findOne',
+              async:true,
+              data:{"id":_this.sellerId},
+              success:function (user) {
+                _this.sellerAddress=user.data.school;
+
+              },
+              error:function (error) {
+                console.log(error);
+              }
+            })
 
           },
           error:function (error) {
@@ -83,6 +107,32 @@
               return this.httpUrl+this.details.imageList[0].address;
 
             }
+          }
+      },
+      methods:{
+          addOrder(){
+            let _this=this;
+            $.ajax({
+              url:'/api/sunny/order/add',
+              async:true,
+              data:{
+                "buyerId":_this.userId,
+                "sellerId":this.sellerId,
+                "goodsId":_this.id,
+                "number":1,
+                "money":_this.total,
+                "buyerAddress":_this.buyerAddress,
+                "sellerAddress":_this.sellerAddress,
+                "status":_this.status
+              },
+              success:function (order) {
+               console.log(order);
+
+              },
+              error:function (error) {
+                console.log(error);
+              }
+            });
           }
       }
     }
@@ -215,5 +265,9 @@
       }
     }
 
+  }
+  .confirm-ordering .icon{
+    position: fixed;
+    right 172px;
   }
 </style>

@@ -3,9 +3,9 @@
     <div class="SellersHJudge" v-if="list.length>0">
       <h1 class="SellersHJudge-h1">历史评价</h1>
       <div>
-        <li class="SellersHJudge-li" v-for="(item,index) in list">
+        <li class="SellersHJudge-li" v-for="(item,index) in list" :key="index">
           <div class="SellersHJudge-li-assess">
-            <img class="myCollection-li-left-img" :src="item[3].address" />
+            <img class="myCollection-li-left-img" :src="httpUrl+item[3].address" />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
                 <span class="myCollection-li-right-header-name">{{item[3].username}}</span>
@@ -20,7 +20,7 @@
             <!--<div class="myCollection-li-time">2019-01-26 12:24:01</div>-->
           </div>
           <div class="SellersHJudge-li-goods">
-            <img class="SellersHJudge-li-left-img" :src="item[2].address" v-if="item[4].id === sellerId"/>
+            <img class="SellersHJudge-li-left-img" :src="httpUrl+item[2].address" v-if="item[4].id === sellerId"/>
             <div class="SellersHJudge-li-right">
               <div class="SellersHJudge-li-right-content">{{item[1].contents}}</div>
               <!--<div class="SellersHJudge-li-right-time">2019-01-26 12:24:01</div>-->
@@ -55,6 +55,7 @@
         pageNum:1,
         pageSize:3,
         list:[],
+        httpUrl:'http://119.23.12.250:8090',
       }
     },
     props:{

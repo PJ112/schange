@@ -7,7 +7,8 @@
         <div class="contact-seller-container">
           <div class="contact-seller-container-info">
             <div class="contact-seller-info-img">
-              <img src="../../../assets/imgs/contact_seller/img.png">
+              <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+              <img style="width: 60px;height: 60px;" :src="userImg" v-else/>
             </div>
             <div class="contact-seller-container-name">
              {{username}}
@@ -19,10 +20,9 @@
               学校：<span>{{school}}</span>
             </div>
             <div class="contact-seller-container-index">
-              <router-link :to="'/index?id='+id">
-
+              <router-link :to="'/sellersmes?id='+sellerId">
+                卖家主页
               </router-link>
-              卖家主页
             </div>
           </div>
           <div class="contact-seller-container-chat">
@@ -40,53 +40,66 @@
                     价格：<span>{{details.price}}元</span>
                   </div>
                   <div class="shop">
-                    <router-link :to="'/index-shopping?id='+id"><span>加入购物车</span></router-link>
+                    <span @click="addProduct">加入购物车</span>
                     <router-link :to="'/confirm-ordering?id='+id"><span>立即购买</span></router-link>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="contact-seller-chat-content">
+            <div class="contact-seller-chat-content" v-if="message.length>0">
               <h1>{{username}}</h1>
-              <div class="contact-seller-content-items" >
-                <div v-for="(item,index) of message" :key="index">
-                  <div class="contact-seller-content-item-left"  v-if="item.sendId===reId">
-                    <img src="../../../assets/imgs/contact_seller/img.png">
+              <div class="contact-seller-content-items"  >
+                <div v-for="(item,index) of message" :key="index" style="clear: both">
+                  <div class="contact-seller-content-item-right" v-if="item.sendId===reId">
+                    <span class="content">
+                      {{item.content}}
+                    </span>
+                    <span class="point"></span>
+                    <img src="../../../assets/imgs/index/person.png" v-if="!meImg">
+                    <img style="width:50px;height: 50px;border-radius: 50%" :src="meImg" v-else/>
+                  </div>
+                  <div class="contact-seller-content-item-left"  v-else>
+                    <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+                    <img style="width:50px;height: 50px;border-radius: 50%" :src="userImg" v-else/>
                     <span class="content">
                       {{item.content}}
                     </span>
                     <span class="point"></span>
                   </div>
-                  <div class="contact-seller-content-item-right" v-else>
-                    <span class="content">
-                      {{item.content}}
-
-                    </span>
-                    <span class="point"></span>
-                    <img src="../../../assets/imgs/contact_seller/user.png">
-                  </div>
-
-                </div>
-                <div class="contact-seller-container-form">
-                  <input type="text" v-model="content" placeholder="请输入内容" style="padding-left: 10px;">
-                  <button type="button" @click="sendMessage">确定</button>
                 </div>
               </div>
+              <div class="contact-seller-container-form">
+                <input type="text" v-model="content" placeholder="请输入内容" style="padding-left: 10px;"  @keyup.enter="sendMessage">
+                <button type="button" @click="sendMessage">确定</button>
+              </div>
+            </div>
+            <div class="contact-seller-chat-content"  v-else>
+              <h1>{{username}}</h1>
+              <div class="contact-seller-content-items" style="text-align: center;color: red">
+               您暂时和卖家还没有消息哦，快来聊天吧！
+              </div>
+              <div class="contact-seller-container-form1">
+                <input type="text" v-model="content" placeholder="请输入内容" style="padding-left: 10px;"  @keyup.enter="sendMessage">
+                <button type="button" @click="sendMessage">确定</button>
+              </div>
+
             </div>
           </div>
         </div>
       </div>
-
+      <icon-common></icon-common>
     </div>
 </template>
 
 <script>
     import Nav from '../../../common/nav-nosearch/Nav'
+    import Icon from '../../../common/indexIcon/Icon'
     import $ from 'jquery'
     export default {
         name: "ContactSeller",
         components:{
-          "nav-common":Nav
+          "nav-common":Nav,
+          "icon-common":Icon
         },
         data(){
           return{
@@ -99,7 +112,10 @@
             sellerId:'',
             content:'',
             reId:this.$store.state.userId.userId,
-            day:''
+            day:'',
+            userImg:'',
+            meImg:''
+
           }
         },
         created(){
@@ -112,7 +128,7 @@
               _this.details=good.data;
               _this.sellerId=_this.details.sellerId;
               $.ajax({
-                url:'/api/sunny/user/findOne ',
+                url:'/api/sunny/user/findOne',
                 async:true,
                 data:{"id":_this.sellerId},
                 success:function (user) {
@@ -122,6 +138,38 @@
                   _this.day=day;
                   _this.username=user.data.username;
                   _this.school=user.data.school;
+                  $.ajax({
+                    url:'/api/sunny/image/findImageAddress',
+                    async:true,
+                    data:{"kindId":_this.sellerId},
+                    success:function (img) {
+                      if (img.flag){
+                        if (img.data){
+                          _this.userImg=_this.httpUrl+img.data.address;
+                        }
+                      }
+                    },
+                    error:function (error) {
+                      console.log(error);
+                    }
+                  });
+                  $.ajax({
+                    url:'/api/sunny/image/findImageAddress',
+                    async:true,
+                    data:{"kindId":_this.reId},
+                    success:function (img) {
+                      if (img.flag){
+                        if (img.data){
+                          _this.meImg=_this.httpUrl+img.data.address;
+                        }
+                      }
+                    },
+                    error:function (error) {
+                      console.log(error);
+                    }
+                  })
+
+
                 },
                 error:function (error) {
                   console.log(error);
@@ -130,10 +178,10 @@
               $.ajax({
                 url:'/api/sunny/message/findMessage',
                 async:true,
-                data:{"id":_this.reId,"otherId":_this.sellerId},
+                data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
                 success:function (message) {
                   _this.message=message.data;
-
+                  console.log(_this.message);
                 },
                 error:function (error) {
                   console.log(error);
@@ -150,26 +198,31 @@
           getImgUrl(){
             if (this.details.imageList){
               return this.httpUrl+this.details.imageList[0].address;
-
             }
           }
         },
         methods:{
           sendMessage(){
             let  _this=this;
+
+            if (_this.content===""){
+              return;
+            }
             $.ajax({
               url:'/api/sunny/message/addMessage ',
               async:true,
-              data:{"reId":_this.reId,"sendId":_this.sellerId,"content":this.content},
+              data:{"reId":_this.sellerId,"sendId":_this.reId,"content":this.content.trim(),"goodsId":this.id},
               success:function (content) {
+
                 if (content.flag){
                   if (_this.sellerId){
                     $.ajax({
                       url:'/api/sunny/message/findMessage',
                       async:true,
-                      data:{"id":_this.reId,"otherId":_this.sellerId},
+                      data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
                       success:function (message) {
                         _this.message=message.data;
+                        console.log(_this.message);
                         if (_this.message.length>0){
                           _this.content='';
                         }
@@ -184,6 +237,22 @@
                 }
 
 
+              },
+              error:function (error) {
+                console.log(error);
+              }
+            })
+          },
+          addProduct(){
+            let _this=this;
+            $.ajax({
+              url:'/api/sunny/cart/add',
+              async:true,
+              data:{"buyerId":this.reId,"goodsId":this.id,"number":1},
+              success:function (product) {
+                if (product.flag){
+                  _this.$router.push('/index-shopping');
+                }
               },
               error:function (error) {
                 console.log(error);
@@ -253,9 +322,14 @@
            height:45px;
            margin-left :-65px;
            left :50%;
-           top:310px;
+           top:245px;
            line-height :45px;
            font-weight :bold;
+           a{
+             display inline-block;
+             text-decoration none;
+             color #fff;
+           }
          }
 
        }
@@ -265,6 +339,7 @@
          background :#fff;
          padding:15px;
          box-sizing border-box;
+         padding-bottom :55px;
          h1{
            text-align :center;
            height:95px;
@@ -321,6 +396,7 @@
          }
          .contact-seller-chat-content{
            margin-top :10px;
+           position: relative;
            h1{
              height :70px;
              line-height :70px;
@@ -330,12 +406,11 @@
            }
            .contact-seller-content-items{
              margin-bottom :10px;
-             position: relative;
-             box-shadow :0 0 10px #eee;
              padding :15px;
              .contact-seller-content-item-right{
                width 356px;
-               margin-left :300px;
+               float right;
+               clear both;
                margin-bottom :35px;
                position: relative;
                .content{
@@ -355,7 +430,7 @@
                .point{
                  position: absolute;
                  right: 98px;
-                 top: 27px;
+                 top: 18px;
                  width:12px;
                  height:12px;
                  display inline-block;
@@ -369,6 +444,8 @@
              .contact-seller-content-item-left{
                margin-bottom :35px;
                position: relative;
+               float left;
+               clear both;
                .content{
                  display :inline-block;
                  border:1px solid #85cab5;
@@ -383,44 +460,76 @@
                }
                .point{
                  position: absolute;
-                 left:0;
-                 top:10px;
-                 width:0;
-                 height:0;
-
+                 left: 69px;
+                 top: 23px;
+                 width: 12px;
+                 height: 12px;
+                 display: inline-block;
+                 border-bottom: 1px solid #85cab5;
+                 border-left: 1px solid #85cab5;
+                 transform: rotate(45deg);
+                 z-index: 110;
+                 background: #fff;
                }
 
 
              }
 
 
-             .contact-seller-container-form{
-               display :flex;
-               position: absolute;
-               bottom:-10px;
-               left:0;
-               right:0;
-               input{
-                 flex :1;
-                 height:45px;
-                 line-height :45px;
-                 border:1px solid #85cab5;
-               }
-               button{
-                 width:92px;
-                 height:47px;
-                 line-height :47px;
-                 text-align :center;
-                 background :#85cab5;
-                 color:#fff;
-                 font-size :18px;
-               }
+           }
+           .contact-seller-container-form{
+             display :flex;
+             position:absolute;
+             bottom:-114px;
+             left:0;
+             right:0;
+             input{
+               flex :1;
+               height:45px;
+               line-height :45px;
+               border:1px solid #85cab5;
+             }
+             button{
+               width:92px;
+               height:47px;
+               line-height :47px;
+               text-align :center;
+               background :#85cab5;
+               color:#fff;
+               font-size :18px;
              }
            }
+           .contact-seller-container-form1{
+             display :flex;
+             position:absolute;
+             bottom:-58px;
+             left:0;
+             right:0;
+             input{
+               flex :1;
+               height:45px;
+               line-height :45px;
+               border:1px solid #85cab5;
+             }
+             button{
+               width:92px;
+               height:47px;
+               line-height :47px;
+               text-align :center;
+               background :#85cab5;
+               color:#fff;
+               font-size :18px;
+             }
+           }
+
          }
        }
      }
    }
 
  }
+  .contact-seller .icon{
+    position: fixed
+    right 128px;
+  }
 </style>
