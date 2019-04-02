@@ -1,233 +1,233 @@
 <template>
-    <div class="sale-product">
-      <div class="sale-container">
-        <div class="sale-product-top">
-          <nav-common></nav-common>
-        </div>
-        <div class="sale-product-container">
-          <div class="sale-product-container-desc">
-            <div class="sale-product-desc-top">
-              <h1 class="sale-product-top-name">
-                {{details.name}}
-              </h1>
-              <div class="sale-product-top-share">
+  <div class="sale-product">
+    <div class="sale-container">
+      <div class="sale-product-top">
+        <nav-common></nav-common>
+      </div>
+      <div class="sale-product-container">
+        <div class="sale-product-container-desc">
+          <div class="sale-product-desc-top">
+            <h1 class="sale-product-top-name">
+              {{details.name}}
+            </h1>
+            <div class="sale-product-top-share">
               <span class="img">
                 <img src="../../../assets/imgs/sale-product/user.png">
               </span>
-                <span class="info">{{username}}</span>
-                <span class="img">
+              <span class="info">{{username}}</span>
+              <span class="img">
                 <img src="../../../assets/imgs/sale-product/category.png">
               </span>
-                <span class="info">{{details.type}}</span>
-              </div>
-              <div class="swiper-container">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img :src="getImgUrl" style="width: 260px;height: 260px;">
-                  </div>
-                </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <span class="info">{{details.type}}</span>
             </div>
-            <div class="sale-product-container-center">
-              <span @click="addProduct"><img src="../../../assets/imgs/sale-product/shop.png"><span>加入购物车</span></span>
-              <span @click="confirmOrdering"><img src="../../../assets/imgs/sale-product/cursor.png"><span>立即购买</span></span>
-            </div>
-            <div class="sale-product-container-bottom">
-              <div class="sale-product-bottom-info">
-                物品详情
-              </div>
-              <div class="sale-product-bottom-desc">
-                <div>物品新旧 : <span class="desc">{{oldDegree}}</span></div>
-                <div>交易方式 :
-                  <span class="desc">
-                   <span class="sale">{{mean}}</span>
-                 </span>
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img :src="getImgUrl" style="width: 260px;height: 260px;">
                 </div>
-                <div>详情描述 :
-                  <span class="desc">{{details.content}}</span>
-                </div>
-
               </div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
             </div>
           </div>
-          <div class="sale-product-container-price">
-            <h1 class="sale-product-price-top">
-              价格：{{details.price}}元
-            </h1>
-            <div class="sale-product-price-bottom">
-              <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
-              <img :src="userImg" v-else/>
-              <div class="sale-product-top-name">
-                {{username}}
+          <div class="sale-product-container-center">
+            <span @click="addProduct"><img src="../../../assets/imgs/sale-product/shop.png"><span>加入购物车</span></span>
+            <span @click="confirmOrdering"><img src="../../../assets/imgs/sale-product/cursor.png"><span>立即购买</span></span>
+          </div>
+          <div class="sale-product-container-bottom">
+            <div class="sale-product-bottom-info">
+              物品详情
+            </div>
+            <div class="sale-product-bottom-desc">
+              <div>物品新旧 : <span class="desc">{{oldDegree}}</span></div>
+              <div>交易方式 :
+                <span class="desc">
+                   <span class="sale">{{mean}}</span>
+                 </span>
               </div>
-              <div class="sale-product-top-age">
-                圈龄{{day}}天
-              </div>
-              <div class="sale-product-top-router">
-                  <div class="sale-product-top-index" @click="sellerIndex">
-                       卖家主页
-                  </div>
-                  <div class="sale-product-top-producer" @click="contactSeller">
-                       私信卖家
-                  </div>
+              <div>详情描述 :
+                <span class="desc">{{details.content}}</span>
               </div>
 
             </div>
           </div>
         </div>
+        <div class="sale-product-container-price">
+          <h1 class="sale-product-price-top">
+            价格：{{details.price}}元
+          </h1>
+          <div class="sale-product-price-bottom">
+            <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+            <img :src="userImg" v-else/>
+            <div class="sale-product-top-name">
+              {{username}}
+            </div>
+            <div class="sale-product-top-age">
+              圈龄{{day}}天
+            </div>
+            <div class="sale-product-top-router">
+              <div class="sale-product-top-index" @click="sellerIndex">
+                卖家主页
+              </div>
+              <div class="sale-product-top-producer" @click="contactSeller">
+                私信卖家
+              </div>
+            </div>
 
+          </div>
+        </div>
       </div>
-      <icon-common></icon-common>
+
     </div>
+    <icon-common></icon-common>
+  </div>
 
 </template>
 
 <script>
-    import Nav from '../../../common/nav-nosearch/Nav'
-    import Icon from '../../../common/indexIcon/Icon'
-    export default {
-        name: "SaleProduct",
-        components:{
-          "nav-common":Nav,
-          "icon-common":Icon
-        },
-        data(){
-          return{
-            id:this.$route.query.id,
-            books:[{id:1,name:'一成新'},{id:2,name:'二成新'},{id:3,name:'三成新'},
-              {id:4,name:'四成新'},{id:5,name:'五成新'},{id:6,name:'六成新'},
-              {id:7,name:'七成新'},{id:8,name:'八成新'},{id:9,name:'九成新'},
-              {id:10,name:'十成新'},
-            ],
-            means:[{id:1,name:'自提'},{id:2,name:'送货上门'},{id:3,name:'会面交易'}],
-            details:{},
-            username:'',
-            httpUrl:'http://119.23.12.250:8090/images',
-            oldDegree: '',
-            mean:'',
-            userId:this.$store.state.userId.userId,
-            day:0,
-            sellerId:'',
-            userImg:''
+  import Nav from '../../../common/nav-nosearch/Nav'
+  import Icon from '../../../common/indexIcon/Icon'
+  export default {
+    name: "SaleProduct",
+    components:{
+      "nav-common":Nav,
+      "icon-common":Icon
+    },
+    data(){
+      return{
+        id:this.$route.query.id,
+        books:[{id:1,name:'一成新'},{id:2,name:'二成新'},{id:3,name:'三成新'},
+          {id:4,name:'四成新'},{id:5,name:'五成新'},{id:6,name:'六成新'},
+          {id:7,name:'七成新'},{id:8,name:'八成新'},{id:9,name:'九成新'},
+          {id:10,name:'十成新'},
+        ],
+        means:[{id:1,name:'自提'},{id:2,name:'送货上门'},{id:3,name:'会面交易'}],
+        details:{},
+        username:'',
+        httpUrl:'http://119.23.12.250:8090/images',
+        oldDegree: '',
+        mean:'',
+        userId:this.$store.state.userId.userId,
+        day:0,
+        sellerId:'',
+        userImg:''
+      }
+    },
+    created(){
+      let  _this=this;
+      $.ajax({
+        url:'/api/sunny/goods/findOne',
+        async:true,
+        data:{"id":_this.id},
+        success:function (data) {
+          _this.details=data.data;
+          let sellerId=_this.details.sellerId;
+          _this.sellerId=sellerId;
+          let oldDegree=_this.details.oldDegree;
+          let mean=_this.details.means;
+          for (var i=0;i<_this.books.length;i++){
+            if(oldDegree===_this.books[i].id){
+              _this.oldDegree=_this.books[i].name;
+            }
           }
-        },
-        created(){
-          let  _this=this;
-          $.ajax({
-            url:'/api/sunny/goods/findOne',
-            async:true,
-            data:{"id":_this.id},
-            success:function (data) {
-              _this.details=data.data;
-              let sellerId=_this.details.sellerId;
-              _this.sellerId=sellerId;
-              let oldDegree=_this.details.oldDegree;
-              let mean=_this.details.means;
-              for (var i=0;i<_this.books.length;i++){
-                  if(oldDegree===_this.books[i].id){
-                      _this.oldDegree=_this.books[i].name;
-                  }
-              }
-              for (var j=0;j<_this.means.length;j++){
-                  if (mean===_this.means[j].id){
-                      _this.mean=_this.means[j].name;
-                  }
-              }
-              if (sellerId){
+          for (var j=0;j<_this.means.length;j++){
+            if (mean===_this.means[j].id){
+              _this.mean=_this.means[j].name;
+            }
+          }
+          if (sellerId){
+            $.ajax({
+              url:'/api/sunny/user/findOne',
+              async:true,
+              data:{"id":sellerId},
+              success:function (user) {
+                let nowTime=new Date().getTime();
+                let createTime=user.data.creatTime;
+                let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
+                _this.day=day;
+                _this.username=user.data.username;
                 $.ajax({
-                  url:'/api/sunny/user/findOne',
+                  url:'/api/sunny/image/findImageAddress',
                   async:true,
-                  data:{"id":sellerId},
+                  data:{"kindId":sellerId,"kind":1},
                   success:function (user) {
-                    let nowTime=new Date().getTime();
-                    let createTime=user.data.creatTime;
-                    let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
-                    _this.day=day;
-                    _this.username=user.data.username;
-                    $.ajax({
-                      url:'/api/sunny/image/findImageAddress',
-                      async:true,
-                      data:{"kindId":sellerId},
-                      success:function (user) {
-                        if (user.flag){
-                          if (user.data){
-                            _this.userImg=_this.httpUrl+user.data.address;
-                          }
-                        }
-                      },
-                      error:function (error) {
-                        console.log(error);
+                    if (user.flag){
+                      if (user.data){
+                        _this.userImg=_this.httpUrl+user.data.address;
                       }
-                    })
+                    }
                   },
                   error:function (error) {
                     console.log(error);
                   }
                 })
+              },
+              error:function (error) {
+                console.log(error);
               }
+            })
+          }
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      })
+    },
+    computed:{
+      getImgUrl(){
+        if (this.details.imageList){
+          return this.httpUrl+this.details.imageList[0].address;
+        }
+      }
+    },
+    methods:{
+      addProduct(){
+
+        if (this.$store.state.user){
+          let _this=this;
+          $.ajax({
+            url:'/api/sunny/cart/add',
+            async:true,
+            data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
+            success:function (product) {
+              _this.$router.push('/index-shopping');
+
             },
             error:function (error) {
               console.log(error);
             }
           })
-        },
-        computed:{
-          getImgUrl(){
-            if (this.details.imageList){
-              return this.httpUrl+this.details.imageList[0].address;
-            }
-          }
-        },
-        methods:{
-          addProduct(){
-
-            if (this.$store.state.user){
-              let _this=this;
-              $.ajax({
-                url:'/api/sunny/cart/add',
-                async:true,
-                data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
-                success:function (product) {
-                    _this.$router.push('/index-shopping');
-
-                },
-                error:function (error) {
-                  console.log(error);
-                }
-              })
-            } else{
-              this.$router.push('/loginin');
-            }
-
-
-          },
-          confirmOrdering(){
-            if (this.$store.state.user){
-              this.$router.push({path:"/confirm-ordering",query:{id:this.id}});
-            }else{
-              this.$router.push('/loginin');
-            }
-          },
-          sellerIndex(){
-            if (this.$store.state.user){
-              this.$router.push({path:"/sellersmes",query:{id:this.sellerId}});
-            }else{
-              this.$router.push('/loginin');
-            }
-          },
-          contactSeller(){
-            if (this.$store.state.user){
-              this.$router.push({path:"/contact-seller",query:{id:this.id}});
-            }else{
-              this.$router.push('/loginin');
-            }
-          }
+        } else{
+          this.$router.push('/loginin');
         }
 
 
+      },
+      confirmOrdering(){
+        if (this.$store.state.user){
+          this.$router.push({path:"/confirm-ordering",query:{id:this.id}});
+        }else{
+          this.$router.push('/loginin');
+        }
+      },
+      sellerIndex(){
+        if (this.$store.state.user){
+          this.$router.push({path:"/sellersmes",query:{id:this.sellerId}});
+        }else{
+          this.$router.push('/loginin');
+        }
+      },
+      contactSeller(){
+        if (this.$store.state.user){
+          this.$router.push({path:"/contact-seller",query:{id:this.id}});
+        }else{
+          this.$router.push('/loginin');
+        }
+      }
     }
+
+
+  }
 </script>
 
 <style scoped lang="stylus">

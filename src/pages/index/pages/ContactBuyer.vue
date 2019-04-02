@@ -104,7 +104,7 @@
         details:{},
         username:'',
         school:'',
-        httpUrl:'http://119.23.12.250:8090/images',
+        httpUrl:'http://119.23.12.250:8090/images/',
         message:[],
         // buyerId:this.$route.query.buyerId,
         buyerId:51,
@@ -129,7 +129,6 @@
             async:true,
             data:{"id":_this.buyerId},
             success:function (user) {
-              console.log(user);
               let nowTime=new Date().getTime();
               let createTime=user.data.creatTime;
               let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
@@ -139,9 +138,8 @@
               $.ajax({
                 url:'/api/sunny/image/findImageAddress',
                 async:true,
-                data:{"kindId":_this.buyerId},
+                data:{"kindId":_this.buyerId,"kind":1},
                 success:function (img) {
-                  console.log(img);
                   if (img.flag){
                     if (img.data){
                       _this.userImg=_this.httpUrl+img.data.address;
@@ -155,7 +153,7 @@
               $.ajax({
                 url:'/api/sunny/image/findImageAddress',
                 async:true,
-                data:{"kindId":_this.meId},
+                data:{"kindId":_this.meId,"kind":1},
                 success:function (img) {
                   if (img.flag){
                     if (img.data){
@@ -180,7 +178,6 @@
             data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
             success:function (message) {
               _this.message=message.data;
-              console.log(_this.message);
 
             },
             error:function (error) {
@@ -221,7 +218,6 @@
                   data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
                   success:function (message) {
                     _this.message=message.data;
-                    console.log(_this.message);
                     if (_this.message.length>0){
                       _this.content='';
                     }

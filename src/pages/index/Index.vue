@@ -1,143 +1,142 @@
 <template>
-    <div class="index">
-      <div class="index-top">
-        <nav-common ></nav-common>
+  <div class="index">
+    <div class="index-top">
+      <nav-common ></nav-common>
+    </div>
+    <div class="index-center">
+      <div class="index-carousel" >
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="../../assets/imgs/index/banner.png">
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
-      <div class="index-center">
-        <div class="index-carousel" >
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <img src="../../assets/imgs/index/banner.png">
+
+    </div>
+    <div class="index-bottom">
+      <div class="index-category">
+        <div class="index-category-all">
+          <div class="all">所有分类</div>
+          <div class="index-category-items">
+            <div class="index-category-item" v-for="(item,index) of categories" :key="index" >
+              <div class="item-icon">
+                <img src="../../assets/imgs/index/图书.png">
+              </div>
+              <div class="item-name">
+                {{item.tbType.type}}
+              </div>
+              <div class="item-one" v-for="(type,index) of item.tbTypeList" :key="index">
+                <router-link :to="'/detail?typeId='+type.id+'&name='+type.type">
+                  {{type.type}}
+                </router-link>
               </div>
             </div>
-            <div class="swiper-pagination"></div>
+          </div>
+
+        </div>
+        <div class="index-category-recommend">
+          <div class="all">热门推荐</div>
+          <div class="recommend-items">
+            <div class="item" v-for="(item,index) of products" :key="index"
+            >
+              <router-link :to="'/sale-product?id='+item.goods.id">
+                <div class="item-img" >
+                  <img :src="getImgUrl(item.imageList[0].address)"  />
+                </div>
+                <div class="item-description">
+                  <div class="item-name">
+                    {{item.goods.name}}
+                  </div>
+                  <div class="item-price">
+                    价格：{{item.goods.price}}
+                  </div>
+                </div>
+              </router-link>
+
+            </div>
           </div>
         </div>
+        <icon-common></icon-common>
 
       </div>
-      <div class="index-bottom">
-         <div class="index-category">
-           <div class="index-category-all">
-             <div class="all">所有分类</div>
-             <div class="index-category-items">
-                   <div class="index-category-item" v-for="(item,index) of categories" :key="index" >
-                       <div class="item-icon">
-                         <img src="../../assets/imgs/index/图书.png">
-                       </div>
-                       <div class="item-name">
-                         {{item.tbType.type}}
-                       </div>
-                       <div class="item-one" v-for="(type,index) of item.tbTypeList" :key="index">
-                         <router-link :to="'/detail?typeId='+type.id+'&name='+type.type">
-                            {{type.type}}
-                         </router-link>
-                       </div>
-                   </div>
-             </div>
-
-           </div>
-           <div class="index-category-recommend">
-             <div class="all">热门推荐</div>
-             <div class="recommend-items">
-               <div class="item" v-for="(item,index) of products" :key="index"
-               >
-                 <router-link :to="'/sale-product?id='+item.goods.id">
-                   <div class="item-img" >
-                     <img :src="getImgUrl(item.imageList[0].address)"  />
-                   </div>
-                   <div class="item-description">
-                     <div class="item-name">
-                       {{item.goods.name}}
-                     </div>
-                     <div class="item-price">
-                       价格：{{item.goods.price}}
-                     </div>
-                   </div>
-                 </router-link>
-
-               </div>
-             </div>
-           </div>
-           <icon-common></icon-common>
-
-         </div>
-         <div class="index-copyright">
-               Copyright @ 2019 Team Sunny
-         </div>
-       </div>
+      <div class="index-copyright">
+        Copyright @ 2019 Team Sunny
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    import $ from 'jquery'
-    import NavCommon from '../../common/nav/Nav'
-    import  Swiper from 'swiper'
-    import Icon from '../../common/indexIcon/Icon'
-    export default {
-        name: "Index",
-        components:{
-          "nav-common":NavCommon,
-          "icon-common":Icon,
+  import $ from 'jquery'
+  import NavCommon from '../../common/nav/Nav'
+  import  Swiper from 'swiper'
+  import Icon from '../../common/indexIcon/Icon'
+  export default {
+    name: "Index",
+    components:{
+      "nav-common":NavCommon,
+      "icon-common":Icon,
 
-        },
-        data(){
-          return{
-            items:["女装","男装","鞋靴","箱包"],
-            user:this.$store.state.user,
-            products:[],
-            imgUrl:'http://119.23.12.250:8090/images',
-            categories:[]
-          }
-        },
-        created() {
-            let _this=this;
-            new Swiper ('.swiper-container', {
-              loop: true,
-              pagination: {
-                el: '.swiper-pagination',
-              }
-            });
-            $.ajax({
-            url:'/api/sunny/goods/newSearch',
-            async:true,
-            data:{},
-            success:function (data) {
-              _this.products=data.data.rows;
-              console.log(_this.products);
-            },
-            error:function (error) {
-              console.log(error);
-            }
-          });
-            $.ajax({
-              url:'/api/sunny/type/findAll',
-              async:true,
-              data:{},
-              success:function (data) {
-                _this.categories=data.data;
-              },
-              error:function (error) {
-                console.log(error);
-              }
-            })
-
-        },
-        computed:{
-          getImgUrl() {
-
-            return function (icon) {
-
-              return this.imgUrl+icon;
-            }
-
-          },
-
-
-
-
+    },
+    data(){
+      return{
+        items:["女装","男装","鞋靴","箱包"],
+        user:this.$store.state.user,
+        products:[],
+        imgUrl:'http://119.23.12.250:8090/images',
+        categories:[]
+      }
+    },
+    created() {
+      let _this=this;
+      new Swiper ('.swiper-container', {
+        loop: true,
+        pagination: {
+          el: '.swiper-pagination',
         }
+      });
+      $.ajax({
+        url:'/api/sunny/goods/newSearch',
+        async:true,
+        data:{"pageNum":1,"pageSize":6},
+        success:function (data) {
+          _this.products=data.data.rows;
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      });
+      $.ajax({
+        url:'/api/sunny/type/findAll',
+        async:true,
+        data:{},
+        success:function (data) {
+          _this.categories=data.data;
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      })
+
+    },
+    computed:{
+      getImgUrl() {
+
+        return function (icon) {
+
+          return this.imgUrl+icon;
+        }
+
+      },
+
+
+
+
     }
+  }
 </script>
 
 <style lang="stylus" scoped>
@@ -236,11 +235,11 @@
 
         }
         .index-category-recommend{
-           margin-top :100px;
-           .all{
-             font-size :30px;
-             margin-bottom :60px;
-           }
+          margin-top :100px;
+          .all{
+            font-size :30px;
+            margin-bottom :60px;
+          }
           .recommend-items{
             .item{
               width:280px;
@@ -297,8 +296,8 @@
     }
   }
   .index .icon{
-     position: fixed;
-     right 155px;
+    position: fixed;
+    right 155px;
 
   }
 </style>
