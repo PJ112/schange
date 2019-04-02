@@ -14,10 +14,10 @@
         </div>
         <li class="myPublish-li">
           <div class="myPublish-li-left">
-            <img class="myPublish-li-left-img" :src="item.imageList[0].address"/>
+            <img class="myPublish-li-left-img" :src="httpUrl+item.imageList[0].address"/>
           </div>
           <div class="myPublish-li-right">
-            <div class="myPublish-li-right-content">{{item.content}}</div>
+            <div class="myPublish-li-right-content">{{item.goods.name}}</div>
             <div class="myPublish-li-right-jifen">价格:{{item.goods.price}}</div>
             <button class="myPublish-li-right-button" @click="goMarket(item.goods.id)">编辑</button>
           </div>
@@ -60,7 +60,9 @@ export default {
       total:Number,
       chose:false,
       choseIndex:Number,
-      goodsId:''
+      goodsId:'',
+      httpUrl:'http://119.23.12.250:8090/images',
+
     }
   },
   methods: {
@@ -133,7 +135,6 @@ export default {
       success:function (data) {
         _this.list = data.data.rows;
         _this.total = data.data.total;
-       // console.log(_this.list[0].imageList[0].address)
         _this.LoadData(0);
       },
       error:function () {
@@ -217,7 +218,7 @@ export default {
             margin-left:5%;
           .myPublish-li-right-jifen
             display:inline-block;
-            margin-top:25%;
+            margin-top:23%;
             margin-left:5%;
             width:30%;
           .myPublish-li-right-button

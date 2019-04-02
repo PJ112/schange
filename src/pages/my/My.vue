@@ -20,11 +20,10 @@
               @mouseenter="showAddUserImg"
               @mouseleave="hiidenAddUserImg">
               <img
-                src="./resource/userIcon.png"
+                src="../../assets/imgs/index/person.png"
                 class="my-changeImg"
                 v-show="!UserAddress"
               />
-
               <img
                 :src="UserAddress"
                 class="my-changeImg"
@@ -158,6 +157,8 @@
         UserAddress:'',
         httpUrl:'http://119.23.12.250:8090/images',
 
+        PId:Number,
+
       }
     },
     methods:{
@@ -193,35 +194,68 @@
         let file = $target.files[0];
         this.imgFile=file;
         formData.append("imgFile",this.imgFile);
-        var reader = new FileReader();
-        reader.onload = (data) => {
+        let reader = new FileReader();
+          reader.onload = (data) => {
           let res = data.target || data.srcElement;
           this.userInfo.avatar = res.result;
+          let _this =this
           this.$http.post('/api/sunny/image/imgUpload', formData, config)
             .then((res)=>{
               if (res.status === 200) {
-                this.fileResource=res.body.data;
-                $.ajax({
-                  url:"/api/sunny/image/add?kind="+this.kind+"&kindId="+this.userId.userId +"&address="+this.fileResource+"",
-                  async:true,
-                  type:'GET',
-                  success:function (data) {
-                    // alert(data.message)
-                  },
-                  error:function (error) {
-                    console.log(error);
-                  },
-                  dataType:'json'
-                })
+                _this.fileResource=res.body.data
+                if(!_this.UserAddress){
+                  $.ajax({
+                    url:"/api/sunny/image/addImageAddress?kind="+_this.kind+"&id="+_this.userId.userId +"&address="+_this.fileResource+"",
+                    async:true,
+                    type:'GET',
+                    success:function (data) {
+                      alert(data.message)
+                    },
+                    error:function (error) {
+                      console.log(error);
+                    },
+                    dataType:'json'
+                  })
+
+                }else{
+                  // alert( _this.fileResource)
+                  $.ajax({
+                    url:"/api/sunny/image/update?kind="+_this.kind+"&id="+_this.PId +"&address="+_this.fileResource+"",
+                    async:true,
+                    type:'GET',
+                    success:function (data) {
+                      // alert(data.message)
+                      $.ajax({
+                        url: "/api/sunny/image/findImageAddress",
+                        async: true,
+                        type: 'GET',
+                        data: {
+                          "kind":_this.kind,
+                          "kindId":_this.userId.userId
+                        },
+                        success: function (data) {
+                          _this.address =data.data.address
+                          _this.UserAddress = _this.httpUrl+_this.address
+                          // alert(_this.UserAddress)
+                        },
+                        error: function () {
+
+                        },
+                        dataType: 'json'
+                      })
+                    },
+                    error:function (error) {
+                      console.log(error);
+                    },
+                    dataType:'json'
+                  })
+
+                }
               }
             })
         };
         reader.readAsDataURL(file);
 
-      },
-      alertBackFn: function(data) {
-        this.alertDara = '';
-        console.log("点击了取消",data)
       },
       alertSureFn:function(data){
         this.alertDara = '';
@@ -257,24 +291,25 @@
 
         },
         dataType: 'json'
-      }),
-        $.ajax({
-          url: "/api/sunny/image/findImageAddress",
-          async: true,
-          type: 'GET',
-          data: {
-            "kindId":_this.userId.userId
-          },
-          success: function (data) {
-            _this.address =data.data.address
-            _this.UserAddress = _this.httpUrl+_this.address
-            alert( _this.UserAddress)
-          },
-          error: function () {
+      })
+      $.ajax({
+        url: "/api/sunny/image/findImageAddress",
+        async: true,
+        type: 'GET',
+        data: {
+          "kind":_this.kind,
+          "kindId":_this.userId.userId
+        },
+        success: function (data) {
+          _this.PId = data.data.id
+          _this.address =data.data.address
+          _this.UserAddress = _this.httpUrl+_this.address
+        },
+        error: function () {
 
-          },
-          dataType: 'json'
-        })
+        },
+        dataType: 'json'
+      })
     }
   }
 </script>

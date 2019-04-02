@@ -101,7 +101,7 @@
             $.ajax({
             url:'/api/sunny/goods/newSearch',
             async:true,
-            data:{"pageNum":1,"pageSize":6},
+            data:{},
             success:function (data) {
               _this.products=data.data.rows;
               console.log(_this.products);

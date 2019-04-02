@@ -4,12 +4,12 @@
       <h1 class="myOrder-h1">订单管理</h1>
       <li class="myOrder-li" v-for="(item,index) in list" :key="index">
         <div class="myOrder-li-left">
-          <img class="myOrder-li-left-img" :src="httpUrl+item.goods.imageList[0]"/>
+          <img class="myOrder-li-left-img" :src="httpUrl+item.goods.imageList[0].address"/>
         </div>
         <div class="myOrder-li-right">
-          <div class="myOrder-li-right-content">{{item.goods.content}}</div>
+          <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
-            <div class="myOrder-li-right-jifen">价格:{{item.goods.price}}</div>
+            <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
             <button class="myOrder-li-right-button" @click="goPay(item.goodsId)" v-show="status  == 1">立即支付</button>
             <div class="myOrder-li-right-text" v-show="status  == 1">待支付</div>
             <button class="myOrder-li-right-button"  v-show="status == 2">付款成功</button>
@@ -54,14 +54,13 @@
     methods: {
       goPay(){
         let _this = this
-        _this.status = 2
         $.ajax({
           url:"/api/sunny/order/findPage",
           async:true,
           type:'GET',
           data:{
             "buyerId":_this.userId.userId,
-            "status":_this.status
+            "status":2
           },
           success:function (data) {
 
@@ -104,7 +103,9 @@
           "order":_this.status
         },
         success:function (data) {
+          // alert(_this.userId.userId) 57
           _this.list = data.data.rows;
+          console.log(_this.list)
           _this.total = data.data.total;
           console.log(data.data.rows)
           _this.LoadData(0);

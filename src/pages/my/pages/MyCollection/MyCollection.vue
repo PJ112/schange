@@ -8,17 +8,16 @@
             <img
               class="myCollection-li-left-img"
               :src="httpUrl+item.sendUser.image.address"
-              v-if="item.sendUser.image.address"
+              v-show="item.sendUser.image.address"
             />
-            <img class="myCollection-li-left-img" src="../../../../assets/imgs/index_shopping/user.png" v-else/>
-            <div
-              class="myCollection-li-right-buttom"
-              v-show="contact"
-              @click="goContact(item.message.sendId,item.message.goodsId)"
-            >私聊卖家</div>
+            <img
+              class="myCollection-li-left-img"
+              src="../../../../assets/imgs/index/person.png"
+              v-show="!item.sendUser.image.address"
+            />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
-                <span class="myCollection-li-right-header-name" >{{item.sendUser.user.name}}</span>
+                <span class="myCollection-li-right-header-name" >{{item.sendUser.user.username}}</span>
                 <span class="myCollection-li-right-header-img">
                 <img src="../../../../assets/imgs/my/mycollection/女.png" v-if="item.sendUser.user.sex === 2"/>
                 <img src="../../../../assets/imgs/my/mycollection/男.png" v-if="item.sendUser.user.sex === 1"/>
@@ -29,8 +28,9 @@
                 </div>
               </div>
               <div class="myCollection-li-right-content">{{item.message.content}}</div>
-              <div class="myCollection-li-right-goods">
-                <img :src="httpUrl+item.image">
+              <div class="myCollection-li-right-goods"
+                   @click="goContact(item.message.sendId,item.message.goodsId,item.message.reId)">
+                <img :src="httpUrl+item.image.address">
               </div>
             </div>
           </li>
@@ -68,27 +68,17 @@
         this.alertDara = '';
         console.log("点击了确定",data)
       },
-      goContact(sendId,goodsId){
+      goContact(buyerdId,goodsId,meId){
+        alert(buyerdId)  //卖家id
+        alert(goodsId) //商品id
+        alert(meId)   //用户id
         this.$router.push({
           path:'contact-seller',
-          params:{sellerId:sendId,userId:this.userId.userId,goodsId:goodsId}
+          query:{buyerdId:buyerdId,meId:meId,goodsId:goodsId}
         })
       }
     },
     created(){
-      // this.$http.get('../../../static/json/colletion.json').then((res)=>{
-      //   this.list = res.data.data
-      //   for (let i = 0 ;i<=this.list.length;i++){
-      //    let myDate = new Date(this.list[i].sendUser.user.creatTime);
-      //     let year = myDate.getFullYear();
-      //     let month = myDate.getMonth() + 1;
-      //     let day = myDate.getDate();
-      //     let hours = myDate.getHours();
-      //     let minutes = myDate.getMinutes();
-      //     let second = myDate.getSeconds();
-      //     this.times.push(year + '-' + month + '-' + day+' '+hours + ':' + minutes + ':' + second)
-      //   }
-      // })
       let _this = this
       $.ajax({
         url: "/api/sunny/message/findNewMessage",
@@ -98,7 +88,8 @@
           "reId":_this.userId.userId
         },
         success: function (res) {
-          _this.list = res.data.data
+          _this.list = res.data
+          console.log(_this.list)
           for (let i = 0 ;i<=this.list.length;i++){
             let myDate = new Date(_this.list[i].sendUser.user.creatTime);
             let year = myDate.getFullYear();
@@ -177,12 +168,13 @@
         .myCollection-li-right-content
           margin-top:2%;
         .myCollection-li-right-goods
+          float:right
           display:inline-block
+          margin-top:-9%;
           img
-            width:15px;
-            height:20px;
-            background-size:15px 20px;
-            margin-top:-1%;
+            width:50px;
+            height:50px;
+            background-size:50px 50px;
         .myCollection-li-right-header-name
           color:black;
         .myCollection-li-right-header-time

@@ -26,3 +26,6 @@ user
         //   alert(this.showIndex)
         //   alert('发表成功！')
         // }
+
+
+  findOnePage 头像获取不成功 添加头像 返回添加成功 但是头像不显示
