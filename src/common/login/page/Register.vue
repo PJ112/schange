@@ -22,7 +22,8 @@
         href="#"
         @click="changeverifyImg()"
       >
-        <img class="register-img"  :src="verifyImg"  alt="图片加载失败"/>
+        <img class="loginIn-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>
+        <img class="loginIn-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>
       </a>
       <button class="register-button" @click="go">注册</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>

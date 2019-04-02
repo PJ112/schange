@@ -9,7 +9,8 @@
         href="#"
         @click="changeverifyImg()"
       >
-        <img class="loginIn-img"  :src="verifyImg"  alt="图片加载失败"/>
+        <img class="loginIn-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>
+        <img class="loginIn-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>
       </a>
       <button class="loginIn-button" @click="go">登录</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
@@ -164,6 +165,7 @@
       }
     },
     created(){
+
     },
   }
 </script>
