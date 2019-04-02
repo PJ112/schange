@@ -198,7 +198,7 @@ export default {
         .myPublish-li-left
           display:inline-block
           vertical-align:top;
-          height:calc(26.6vh);
+          height:100%;
           width:34%;
           border-radius:5px;
           img

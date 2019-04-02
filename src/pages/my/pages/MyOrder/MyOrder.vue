@@ -54,40 +54,40 @@
     methods: {
       goPay(){
         let _this = this
-        // $.ajax({
-        //   url:"/api/sunny/order/findPage",
-        //   async:true,
-        //   type:'GET',
-        //   data:{
-        //     "buyerId":_this.userId.userId,
-        //     "status":2
-        //   },
-        //   success:function (data) {
-        //     $.ajax({
-        //       url:"/api/sunny/order/newSearch",
-        //       async:true,
-        //       type:'GET',
-        //       data:{
-        //         "buyerId":_this.userId.userId,
-        //         "pageNum":_this.pageNum,
-        //         "pageSize":_this.pageSize,
-        //       },
-        //       success:function (data) {
-        //         _this.list = data.data.rows;
-        //         console.log(_this.list)
-        //         _this.total = data.data.total;
-        //        alert(_this.list.order.status)
-        //         _this.LoadData(0);
-        //       },
-        //       error:function () {
-        //       },
-        //       dataType:'json'
-        //     })
-        //   },
-        //   error:function () {
-        //   },
-        //   dataType:'json'
-        // })
+        $.ajax({
+          url:"/api/sunny/order/findPage",
+          async:true,
+          type:'GET',
+          data:{
+            "buyerId":_this.userId.userId,
+            "status":2
+          },
+          success:function (data) {
+            // $.ajax({
+            //   url:"/api/sunny/order/newSearch",
+            //   async:true,
+            //   type:'GET',
+            //   data:{
+            //     "buyerId":_this.userId.userId,
+            //     "pageNum":_this.pageNum,
+            //     "pageSize":_this.pageSize,
+            //   },
+            //   success:function (data) {
+            //     _this.list = data.data.rows;
+            //     console.log(_this.list)
+            //     _this.total = data.data.total;
+            //    alert(_this.list.order.status)
+            //     _this.LoadData(0);
+            //   },
+            //   error:function () {
+            //   },
+            //   dataType:'json'
+            // })
+          },
+          error:function () {
+          },
+          dataType:'json'
+        })
       },
       LoadData(value) {
         this.pageNum = value
