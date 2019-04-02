@@ -5,14 +5,6 @@
     </div>
     <div class="my">
       <div class="my-content">
-        <div class="my-header">
-          <span v-show="!user">
-          <span class="my-register" @click="goRes">| 注册</span>
-          <span class="my-login" @click="goLogin">登录</span>
-        </span>
-          <span v-show="user">
-        </span>
-        </div>
         <div class="my-left">
           <div class="my-top">
             <div
@@ -195,7 +187,7 @@
         this.imgFile=file;
         formData.append("imgFile",this.imgFile);
         let reader = new FileReader();
-          reader.onload = (data) => {
+        reader.onload = (data) => {
           let res = data.target || data.srcElement;
           this.userInfo.avatar = res.result;
           let _this =this
@@ -316,56 +308,19 @@
 
 <style lang="stylus" scoped>
   .nav
-    z-index:100;
+    z-index:1;
   .my
     width:100%;
+    z-index:-1;
     min-height:calc(80vh);
     background:white;
     font-family: simsun;
     .my-content
       padding-top:10px;
       margin:0 auto;
-      min-height:calc(100vh);
+      min-height:calc(80vh);
       width:80%;
       background:#e7f4f0;
-      .my-header
-        height:15%;
-        width:100%;
-        margin-bottom:1%;
-        .my-logo
-          width:275px;
-          height:92px;
-          margin-left:7%;
-        .my-userIcon
-          width:40px;
-          height:40px;
-          float:right;
-          margin-top:2%;
-          margin-right:2%;
-        .my-changeUserIcon
-          width:40px;
-          height:40px;
-          border-radius:40px;
-          float:right;
-          margin-top:1%;
-          margin-right:1%;
-        .my-loginText
-          float:right;
-          margin-top:3.5%;
-          margin-right:8%;
-          color:#85cab5
-          font-size:16px;
-          cursor:pointer;
-        .my-login
-          float:right;
-          margin-top:3%;
-          cursor:pointer
-        .my-register
-          float:right;
-          cursor:pointer
-          margin-top:3%;
-          margin-right:10%;
-          margin-left:1%;
       .my-left
         display:inline-block;
         vertical-align:top;
@@ -476,6 +431,7 @@
       .my-link
         display:inline-block;
         position:fixed;
+        margin-top:15%;
         width:6%;
         height:80%;
 </style>

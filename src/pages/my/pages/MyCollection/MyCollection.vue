@@ -4,7 +4,11 @@
       <div class="myCollection">
         <h1 class="myCollection-h1">我的消息</h1>
         <div v-for="(item,index) in list" :key="index">
-          <li class="myCollection-li" >
+          <li class="myCollection-li"
+              @click="goContact(item.message.sendId,item.message.goodsId,item.message.reId)"
+              @mouseenter="showgoodsImg"
+              @mouseleave="hiidengoodsImg"
+          >
             <img
               class="myCollection-li-left-img"
               :src="httpUrl+item.sendUser.image.address"
@@ -14,6 +18,8 @@
               class="myCollection-li-left-img"
               src="../../../../assets/imgs/index/person.png"
               v-show="!item.sendUser.image.address"
+              @mouseenter="showgoodsImg"
+              @mouseleave="hiidengoodsImg"
             />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
@@ -28,8 +34,7 @@
                 </div>
               </div>
               <div class="myCollection-li-right-content">{{item.message.content}}</div>
-              <div class="myCollection-li-right-goods"
-                   @click="goContact(item.message.sendId,item.message.goodsId,item.message.reId)">
+              <div class="myCollection-li-right-goods" v-show="showImg">
                 <img :src="httpUrl+item.image.address">
               </div>
             </div>
@@ -56,7 +61,8 @@
         alertDara: '',
         list:[],
         httpUrl:'http://119.23.12.250:8090/images',
-        times:[]
+        times:[],
+        showImg:false
       }
     },
     methods:{
@@ -68,13 +74,20 @@
         this.alertDara = '';
         console.log("点击了确定",data)
       },
-      goContact(buyerdId,goodsId,meId){
-        alert(buyerdId)  //卖家id
+      showgoodsImg(){
+        this.showImg = true
+      },
+      hiidengoodsImg(){
+        this.showImg=false
+      },
+      goContact(buyerId,goodsId,meId){
+        alert(buyerId)  //卖家id
         alert(goodsId) //商品id
         alert(meId)   //用户id
+        // alert(this.userId.userId)
         this.$router.push({
-          path:'contact-seller',
-          query:{buyerdId:buyerdId,meId:meId,goodsId:goodsId}
+          path:'contact-buyer',
+          query:{"buyerId":buyerId,"meId":meId,"goodsId":goodsId}
         })
       }
     },
@@ -90,8 +103,8 @@
         success: function (res) {
           _this.list = res.data
           console.log(_this.list)
-          for (let i = 0 ;i<=this.list.length;i++){
-            let myDate = new Date(_this.list[i].sendUser.user.creatTime);
+          for (let i = 0 ;i<_this.list.length+1;i++){
+            let myDate = new Date(_this.list[i].message.createTime);
             let year = myDate.getFullYear();
             let month = myDate.getMonth() + 1;
             let day = myDate.getDate();
@@ -127,6 +140,7 @@
       margin-bottom:3%;
     .myCollection-li
       list-style:none;
+      cursor:pointer
       margin-top:3%;
       width:90%;
       box-shadow:0 0px 9px rgba(0,0,0,0.1);
@@ -168,9 +182,10 @@
         .myCollection-li-right-content
           margin-top:2%;
         .myCollection-li-right-goods
-          float:right
           display:inline-block
-          margin-top:-9%;
+          float:right;
+          cursor:pointer
+          margin-top:-10%;
           img
             width:50px;
             height:50px;
@@ -179,7 +194,7 @@
           color:black;
         .myCollection-li-right-header-time
           display:inline-block
-          margin-left:44%;
+          margin-left:52%;
           margin-top:-1%;
         .myCollection-li-right-header-img
           margin-left:3%;

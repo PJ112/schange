@@ -1,6 +1,6 @@
 <template>
 
-    <!-- alert -->
+  <!-- alert -->
   <div id="alert" class="flex-con" v-if="alertDara">
     <div class="con">
       <div class="title" :style="{color:alertDara.titleColor}">{{alertDara.title}}</div>
@@ -24,18 +24,18 @@
 </template>
 
 <script>
-export default {
-  name: "Alert",
-  props:['alertDara'],
-  methods: {
-    alertBackFn:function(){
-      this.$emit('alertBack', '这是子组件传递的消息');
+  export default {
+    name: "Alert",
+    props:['alertDara'],
+    methods: {
+      alertBackFn:function(){
+        this.$emit('alertBack', '这是子组件传递的消息');
+      },
+      alertSureFn:function(){
+        this.$emit('alertBack', '这是子组件传递的消息');
+      }
     },
-    alertSureFn:function(){
-      this.$emit('alertBack', '这是子组件传递的消息');
-    }
-  },
-}
+  }
 </script>
 
 <style scoped>
@@ -44,7 +44,6 @@ export default {
     justify-content: center;
     align-items: center;
   }
-
   #alert{
     position: fixed;
     top: 0;
