@@ -194,6 +194,7 @@
             async:true,
             data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
             success:function (product) {
+              console.log(product);
               if (!product.flag) {
                 _this.error="该商品在购物车中已存在，不能重复添加。";
                 _this.$store.dispatch('errorAsyc',_this.error);

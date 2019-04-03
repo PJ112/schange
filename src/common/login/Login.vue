@@ -59,17 +59,17 @@
     margin:4% auto;
     .way-res
       display:inline-block;
-      color:white;
+      color:#67d49d;
       margin-top:4%;
       margin-left:10%;
       &.router-link-active
-        color:#67d49d
+        color:white
     .way-log
       display:inline-block;
       float right;
-      color:white;
+      color:#67d49d;
       margin-top:4%;
       margin-right:10%;
       &.router-link-active
-        color: #67d49d
+        color: white
 </style>

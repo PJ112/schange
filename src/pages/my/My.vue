@@ -201,7 +201,28 @@
                     async:true,
                     type:'GET',
                     success:function (data) {
-                      alert(data.message)
+                      $.ajax({
+                        url: "/api/sunny/image/findImageAddress",
+                        async: true,
+                        type: 'GET',
+                        data: {
+                          "kind":_this.kind,
+                          "kindId":_this.userId.userId
+                        },
+                        success: function (data) {
+                          if (data){
+                            if (data.data){
+                              _this.PId = data.data.id;
+                              _this.address =data.data.address;
+                              _this.UserAddress = _this.httpUrl+_this.address;
+                            }
+                          }
+                        },
+                        error: function () {
+
+                        },
+                        dataType: 'json'
+                      })
                     },
                     error:function (error) {
                       console.log(error);
@@ -228,7 +249,6 @@
                         success: function (data) {
                           _this.address =data.data.address
                           _this.UserAddress = _this.httpUrl+_this.address
-                          // alert(_this.UserAddress)
                         },
                         error: function () {
 
@@ -270,14 +290,22 @@
           "id":_this.userId.userId
         },
         success: function (data) {
-          _this.UserSrc=  data.data.address;
-          _this.UserSex = data.data.sex
-          _this.UserWechat = data.data.wechat
-          _this.UserPhone = data.data.phone
-          let nowTime=new Date().getTime();
-          let createTime=data.data.creatTime;
-          let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
-          _this.day = day
+          if (data){
+            if (data.data){
+
+              _this.UserSrc=  data.data.address;
+              _this.UserSex = data.data.sex
+              _this.UserWechat = data.data.wechat
+              _this.UserPhone = data.data.phone
+              let nowTime=new Date().getTime();
+              let createTime=data.data.creatTime;
+              let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
+              _this.day = day
+            }
+
+
+          }
+
         },
         error: function () {
 
@@ -293,9 +321,13 @@
           "kindId":_this.userId.userId
         },
         success: function (data) {
-          _this.PId = data.data.id
-          _this.address =data.data.address
-          _this.UserAddress = _this.httpUrl+_this.address
+          if (data){
+            if (data.data){
+              _this.PId = data.data.id;
+              _this.address =data.data.address;
+              _this.UserAddress = _this.httpUrl+_this.address;
+            }
+          }
         },
         error: function () {
 

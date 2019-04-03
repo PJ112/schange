@@ -85,7 +85,26 @@ export default {
          "ids":this.choseIndex
         },
         success:function (data) {
-          _this.chose = false
+          _this.chose = false;
+          $.ajax({
+            url:"/api/sunny/goods/newSearch",
+            async:true,
+            type:'GET',
+            data:{
+              "sellerId":_this.userId.userId,
+              "pageNum":_this.pageNum,
+              "pageSize":_this.pageSize,
+              "status":_this.status
+            },
+            success:function (data) {
+              _this.list = data.data.rows;
+              _this.total = data.data.total;
+              _this.LoadData(0);
+            },
+            error:function () {
+            },
+            dataType:'json'
+          })
         },
         error:function () {
         },

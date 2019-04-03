@@ -20,7 +20,7 @@
             学校：<span>{{school}}</span>
           </div>
           <div class="contact-seller-container-index">
-            <router-link :to="'/sellersmes?id='+sellerId">
+            <router-link :to="'/sellersmes?id='+buyerId">
               买家主页
             </router-link>
           </div>
@@ -100,17 +100,17 @@
     data(){
       return{
         // goodsId:this.$route.query.goodsId,
-        goodsId:61,
+        goodsId:this.$route.query.goodsId,
         details:{},
         username:'',
         school:'',
         httpUrl:'http://119.23.12.250:8090/images/',
         message:[],
         // buyerId:this.$route.query.buyerId,
-        buyerId:51,
+        buyerId:this.$route.query.buyerId,
         content:'',
         // meId:this.$route.query.meId,
-        meId:42,
+        meId:this.$route.query.meId,
         day:'',
         userImg:'',
         meImg:'',
@@ -118,12 +118,14 @@
     },
     created(){
       let _this=this;
+      console.log(this.goodsId);
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.goodsId},
         success:function (good) {
           _this.details=good.data;
+          console.log(_this.details);
           $.ajax({
             url:'/api/sunny/user/findOne ',
             async:true,
@@ -175,8 +177,9 @@
           $.ajax({
             url:'/api/sunny/message/findMessage',
             async:true,
-            data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
+            data:{"id":_this.buyerId,"otherId":_this.meId,"goodsId":_this.goodsId},
             success:function (message) {
+
               _this.message=message.data;
 
             },
@@ -193,9 +196,16 @@
     },
     computed:{
       getImgUrl(){
-        if (this.details.imageList){
-          return this.httpUrl+this.details.imageList[0].address;
+        if (this.details){
+          if (this.details.imageList){
+            if (this.details.imageList[0]){
+              return this.httpUrl+this.details.imageList[0].address;
+
+            }
+
+          }
         }
+
       }
     },
     methods:{

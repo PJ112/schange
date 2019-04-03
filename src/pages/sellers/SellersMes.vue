@@ -1,14 +1,7 @@
 <template>
   <div class="my">
     <div class="my-content">
-      <div class="my-header">
-        <img src="../../assets/imgs/sellers/schange.png" class="my-logo"/>
-        <span>
-           <span class="my-header-loginout" @click="goOut">退出</span>
-          <img  class="my-userIcon" :src="sellersImg" v-if="sellersImg"/>
-          <img  class="my-userIcon" src="../../assets/imgs/index/person.png" v-else/>
-        </span>
-      </div>
+      <common-nav></common-nav>
       <div class="my-left">
         <div class="my-top">
           <img   class="my-changeIcon" :src="sellersImg" v-if="sellersImg"/>
@@ -33,6 +26,7 @@
 </template>
 
 <script>
+  import Nav from '../../common/nav-nosearch/Nav'
   import MyLink from '../../common/MyLink/Link'
   export default {
     name: 'SellersMes',
@@ -57,7 +51,8 @@
       }
     },
     components:{
-      MyLink
+      MyLink,
+      "common-nav":Nav
     },
     created(){
       let _this = this

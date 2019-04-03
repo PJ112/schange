@@ -26,8 +26,8 @@
                 <img class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
                 <img class="index-profile-img" :src="userImg" v-if="userImg">
                 <span class="index-profile-title">{{user}}</span>
-                <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===1">
-                <img class="index-profile-sex" src="../../assets/imgs/index_profile/男.png" v-else-if="sex===2"/>
+                <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===2">
+                <img class="index-profile-sex" src="../../assets/imgs/index_profile/男.png" v-else-if="sex===1"/>
                 <img class="index-profile-sex" src="../../assets/imgs/my/mycollection/保密.png" v-else/>
               </div>
               <div class="index-profile-category">
@@ -110,7 +110,7 @@
                 $.ajax({
                   url:'/api/sunny/image/findImageAddress',
                   async:true,
-                  data:{"kindId":_this.userId},
+                  data:{"kindId":_this.userId,"kind":1},
                   success:function (user) {
                     if (user.flag){
                       if (user.data){

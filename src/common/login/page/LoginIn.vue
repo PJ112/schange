@@ -32,7 +32,7 @@
     components: {Alert},
     data () {
       return {
-        user:'',
+        user:this.$store.state.user.user,
         pass:'',
         showPas: false,
         isShow:false,
@@ -42,6 +42,7 @@
         userId:0
       }
     },
+
     methods:{
       show () {
         this.showPas = !this.showPas;
@@ -167,7 +168,6 @@
       }
     },
     created(){
-
     },
   }
 </script>

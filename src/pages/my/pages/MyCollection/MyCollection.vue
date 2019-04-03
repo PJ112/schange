@@ -6,20 +6,17 @@
         <div v-for="(item,index) in list" :key="index">
           <li class="myCollection-li"
               @click="goContact(item.message.sendId,item.message.goodsId,item.message.reId)"
-              @mouseenter="showgoodsImg"
-              @mouseleave="hiidengoodsImg"
+
           >
             <img
               class="myCollection-li-left-img"
-              :src="httpUrl+item.sendUser.image.address"
-              v-show="item.sendUser.image.address"
+              :src="getImg(item.sendUser)"
+              v-show="item.sendUser.image"
             />
             <img
               class="myCollection-li-left-img"
               src="../../../../assets/imgs/index/person.png"
-              v-show="!item.sendUser.image.address"
-              @mouseenter="showgoodsImg"
-              @mouseleave="hiidengoodsImg"
+              v-show="!item.sendUser.image"
             />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
@@ -35,7 +32,7 @@
               </div>
               <div class="myCollection-li-right-content">{{item.message.content}}</div>
               <div class="myCollection-li-right-goods" v-show="showImg">
-                <img :src="httpUrl+item.image.address">
+                <img :src="getImg(item)">
               </div>
             </div>
           </li>
@@ -62,7 +59,7 @@
         list:[],
         httpUrl:'http://119.23.12.250:8090/images',
         times:[],
-        showImg:false
+        showImg:true
       }
     },
     methods:{
@@ -81,9 +78,7 @@
         this.showImg=false
       },
       goContact(buyerId,goodsId,meId){
-        alert(buyerId)  //卖家id
-        alert(goodsId) //商品id
-        alert(meId)   //用户id
+
         // alert(this.userId.userId)
         this.$router.push({
           path:'contact-buyer',
@@ -101,16 +96,24 @@
           "reId":_this.userId.userId
         },
         success: function (res) {
-          _this.list = res.data
+          _this.list = res.data;
+          let myDate='';
           for (let i = 0 ;i<_this.list.length+1;i++){
-            let myDate = new Date(_this.list[i].message.createTime);
-            let year = myDate.getFullYear();
-            let month = myDate.getMonth() + 1;
-            let day = myDate.getDate();
-            let hours = myDate.getHours();
-            let minutes = myDate.getMinutes();
-            let second = myDate.getSeconds();
-            _this.times.push(year + '-' + month + '-' + day+' '+hours + ':' + minutes + ':' + second)
+            if (_this.list){
+              if (_this.list[i]){
+                if (_this.list[i].message){
+                   myDate= new Date(_this.list[i].message.createTime);
+                  let year = myDate.getFullYear();
+                  let month = myDate.getMonth() + 1;
+                  let day = myDate.getDate();
+                  let hours = myDate.getHours();
+                  let minutes = myDate.getMinutes();
+                  let second = myDate.getSeconds();
+                  _this.times.push(year + '-' + month + '-' + day+' '+hours + ':' + minutes + ':' + second)
+                }
+              }
+            }
+
           }
         },
         error: function () {
@@ -118,6 +121,20 @@
         },
         dataType: 'json'
       })
+    },
+    computed:{
+      getImg(){
+        return function (icon) {
+          if (icon){
+            if (icon.image){
+              if (icon.image.address){
+                return this.httpUrl+icon.image.address;
+              }
+            }
+          }
+
+        }
+      }
     }
   }
 </script>
@@ -184,7 +201,7 @@
           display:inline-block
           float:right;
           cursor:pointer;
-          margin-top:-10%
+          margin-top:-6%
           img
             width:50px;
             height:50px;
