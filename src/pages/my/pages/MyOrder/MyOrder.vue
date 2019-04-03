@@ -10,7 +10,7 @@
           <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-            <button class="myOrder-li-right-button" @click="goPay(item.goodsId)" v-show="item.order.status  === 1">立即支付</button>
+            <button class="myOrder-li-right-button" @click="goPay(item.order.id)" v-show="item.order.status  === 1">立即支付</button>
             <div class="myOrder-li-right-text" v-show="item.order.status  === 1">待支付</div>
             <button class="myOrder-li-right-button"  v-show="item.order.status === 2">付款成功</button>
             <div class="myOrder-li-right-text"  v-show="item.order.status === 2">已支付</div>
@@ -52,37 +52,38 @@
       userId:Number,
     },
     methods: {
-      goPay(){
+      goPay(id){
         let _this = this
         $.ajax({
-          url:"/api/sunny/order/findPage",
+          url:"/api/sunny/order/update",
+          async:true,
+          type:'GET',
+          data:{
+            "id":id,
+            "status":2
+          },
+          success:function (data) {
+            alert(data.message)
+          },
+          error:function () {
+          },
+          dataType:'json'
+        })
+        $.ajax({
+          url:"/api/sunny/order/newSearch",
           async:true,
           type:'GET',
           data:{
             "buyerId":_this.userId.userId,
-            "status":2
+            "pageNum":_this.pageNum,
+            "pageSize":_this.pageSize,
           },
           success:function (data) {
-            // $.ajax({
-            //   url:"/api/sunny/order/newSearch",
-            //   async:true,
-            //   type:'GET',
-            //   data:{
-            //     "buyerId":_this.userId.userId,
-            //     "pageNum":_this.pageNum,
-            //     "pageSize":_this.pageSize,
-            //   },
-            //   success:function (data) {
-            //     _this.list = data.data.rows;
-            //     console.log(_this.list)
-            //     _this.total = data.data.total;
-            //    alert(_this.list.order.status)
-            //     _this.LoadData(0);
-            //   },
-            //   error:function () {
-            //   },
-            //   dataType:'json'
-            // })
+            _this.list = data.data.rows;
+            console.log(_this.list)
+            _this.total = data.data.total;
+            console.log(data.data.rows)
+            _this.LoadData(0);
           },
           error:function () {
           },

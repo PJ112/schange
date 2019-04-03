@@ -61,7 +61,7 @@
             btnColor: ["", ""]
           };
           _this.alertDara = alertDara;
-        }else if(this.verifyText === ""){
+        }else if(_this.verifyText === ""){
           let alertDara = {
             content: "请输入验证码！",
             contentColor: "red",
@@ -70,13 +70,15 @@
           };
           _this.alertDara = alertDara;
         }
-        // else if(this.verifyText !== ""){
+        // else if(_this.verifyText !== ""){
         //   $.ajax({
         //     url:"/api/sunny/user/check",
-        //     async:true,
+        //     async:false,
         //     type:'GET',
+        //     // contentType:"application/json;charset=utf-8",
+        //     // dataType:text,
         //     data:{
-        //       "verify":this.verifyText
+        //       "verify":_this.verifyText
         //     },
         //     success:function (data) {
         //       //验证成功
@@ -104,7 +106,7 @@
         else{
           $.ajax({
             url:"/api/sunny/user/login",
-            async:true,
+            async:false,
             type:'GET',
             data:{
               "username":this.user,

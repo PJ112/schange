@@ -5,40 +5,41 @@
       <div>
         <li class="MyHJudge-li" v-for="(item,index) in list" :key="index">
           <div class="MyHJudge-li-assess">
-            <img class="myCollection-li-left-img" :src="httpUrl+item[4].address" />
+            <img class="myCollection-li-left-img" :src="httpUrl+item[4].address" v-if="item[4]"/>
+            <img class="myCollection-li-left-img" src="../../../../assets/imgs/index/person.png" v-else />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
-                <span class="myCollection-li-right-header-name">{{item[4].username}}</span>
+                <span class="myCollection-li-right-header-name">{{item[3].username}}</span>
                 <span class="myCollection-li-right-header-img">
-                <img src="../../../../assets/imgs/my/mycollection/女.png" v-show="item[4].sex ===2"/>
-                <img src="../../../../assets/imgs/my/mycollection/男.png" v-show="item[4].sex ===1"/>
-                <img src="../../../../assets/imgs/my/mycollection/保密.png" v-show="item[4].sex ===3"/>
+                <img src="../../../../assets/imgs/my/mycollection/女.png" v-if="item[3].sex ===2"/>
+                <img src="../../../../assets/imgs/my/mycollection/男.png" v-else-if="item[3].sex ===1"/>
+                <img src="../../../../assets/imgs/my/mycollection/保密.png" v-else/>
               </span>
               </div>
-              <div class="myCollection-li-right-content">{{item[5].contents}}</div>
+              <div class="myCollection-li-right-content">{{item[1].contents}}</div>
             </div>
           </div>
           <div class="MyHJudge-li-goods">
-            <img class="MyHJudge-li-left-img" :src="httpUrl+item[2].address" v-if="item[4].id === userId.userId"/>
+            <img class="MyHJudge-li-left-img" :src="httpUrl+item[2].address"/>
             <div class="MyHJudge-li-right">
-              <div class="MyHJudge-li-right-content">{{item[1].contents}}</div>
+              <div class="MyHJudge-li-right-content">{{item[0].name}}</div>
             </div>
           </div>
         </li>
       </div>
       <!--分页-->
-      <ul class="MyHJudge-page" v-show="list.length>0">
-        <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
-        <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
-        <li
-          @click="LoadData(item-1)"
-          v-for="(item,index) in totalPages"
-          :key="index"
-          :class="[index==pageNum?'ItemnumberPage':'numberPage']"
-        >{{item}}</li>
-        <li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>
-        <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
-      </ul>
+      <!--<ul class="MyHJudge-page" v-show="list.length>0">-->
+        <!--<li v-if="pageNum === 0" class="disabled unforepage">上一页</li>-->
+        <!--<li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>-->
+        <!--<li-->
+          <!--@click="LoadData(item-1)"-->
+          <!--v-for="(item,index) in totalPages"-->
+          <!--:key="index"-->
+          <!--:class="[index==pageNum?'ItemnumberPage':'numberPage']"-->
+        <!--&gt;{{item}}</li>-->
+        <!--<li v-if="pageNum === totalPages-1 || totalPages === -1" class="disabled unforepage">下一页</li>-->
+        <!--<li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>-->
+      <!--</ul>-->
     </div>
     <div class="MyHJudge-no" v-else>暂无历史评价！</div>
   </div>
@@ -54,31 +55,32 @@
         pageSize:3,
         list:[],
         httpUrl:'http://119.23.12.250:8090/images',
+        listN:[]
       }
     },
     props:{
       userId:Number,
     },
     methods:{
-      LoadData(value) {
-        this.pageNum = value
-        let _this = this
-        $.ajax({
-          url:"/api/sunny/comment/search",
-          async:true,
-          type:'GET',
-          data:{
-            "buyId":_this.userId.userId,
-            "pageNum":_this.pageNum,
-            "pageSize":_this.pageSize
-          },
-          success:function (data) {
-          },
-          error:function () {
-          },
-          dataType:'json'
-        })
-      },
+      // LoadData(value) {
+      //   this.pageNum = value
+      //   let _this = this
+      //   $.ajax({
+      //     url:"/api/sunny/comment/search",
+      //     async:true,
+      //     type:'GET',
+      //     data:{
+      //       "buyId":_this.userId.userId,
+      //       "pageNum":_this.pageNum,
+      //       "pageSize":_this.pageSize
+      //     },
+      //     success:function (data) {
+      //     },
+      //     error:function () {
+      //     },
+      //     dataType:'json'
+      //   })
+      // },
     },
     created(){
       let _this = this
@@ -87,13 +89,14 @@
         async: true,
         type: 'GET',
         data: {
-          "buy":_this.userId.userId,
-          "pageNum":_this.pageNum,
-          "pageSize":_this.pageSize
+          "buyerId":_this.userId.userId
+          // "pageNum":_this.pageNum,
+          // "pageSize":_this.pageSize
         },
         success: function (data) {
           _this.list = data.data
-          _this.total = data.data.length
+          _this.total = _this.list.length
+          // alert( _this.total)
 
         },
         error: function () {
@@ -103,9 +106,9 @@
       })
     },
     computed: {
-      totalPages() {
-        return Math.ceil(this.total * 1 / this.pageSize)
-      }
+    //   totalPages() {
+    //     return Math.ceil(this.total * 1 / this.pageSize)
+    //   }
     }
   }
 </script>
@@ -151,9 +154,13 @@
         margin-left:3%;
         margin-top:10px;
         .myCollection-li-right-content
-          margin-top:5%;
+          margin-top:3%;
         .myCollection-li-right-header-img
           margin-left:3%;
+          img
+            margin-top:-1%
+            width:20px;
+            height:20px;
       .myCollection-li-time
         display:inline-block;
         float:right;
