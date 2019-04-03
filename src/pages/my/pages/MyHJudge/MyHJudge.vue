@@ -5,7 +5,7 @@
       <div>
         <li class="MyHJudge-li" v-for="(item,index) in list" :key="index">
           <div class="MyHJudge-li-assess">
-            <img class="myCollection-li-left-img" :src="httpUrl+item[4].address" />
+            <img class="myCollection-li-left-img" :src="httpUrl+item[2].address" />
             <div class="myCollection-li-right">
               <div class="myCollection-li-right-header">
                 <span class="myCollection-li-right-header-name">{{item[4].username}}</span>
@@ -15,7 +15,7 @@
                 <img src="../../../../assets/imgs/my/mycollection/保密.png" v-show="item[4].sex ===3"/>
               </span>
               </div>
-              <div class="myCollection-li-right-content">{{item[5].contents}}</div>
+              <div class="myCollection-li-right-content">{{item[1].contents}}</div>
             </div>
           </div>
           <div class="MyHJudge-li-goods">
@@ -54,6 +54,7 @@
         pageSize:3,
         list:[],
         httpUrl:'http://119.23.12.250:8090/images',
+        listN:[]
       }
     },
     props:{
@@ -87,13 +88,14 @@
         async: true,
         type: 'GET',
         data: {
-          "buy":_this.userId.userId,
+          "buyerId":_this.userId.userId,
           "pageNum":_this.pageNum,
           "pageSize":_this.pageSize
         },
         success: function (data) {
           _this.list = data.data
-          _this.total = data.data.length
+          _this.total = _this.list.length
+          alert( _this.total)
 
         },
         error: function () {

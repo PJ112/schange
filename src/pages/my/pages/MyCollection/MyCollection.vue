@@ -184,8 +184,8 @@
         .myCollection-li-right-goods
           display:inline-block
           float:right;
-          cursor:pointer
-          margin-top:-30%;
+          cursor:pointer;
+          margin-top:-10%
           img
             width:50px;
             height:50px;
