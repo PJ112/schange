@@ -14,5 +14,8 @@ export default  {
   },
 
   //shop  LT
+  error(state,error){
+    state.error=error.error;
+  }
 
 }

@@ -6,13 +6,16 @@
         <div class="shopping-container-title">
           购物车
         </div>
+        <div class="alter" v-if="error" style="text-align: center;color: red;margin-top: 20px;">
+          {{error}}
+        </div>
         <div v-if="shopCarts.length>0">
           <div class="shopping-container-items"  v-for="(item,index) of shopCarts" :key="index" >
             <div class="shopping-item-select">
               <input type="radio" id="input" name="radio"  @click="toggleChange(item.data[0].goodsId,item.data[1].price)" class="shopping-select-input" />
             </div>
             <div class="shopping-item-intro">
-              <img  class="shopping-intro-img" :src="getImgUrl(item.data[3].address)">
+              <img  class="shopping-intro-img" :src="getImgUrl(item.data)">
               <div class="shopping-item-desc">
                 <div class="shopping-desc-title">
                   {{item.data[1].name}}
@@ -40,6 +43,7 @@
         </div>
       </div>
       <icon-common v-if="shopCarts.length>0"></icon-common>
+
     </div>
 
 
@@ -65,12 +69,13 @@
         userId:this.$store.state.userId.userId,
         shopCarts:[],
         radio:'',
-        total:0
+        total:0,
+        error:this.$store.state.error
       }
     },
     components:{
       "nav-common":Nav,
-      "icon-common":Icon
+      "icon-common":Icon,
     },
     created(){
       let _this=this;
@@ -80,6 +85,12 @@
         data:{"buyerId":this.userId},
         success:function (good) {
           _this.shopCarts=good.data;
+          if (_this.shopCarts){
+            setTimeout(()=>{
+              _this.error='';
+              _this.$store.dispatch('errorAsyc','');
+            },2000);
+          }
 
         },
         error:function (error) {
@@ -88,11 +99,19 @@
       });
 
 
+
+
     },
     computed:{
       getImgUrl() {
         return function (icon) {
-          return this.httpUrl+icon;
+          if (icon){
+            if (icon[3]){
+              return this.httpUrl+icon[3].address;
+
+            }
+
+          }
         }
       }
     },
@@ -306,6 +325,7 @@
         }
       }
     }
+
 
   }
   .shopping .icon{

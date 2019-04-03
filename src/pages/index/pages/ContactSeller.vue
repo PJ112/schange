@@ -55,11 +55,11 @@
                       {{item.content}}
                     </span>
                   <span class="point"></span>
-                  <img src="../../../assets/imgs/index/person.png" v-if="!meImg">
+                  <img style="width:50px;height: 50px;border-radius: 50%" src="../../../assets/imgs/index/person.png" v-if="!meImg">
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="meImg" v-else/>
                 </div>
                 <div class="contact-seller-content-item-left"  v-else>
-                  <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+                  <img style="width:50px;height: 50px;border-radius: 50%" src="../../../assets/imgs/index/person.png" v-if="!userImg">
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="userImg" v-else/>
                   <span class="content">
                       {{item.content}}
@@ -196,9 +196,12 @@
     },
     computed:{
       getImgUrl(){
-        if (this.details.imageList){
-          return this.httpUrl+this.details.imageList[0].address;
+        if (this.details){
+          if (this.details.imageList){
+            return this.httpUrl+this.details.imageList[0].address;
+          }
         }
+
       }
     },
     methods:{
@@ -222,6 +225,7 @@
                   data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
                   success:function (message) {
                     _this.message=message.data;
+                    console.log(_this.message);
                     if (_this.message.length>0){
                       _this.content='';
                     }
@@ -249,8 +253,13 @@
           async:true,
           data:{"buyerId":this.reId,"goodsId":this.id,"number":1},
           success:function (product) {
-            if (product.flag){
+            if (!product.flag) {
+              _this.error="该商品在购物车中已存在，不能重复添加。";
+              _this.$store.dispatch('errorAsyc',_this.error);
               _this.$router.push('/index-shopping');
+            }else{
+              _this.$router.push('/index-shopping');
+
             }
           },
           error:function (error) {
@@ -459,13 +468,14 @@
                 }
                 .point{
                   position: absolute;
-                  left: 69px;
-                  top: 23px;
+                  left: 58px;
+                  top: 19px;
                   width: 12px;
                   height: 12px;
                   display: inline-block;
                   border-bottom: 1px solid #85cab5;
                   border-left: 1px solid #85cab5;
+                  -webkit-transform: rotate(45deg);
                   transform: rotate(45deg);
                   z-index: 110;
                   background: #fff;

@@ -44,7 +44,7 @@
             >
               <router-link :to="'/sale-product?id='+item.goods.id">
                 <div class="item-img" >
-                  <img :src="getImgUrl(item.imageList[0].address)"  />
+                  <img :src="getImgUrl(item.imageList)"  />
                 </div>
                 <div class="item-description">
                   <div class="item-name">
@@ -126,8 +126,12 @@
       getImgUrl() {
 
         return function (icon) {
+          if(icon.length>0){
+            return this.imgUrl+icon[0].address;
 
-          return this.imgUrl+icon;
+          }
+
+
         }
 
       },

@@ -4,14 +4,13 @@
       <common-nav></common-nav>
       <div class="shopping-container">
         <div class="shopping-container-title">
-          {{name}}
         </div>
-        <div class="shopping-container-items" v-if="products.length>0"  v-for="(item,index) of products" :key="index">
+        <div class="shopping-container-items" v-if="goods.length>0"  v-for="(item,index) of goods" :key="index">
           <div class="shopping-item-intro">
-            <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
+            <img  class="shopping-intro-img" :src="getUrlImg(item.imageList)">
             <div class="shopping-item-desc">
               <div class="shopping-desc-title">
-               {{item.goods.name}}
+                {{item.goods.name}}
               </div>
               <div class="shopping-desc-price">
                 <span>价格：</span>{{item.goods.price}}元
@@ -23,11 +22,11 @@
             </div>
           </div>
         </div>
-        <div class="shopping-container-items1" v-if="products.length===0"  style="text-align: center;color: red;padding: 20px;padding-top: 40px;">
-          <span>不好意思哦,该分类还没有发布商品!</span>
+        <div class="shopping-container-items1" v-if="goods.length===0"  style="text-align: center;color: red;padding: 20px;padding-top: 40px;">
+          <span>不好意思哦,没有搜索到该类商品哦!</span>
         </div>
       </div>
-      <common-icon v-if="products.length>0"></common-icon>
+      <common-icon v-if="goods.length>0"></common-icon>
     </div>
 
 
@@ -37,6 +36,7 @@
 <script>
   import CommonNav from '../../../common/nav/Nav'
   import Icon from '../../../common/indexIcon/Icon'
+  import $ from 'jquery'
   export default {
     name: "Shopping",
     data(){
@@ -44,34 +44,39 @@
         show:true,
         select:true,
         typeId:this.$route.query.typeId,
-        products:[],
-        name:this.$route.query.name,
+        name:'',
         imgUrl:'http://119.23.12.250:8090/images',
-        userId:this.$store.state.userId.userId
+        userId:this.$store.state.userId.userId,
+        goods:[]
       }
     },
     created(){
       let _this=this;
+      this.goods=[];
+      this.name=this.$route.query.name;
       $.ajax({
         url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{"typeId":this.typeId,"pageNum":1,"pageSize":6},
+        data:{"name":_this.name},
         success:function (good) {
-         if (good.flag){
-           _this.products=good.data.rows;
-         }
+          _this.goods=good.data.rows;
 
         },
         error:function (error) {
           console.log(error);
         }
-      });
+      })
     },
     computed:{
       getUrlImg(){
         return function (icon) {
+          if (icon){
+            if (icon[0]){
+              return this.imgUrl+icon[0].address;
 
-          return this.imgUrl+icon;
+            }
+
+          }
         }
       }
     },
@@ -84,6 +89,7 @@
             async:true,
             data:{"buyerId":this.userId,"goodsId":id,"number":1},
             success:function (product) {
+              console.log(product);
               if (!product.flag) {
                 _this.error="该商品在购物车中已存在，不能重复添加。";
                 _this.$store.dispatch('errorAsyc',_this.error);
@@ -240,10 +246,10 @@
       }
     }
   }
-  .shopping .icon{
+  .shopping .icon {
     position: fixed;
     right: 131px;
-    top: 500px;
+    top: 302px;
   }
 </style>
 

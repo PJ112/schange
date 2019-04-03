@@ -20,7 +20,7 @@
                 <img class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
                 <img class="index-profile-img" :src="userImg" v-else>
 
-                <span class="index-profile-title">{{user.user}}</span>
+                <span class="index-profile-title">{{user}}</span>
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===1">
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/男.png" v-else-if="sex===2"/>
                 <img class="index-profile-sex" src="../../assets/imgs/my/mycollection/保密.png" v-else/>
@@ -44,7 +44,7 @@
           </transition>
         </div>
       </span>
-      <span v-if="!user">
+      <span v-else>
          <span class="index-nav-loginin"><router-link to="/loginin">登陆</router-link></span>
         <span class="index-nav-register"><router-link to="/register">注册</router-link></span>
        </span>
@@ -84,7 +84,7 @@
               }
             ],
             show:false,
-            user:this.$store.state.user,
+            user:this.$store.state.user.user,
             userId:this.$store.state.userId.userId,
             userImg:'',
             sex:0,
@@ -132,6 +132,7 @@
             storage.clear();
             this.$store.dispatch('updateUserAsyc','');
             this.$store.dispatch('updateuserIdAsyc','');
+            this.$store.router.push('/loginin');
           }
        }
     }

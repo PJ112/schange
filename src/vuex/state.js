@@ -19,5 +19,6 @@ export default {
   jifen:'0',
 
   //shop
+  error:''
 
 }

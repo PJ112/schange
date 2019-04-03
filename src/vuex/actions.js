@@ -20,5 +20,9 @@ export default {
     })
   },
   //shop  LT
-
+  errorAsyc(store,data){
+    store.commit('error',{
+      error:data
+    })
+  }
 }

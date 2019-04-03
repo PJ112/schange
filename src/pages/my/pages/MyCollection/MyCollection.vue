@@ -102,7 +102,6 @@
         },
         success: function (res) {
           _this.list = res.data
-          console.log(_this.list)
           for (let i = 0 ;i<_this.list.length+1;i++){
             let myDate = new Date(_this.list[i].message.createTime);
             let year = myDate.getFullYear();

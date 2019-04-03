@@ -7,12 +7,12 @@
     </div>
     <div class="index-nav-search">
       <div class="index-nav-search-input">
-        <input type="text" placeholder="搜索">
-        <img src="../../assets/imgs/index/search.png">
+        <input type="text" placeholder="搜索" v-model="name" @keyup.enter="search">
+        <img src="../../assets/imgs/index/search.png" @click="search">
       </div>
     </div>
     <div class="index-nav-login">
-      <span v-if="user">
+       <span v-if="user">
         <div class="index-show-profile"  @mouseenter="show=true" @mouseleave="show=false" style="display: inline-block;height: 92px;padding-top: 30px;">
           <span class="index-nav-login-img">
                 <img style="width: 50px;height: 50px;border-radius: 50%" src="../../assets/imgs/index/person.png" v-if="!userImg">
@@ -25,7 +25,7 @@
               <div class="index-profile-intro">
                 <img class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
                 <img class="index-profile-img" :src="userImg" v-if="userImg">
-                <span class="index-profile-title">{{user.user}}</span>
+                <span class="index-profile-title">{{user}}</span>
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===1">
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/男.png" v-else-if="sex===2"/>
                 <img class="index-profile-sex" src="../../assets/imgs/my/mycollection/保密.png" v-else/>
@@ -49,7 +49,7 @@
           </transition>
         </div>
       </span>
-       <span v-if="!user" class="nav-login">
+       <span v-else class="nav-login">
          <span class="index-nav-loginin"><router-link to="/loginin">登陆</router-link></span>
          <span class="index-nav-register"><router-link to="/register">注册</router-link></span>
        </span>
@@ -89,11 +89,12 @@
               }
             ],
             show:false,
-            user:this.$store.state.user,
+            user:this.$store.state.user.user,
             userId:this.$store.state.userId.userId,
             sex:0,
             userImg:'',
             httpUrl:'http://119.23.12.250:8090/images',
+            name:''
 
           }
         },
@@ -136,6 +137,16 @@
             storage.clear();
             this.$store.dispatch('updateUserAsyc','');
             this.$store.dispatch('updateuserIdAsyc','');
+            this.$router.push('/loginin');
+
+          },
+          search(){
+            let _this=this;
+            let route=_this.$router.resolve({
+              path:'/search-detail',
+              query:{name:_this.name}
+            });
+            window.open(route.href,'_blank');
           }
         }
     }

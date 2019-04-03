@@ -37,6 +37,7 @@ import Detail from '../pages/index/pages/Detail'
 import ContactSeller from '../pages/index/pages/ContactSeller'
 
 import ContactBuyer from '../pages/index/pages/ContactBuyer'
+import SearchDetail from '../pages/index/pages/SearchDetail'
 
 
 Vue.use(Router);
@@ -175,6 +176,10 @@ export default new Router({
     {
       path:'/contact-buyer',
       component:ContactBuyer
+    },
+    {
+      path:'/search-detail',
+      component:SearchDetail
     },
     {
      path:'/sellersmes',
