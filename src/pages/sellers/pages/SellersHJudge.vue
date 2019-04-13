@@ -94,6 +94,7 @@
           "pageSize":_this.pageSize
         },
         success: function (data) {
+
           _this.list = data.data
           _this.total = data.data.length
 

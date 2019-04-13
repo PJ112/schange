@@ -106,8 +106,8 @@
             :school="school"
             :UserSrc="UserSrc"
             :UserSex="UserSex"
-            :UserWechat="UserWechat"
-            :UserPhone="UserPhone"
+            :wechat="wechat"
+            :phone="phone"
           ></router-view>
         </div>
         <div class="my-link">
@@ -144,8 +144,8 @@
         kind:1,
         UserSrc:'',
         UserSex:Number,
-        UserWechat:'',
-        UserPhone:'',
+        wechat:'',
+        phone:'',
         UserAddress:'',
         httpUrl:'http://119.23.12.250:8090/images',
 
@@ -210,11 +210,15 @@
                           "kindId":_this.userId.userId
                         },
                         success: function (data) {
+                          console.log(data);
                           if (data){
                             if (data.data){
                               _this.PId = data.data.id;
                               _this.address =data.data.address;
                               _this.UserAddress = _this.httpUrl+_this.address;
+                              _this.$store.dispatch('updateUserAsyc',_this.user.user);
+                              _this.$store.dispatch('updateuserIdAsyc', _this.userId.userId);
+                              _this.$router.go(0);
                             }
                           }
                         },
@@ -249,6 +253,9 @@
                         success: function (data) {
                           _this.address =data.data.address
                           _this.UserAddress = _this.httpUrl+_this.address
+                          _this.$store.dispatch('updateUserAsyc',_this.user.user);
+                          _this.$store.dispatch('updateuserIdAsyc', _this.userId.userId);
+                          _this.$router.go(0);
                         },
                         error: function () {
 
@@ -295,8 +302,10 @@
 
               _this.UserSrc=  data.data.address;
               _this.UserSex = data.data.sex
-              _this.UserWechat = data.data.wechat
-              _this.UserPhone = data.data.phone
+              _this.wechat = data.data.wechat
+              _this.phone = data.data.phone
+              _this.school = data.data.school
+              console.log(data)
               let nowTime=new Date().getTime();
               let createTime=data.data.creatTime;
               let day=Math.ceil((nowTime-createTime)/1000/60/60/24);

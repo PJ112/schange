@@ -183,7 +183,6 @@
               success:function (data) {
                 _this.parentCategories=data.data;
                 if (_this.goodsId) {
-                  console.log(_this.parentCategories);
                   $.ajax({
                     url:'/api/sunny/goods/findOne',
                     async:true,
@@ -302,7 +301,6 @@
               type:'GET',
               success:function (product) {
                 _this.message=product.message;
-
                 setTimeout(()=>{
                   _this.$router.push('/mypublish');
                 },1000);

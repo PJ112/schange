@@ -125,7 +125,6 @@
         data:{"id":_this.goodsId},
         success:function (good) {
           _this.details=good.data;
-          console.log(_this.details);
           $.ajax({
             url:'/api/sunny/user/findOne ',
             async:true,

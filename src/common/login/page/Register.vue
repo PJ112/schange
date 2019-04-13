@@ -10,7 +10,7 @@
       </span>
         <span>
       <select  class="school-school" v-model="schoolChange">
-          <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="scholl">{{item.name}}</option>
+          <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="school">{{item.name}}</option>
       </select>
      </span>
       </div>
@@ -59,7 +59,7 @@
         verifyImg:"",
         verifyText:"",
         alertDara: '',
-        scholl:'',
+        school:'',
         verify:String
       }
     },
@@ -73,7 +73,8 @@
         this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
       },
       go() {
-        this.scholl = this.newList.find(item => item.id === this.schoolChange)['name'];
+        // alert(this.school)
+        this.school = this.newList.find(item => item.id === this.schoolChange)['name'];
         this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
         let _this = this;
         if(_this.user===""  || _this.pass==="" || _this.verifyText === "" ){
