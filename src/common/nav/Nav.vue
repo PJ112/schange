@@ -7,8 +7,8 @@
     </div>
     <div class="index-nav-search">
       <div class="index-nav-search-input">
-        <input type="text" placeholder="搜索" v-model="name" @keyup.enter="search">
-        <img src="../../assets/imgs/index/search.png" @click="search">
+        <input type="text" class="input" placeholder="搜索" v-model="name" @keyup.enter="search">
+        <img class="img" src="../../assets/imgs/index/search.png" @click="search">
       </div>
     </div>
     <div class="index-nav-login">
@@ -23,8 +23,8 @@
               <div class="index-profile-angle">
               </div>
               <div class="index-profile-intro">
-                <img class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
-                <img class="index-profile-img" :src="userImg" v-if="userImg">
+                <img style="width: 50px;height: 50px;border-radius: 50%" class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
+                <img style="width: 50px;height: 50px;border-radius: 50%" class="index-profile-img" :src="userImg" v-if="userImg">
                 <span class="index-profile-title">{{user}}</span>
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===2">
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/男.png" v-else-if="sex===1"/>
@@ -176,6 +176,7 @@
       display :inline-block;
       width :275px;
       height :92px;
+      vertical-align middle;
       img{
         display inline-block;
         width:100%;
@@ -189,29 +190,30 @@
       clear :both;
       width :40%;
       height 50px;
+      vertical-align middle;
       .index-nav-search-input{
         display inline-block;
-        background-image :url("../../assets/imgs/index/input.png");
-        background-repeat no-repeat;
-        background-size :100%;
         width :500px;
         height :50px;
-        input{
-          display :inline-block;
-          margin-left :30px;
-          color :#737473;
-          font-size :16px;
-          height :30px;
-          width :80%;
-          font-family "Microsoft Yahei";
-          margin-top 5px;
+        border :3px solid #000;
+        border-radius 25px;
+        .input{
+          font-size 16px;
+          display inline-block;
+          width 80%;
+          height 40px;
+          margin-top:7px;
+          padding-left 30px;
+          background none;
+          border-radius 25px;
         }
-        img{
-          display: inline-block;
-          margin-top: 7px;
+        .img{
+          display inline-block;
+          margin-top:7px;
         }
 
-  }
+
+     }
   }
   .index-nav-login{
     display :inline-block;
@@ -219,6 +221,8 @@
     margin-right :4%;
     height :92px;
     position :relative;
+    line-height 30px;
+    z-index 999;
     .index-nav-loginin{
       display :inline-block;
       margin-left :10px;
@@ -280,7 +284,7 @@
       .index-profile-category{
         box-sizing border-box;
         .index-category-item{
-          width:83px;
+          width:82px;
           height:82px;
           text-align :center;
           display :inline-block;
@@ -309,6 +313,7 @@
           color :#f72b2b;
           margin-top :18px;
           margin-bottom :14px;
+          font-size 16px;
           &:hover{
             cursor pointer;
           }

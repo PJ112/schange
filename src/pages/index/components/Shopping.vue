@@ -6,9 +6,6 @@
         <div class="shopping-container-title">
           购物车
         </div>
-        <div class="alter" v-if="error" style="text-align: center;color: red;margin-top: 20px;">
-          {{error}}
-        </div>
         <div v-if="shopCarts.length>0">
           <div class="shopping-container-items"  v-for="(item,index) of shopCarts" :key="index" >
             <div class="shopping-item-select">
@@ -42,7 +39,29 @@
           您的购物车里还没有商品哦，赶快来添加吧！
         </div>
       </div>
-      <icon-common v-if="shopCarts.length>0"></icon-common>
+      <div class="recommend">
+          <h1>--为你推荐--</h1>
+        <div class="recommend-items">
+          <div class="item" v-for="(item,index) of recommendProducts" :key="index"
+          >
+            <router-link :to="'/sale-product?id='+item.goods.id">
+              <div class="item-img" >
+                <img :src="getImg(item.imageList)"  />
+              </div>
+              <div class="item-description">
+                <div class="item-name">
+                  {{item.goods.name}}
+                </div>
+                <div class="item-price">
+                  价格：{{item.goods.price}}
+                </div>
+              </div>
+            </router-link>
+
+          </div>
+        </div>
+      </div>
+      <icon-common v-if="shopCarts"></icon-common>
 
     </div>
 
@@ -70,7 +89,7 @@
         shopCarts:[],
         radio:'',
         total:0,
-        error:this.$store.state.error
+        recommendProducts:[]
       }
     },
     components:{
@@ -82,25 +101,28 @@
       $.ajax({
         url:'/api/sunny/cart/search',
         async:true,
-        data:{"buyerId":this.userId},
+        data:{"buyerId":this.userId,"status":1},
         success:function (good) {
-          _this.shopCarts=good.data;
-          if (_this.shopCarts){
-            setTimeout(()=>{
-              _this.error='';
-              _this.$store.dispatch('errorAsyc','');
-            },2000);
-          }
 
+          if(good.data){
+            _this.shopCarts=good.data;
+          }
         },
         error:function (error) {
           console.log(error);
         }
       });
-
-
-
-
+      $.ajax({
+        url:'/api/sunny/goods/newSearch',
+        async:true,
+        data:{"typeId":20,"status":1},
+        success:function (good) {
+          _this.recommendProducts=good.data.rows;
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      });
     },
     computed:{
       getImgUrl() {
@@ -110,6 +132,14 @@
               return this.httpUrl+icon[3].address;
 
             }
+
+          }
+        }
+      },
+      getImg(){
+        return function (icon) {
+          if (icon){
+            return this.httpUrl+icon[0].address;
 
           }
         }
@@ -125,14 +155,14 @@
         $.ajax({
           url:'/api/sunny/cart/delete',
           async:true,
-          data:{"ids":id},
+          data:{"ids":id,"status":3},
           success:function (product) {
 
             if (product.flag){
               $.ajax({
                 url:'/api/sunny/cart/search',
                 async:true,
-                data:{"buyerId":_this.userId},
+                data:{"buyerId":_this.userId,"status":1},
                 success:function (good) {
                   _this.shopCarts=good.data;
                 },
@@ -171,11 +201,13 @@
     background :#fff;
     font-family :simsun;
     .shopping-container-box{
-      margin-left 150px;
-      margin-right 150px;
       background #e7f4f0;
-      padding-bottom :200px;
-      z-index 0;
+      padding-bottom :100px;
+      position: absolute;
+      width 1286px;
+      left 50%;
+      margin-left :-643px;
+      z-index: 0;
       .shopping-top{
         width :80%;
         height :112px;
@@ -206,7 +238,6 @@
           }
         }
       }
-
       .shopping-container{
         width:80%;
         margin: 0 auto;
@@ -321,6 +352,61 @@
             border-radius :9px;
             color:#fff;
             font-size :17px;
+          }
+        }
+      }
+      .recommend{
+        width:80%;
+        margin:50px auto;
+        box-sizing: border-box;
+        h1{
+          text-align center;
+          width 100%;
+          height 30px;
+          font-size 26px;
+          color coral;
+        }
+        .recommend-items{
+          padding-left 27px;
+          margin-top 40px;
+          .item{
+            width: 288px;
+            height: 340px;
+            display: inline-block;
+            margin-right: 42px;
+            vertical-align :top;
+            margin-bottom :30px;
+            box-shadow :0 0 20px #ccc;
+            border-radius :8px;
+            background :#85cab5;
+            transition: All 0.4s ease-in-out;
+            -webkit-transition: All 0.4s ease-in-out;
+            -moz-transition: All 0.4s ease-in-out;
+            -o-transition: All 0.4s ease-in-out;
+            .item-img{
+              width :100%;
+              height :225px;
+              img{
+                max-width :100%;
+                max-height :100%;
+                border-radius :8px;
+              }
+            }
+            .item-description{
+              width:280px;
+              height :auto;
+              background :#85cab5;
+              font-size :24px;
+              color :#fff;
+              text-align center
+              .item-name{
+              }
+              .item-price{
+                font-weight :bold;
+                margin-top 20px;
+
+              }
+            }
           }
         }
       }

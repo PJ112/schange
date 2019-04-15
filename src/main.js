@@ -8,8 +8,11 @@ import './assets/iconfont/iconfont.css'
 import store from './vuex/index';
 import "element-ui/lib/theme-chalk/index.css";
 import VueSource from 'vue-resource'
-
+import Swiper from 'swiper'
+import '../node_modules/jquery/src/jquery'
+import '../node_modules/bootstrap/dist/js/bootstrap.min'
 Vue.use(VueSource);
+Vue.use(new Swiper());
 
 
 

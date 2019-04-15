@@ -17,8 +17,8 @@
               <div class="index-profile-angle">
               </div>
               <div class="index-profile-intro">
-                <img class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
-                <img class="index-profile-img" :src="userImg" v-else>
+                <img style="width: 50px;height: 50px;border-radius: 50%" class="index-profile-img" src="../../assets/imgs/index/person.png" v-if="!userImg">
+                <img style="width: 50px;height: 50px;border-radius: 50%" class="index-profile-img" :src="userImg" v-else>
 
                 <span class="index-profile-title">{{user}}</span>
                 <img class="index-profile-sex" src="../../assets/imgs/index_profile/女.png" v-if="sex===2">
@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="index-profile-logout">
-                <div class="index-logout" @click="logout">
+                <div class="index-logout" @click="logout" style="font-size: 16px;">
                   退出登录
                 </div>
               </div>
@@ -156,7 +156,6 @@
     height :100px;
     margin: 0 auto;
     box-sizing: border-box;
-    z-index 110;
     .index-nav-icon{
       display :inline-block;
       width :275px;
@@ -174,6 +173,8 @@
       margin-right :4%;
       height :92px;
       position :relative;
+      line-height 30px;
+      z-index 999;
       .index-nav-loginin{
         display :inline-block;
         margin-left :10px;
@@ -245,7 +246,6 @@
             .item-img{
               width :30px;
               height :30px;
-
             }
             .item-info{
               margin-top :8px;

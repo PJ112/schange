@@ -7,8 +7,8 @@
       <div class="contact-seller-container">
         <div class="contact-seller-container-info">
           <div class="contact-seller-info-img">
-            <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
-            <img style="width: 60px;height: 60px;" :src="userImg" v-else/>
+            <img  style="border-radius: 50%;"  src="../../../assets/imgs/index/person.png" v-if="!userImg">
+            <img style="width: 60px;height: 60px;border-radius: 50%;" :src="userImg" v-else/>
           </div>
           <div class="contact-seller-container-name">
             {{username}}
@@ -40,7 +40,9 @@
                   价格：<span>{{details.price}}元</span>
                 </div>
                 <div class="shop">
-                  <span @click="addProduct">加入购物车</span>
+                  <div v-if="error" style="color: red;">{{error}}</div>
+                  <div v-if="success" style="color:lightseagreen;">{{success}}</div>
+                  <span @click="addProduct" style="margin-top: 20px;">加入购物车</span>
                   <router-link :to="'/confirm-ordering?id='+id"><span>立即购买</span></router-link>
                 </div>
               </div>
@@ -51,6 +53,9 @@
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
                 <div class="contact-seller-content-item-right" v-if="item.sendId===reId">
+                   <div class="time">
+                     {{getTime(item.createTime)}}
+                   </div>
                     <span class="content">
                       {{item.content}}
                     </span>
@@ -59,6 +64,9 @@
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="meImg" v-else/>
                 </div>
                 <div class="contact-seller-content-item-left"  v-else>
+                  <div class="time">
+                    {{getTime(item.createTime)}}
+                  </div>
                   <img style="width:50px;height: 50px;border-radius: 50%" src="../../../assets/imgs/index/person.png" v-if="!userImg">
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="userImg" v-else/>
                   <span class="content">
@@ -114,7 +122,9 @@
         reId:this.$store.state.userId.userId,
         day:'',
         userImg:'',
-        meImg:''
+        meImg:'',
+        error:'' ,
+        success:''
 
       }
     },
@@ -123,7 +133,7 @@
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
-        data:{"id":_this.id},
+        data:{"id":_this.id,"status":1},
         success:function (good) {
           _this.details=good.data;
           _this.sellerId=_this.details.sellerId;
@@ -168,8 +178,6 @@
                   console.log(error);
                 }
               })
-
-
             },
             error:function (error) {
               console.log(error);
@@ -202,6 +210,24 @@
           }
         }
 
+      },
+      getTime(){
+        return function (time) {
+
+          let now=new Date(time);
+          let  year=now.getFullYear();
+          let  month=now.getMonth()+1;
+          let  date=now.getDate();
+          let  hour=now.getHours();
+          let  minute=now.getMinutes();
+          if (minute<10){
+            minute="0"+minute;
+          }
+          let  second=now.getSeconds();
+          return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;
+
+
+        }
       }
     },
     methods:{
@@ -251,14 +277,19 @@
         $.ajax({
           url:'/api/sunny/cart/add',
           async:true,
-          data:{"buyerId":this.reId,"goodsId":this.id,"number":1},
+          data:{"buyerId":this.reId,"goodsId":this.id,"number":1,"status":1},
           success:function (product) {
             if (!product.flag) {
-              _this.error="该商品在购物车中已存在，不能重复添加。";
-              _this.$store.dispatch('errorAsyc',_this.error);
-              _this.$router.push('/index-shopping');
+              _this.error="该商品在购物车中已存在，不能重复添加！";
+              setTimeout(()=>{
+                _this.error='';
+              },2000)
+
             }else{
-              _this.$router.push('/index-shopping');
+              _this.success="添加购物车成功！";
+              setTimeout(()=>{
+                _this.success='';
+              },2000)
 
             }
           },
@@ -272,24 +303,35 @@
 </script>
 
 <style scoped lang="stylus">
-
+  .shop sapn{
+    display inline-block;
+    font-size 16px;
+  }
+  .shop span:hover{
+    cursor pointer;
+  }
   .contact-seller{
     width: 100%;
     height: 100%;
     background: #fff;
     font-family: simsun;
     padding-bottom :100px;
+    box-sizing border-box;
     .contact-container{
       margin-left 100px;
       margin-right 100px;
       background #e7f4f0;
       padding-bottom :100px;
       box-sizing border-box;
+      box-sizing border-box;
+
       .contact-seller-container{
         width: 80%;
         margin: 0 auto;
         box-sizing: border-box;
         display :flex;
+        box-sizing border-box;
+
         .contact-seller-container-info{
           width:330px;
           text-align :center;
@@ -333,6 +375,8 @@
             top:245px;
             line-height :45px;
             font-weight :bold;
+            box-sizing border-box;
+
             a{
               display inline-block;
               text-decoration none;
@@ -348,6 +392,7 @@
           padding:15px;
           box-sizing border-box;
           padding-bottom :55px;
+
           h1{
             text-align :center;
             height:95px;
@@ -361,12 +406,11 @@
             padding:16px;
             box-shadow :0 2px 2px #eee;
             margin-right :10px;
-            .contact-seller-info-img{
-
-            }
+            box-sizing border-box;
             .contact-seller-info-desc{
               flex :1;
               margin-left :27px;
+              box-sizing border-box;
               .contact-seller-deac-name{
                 color:#989898;
                 font-size :18px;
@@ -375,6 +419,7 @@
               }
               .contact-seller-desc-price{
                 margin-top :97px;
+                box-sizing border-box;
                 .price{
                   float :left;
                   color:#989898;
@@ -405,6 +450,7 @@
           .contact-seller-chat-content{
             margin-top :10px;
             position: relative;
+            box-sizing border-box;
             h1{
               height :70px;
               line-height :70px;
@@ -421,6 +467,15 @@
                 clear both;
                 margin-bottom :35px;
                 position: relative;
+                .time{
+                  color #969896;
+                  font-size 13px;
+                  position: absolute;
+                  left:-130px;
+                  top:30px;
+                  width 125px;
+                  height 30px;
+                }
                 .content{
                   display :inline-block;
                   border:1px solid #85cab5;
@@ -451,9 +506,19 @@
               }
               .contact-seller-content-item-left{
                 margin-bottom :35px;
+                width 319px;
                 position: relative;
                 float left;
                 clear both;
+                .time{
+                  color #969896;
+                  font-size 13px;
+                  position: absolute;
+                  left :326px;
+                  top:30px;
+                  width 125px;
+                  height 30px;
+                }
                 .content{
                   display :inline-block;
                   border:1px solid #85cab5;

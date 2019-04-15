@@ -7,7 +7,7 @@
       <div class="contact-seller-container">
         <div class="contact-seller-container-info">
           <div class="contact-seller-info-img">
-            <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
+            <img style="border-radius: 50%;" src="../../../assets/imgs/index/person.png" v-if="!userImg">
             <img style="width: 60px;height: 60px;border-radius: 50%" :src="userImg" v-else/>
           </div>
           <div class="contact-seller-container-name">
@@ -47,6 +47,9 @@
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
                 <div class="contact-seller-content-item-right" v-if="item.sendId===meId">
+                  <div class="time">
+                    {{getTime(item.createTime)}}
+                  </div>
                     <span class="content">
                       {{item.content}}
                     </span>
@@ -55,6 +58,9 @@
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="meImg" v-else/>
                 </div>
                 <div class="contact-seller-content-item-left"  v-else>
+                  <div class="time">
+                    {{getTime(item.createTime)}}
+                  </div>
                   <img style="width: 50px;height: 50px;border-radius: 50%" src="../../../assets/imgs/index/person.png" v-if="!userImg">
                   <img style="width:50px;height: 50px;border-radius: 50%" :src="userImg" v-else/>
                   <span class="content">
@@ -122,7 +128,7 @@
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
-        data:{"id":_this.goodsId},
+        data:{"id":_this.goodsId,"status":1},
         success:function (good) {
           _this.details=good.data;
           $.ajax({
@@ -205,6 +211,24 @@
           }
         }
 
+      },
+      getTime(){
+        return function (time) {
+
+          let now=new Date(time);
+          let  year=now.getFullYear();
+          let  month=now.getMonth()+1;
+          let  date=now.getDate();
+          let  hour=now.getHours();
+          let  minute=now.getMinutes();
+          if (minute<10){
+            minute="0"+minute;
+          }
+          let  second=now.getSeconds();
+          return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;
+
+
+        }
       }
     },
     methods:{
@@ -252,7 +276,7 @@
         $.ajax({
           url:'/api/sunny/cart/add',
           async:true,
-          data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1},
+          data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
           success:function (product) {
             if (product.flag){
               _this.$router.push('/index-shopping');
@@ -412,11 +436,20 @@
               margin-bottom :10px;
               padding :15px;
               .contact-seller-content-item-right{
-                width 318px;
+                width 356px;
                 float right;
                 clear both;
                 margin-bottom :35px;
                 position: relative;
+                .time{
+                  color #969896;
+                  font-size 13px;
+                  position: absolute;
+                  left:-130px;
+                  top:30px;
+                  width 125px;
+                  height 30px;
+                }
                 .content{
                   display :inline-block;
                   border:1px solid #85cab5;
@@ -433,7 +466,7 @@
                 }
                 .point{
                   position: absolute;
-                  right: 59px;
+                  right: 98px;
                   top: 18px;
                   width:12px;
                   height:12px;
@@ -447,9 +480,19 @@
               }
               .contact-seller-content-item-left{
                 margin-bottom :35px;
+                width 319px;
                 position: relative;
                 float left;
                 clear both;
+                .time{
+                  color #969896;
+                  font-size 13px;
+                  position: absolute;
+                  left :326px;
+                  top:30px;
+                  width 125px;
+                  height 30px;
+                }
                 .content{
                   display :inline-block;
                   border:1px solid #85cab5;
@@ -464,8 +507,8 @@
                 }
                 .point{
                   position: absolute;
-                  left: 57px;
-                  top: 18px;
+                  left: 58px;
+                  top: 19px;
                   width: 12px;
                   height: 12px;
                   display: inline-block;

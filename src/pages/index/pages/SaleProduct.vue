@@ -26,11 +26,11 @@
                   <img :src="getImgUrl" style="width: 260px;height: 260px;">
                 </div>
               </div>
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-button-next"></div>
             </div>
           </div>
           <div class="sale-product-container-center">
+            <span v-if="error" style="display: block;text-align: center;color: red;background: none;margin-bottom: 10px;">{{error}}</span>
+            <span v-if="success" style="display: block;text-align: center;color: lightseagreen;background: none;margin-bottom: 10px;">{{success}}</span>
             <span @click="addProduct"><img src="../../../assets/imgs/sale-product/shop.png"><span>加入购物车</span></span>
             <span @click="confirmOrdering"><img src="../../../assets/imgs/sale-product/cursor.png"><span>立即购买</span></span>
           </div>
@@ -57,8 +57,8 @@
             价格：{{details.price}}元
           </h1>
           <div class="sale-product-price-bottom">
-            <img src="../../../assets/imgs/index/person.png" v-if="!userImg">
-            <img :src="userImg" v-else/>
+            <img  style="border-radius: 50%;" src="../../../assets/imgs/index/person.png" v-if="!userImg">
+            <img style="border-radius: 50%;" :src="userImg" v-else/>
             <div class="sale-product-top-name">
               {{username}}
             </div>
@@ -66,10 +66,10 @@
               圈龄{{day}}天
             </div>
             <div class="sale-product-top-router">
-              <div class="sale-product-top-index" @click="sellerIndex">
+              <div class="sale-product-top-index" @click="sellerIndex" style="font-size: 16px;">
                 卖家主页
               </div>
-              <div class="sale-product-top-producer" @click="contactSeller">
+              <div class="sale-product-top-producer" @click="contactSeller" style="font-size: 16px;">
                 私信卖家
               </div>
             </div>
@@ -87,6 +87,7 @@
 <script>
   import Nav from '../../../common/nav-nosearch/Nav'
   import Icon from '../../../common/indexIcon/Icon'
+  import $ from 'jquery'
   export default {
     name: "SaleProduct",
     components:{
@@ -111,7 +112,8 @@
         day:0,
         sellerId:'',
         userImg:'',
-        error:''
+        error:'',
+        success:''
       }
     },
     created(){
@@ -119,7 +121,7 @@
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
-        data:{"id":_this.id},
+        data:{"id":_this.id,"status":1},
         success:function (data) {
           _this.details=data.data;
           let sellerId=_this.details.sellerId;
@@ -177,8 +179,11 @@
     computed:{
       getImgUrl(){
         if (this.details){
-          if (this.details.imageList.length>0){
-            return this.httpUrl+this.details.imageList[0].address;
+          if (this.details.imageList){
+            if (this.details.imageList[0]){
+              return this.httpUrl+this.details.imageList[0].address;
+
+            }
           }
         }
 
@@ -192,16 +197,21 @@
           $.ajax({
             url:'/api/sunny/cart/add',
             async:true,
-            data:{"buyerId":this.userId,"goodsId":this.id,"number":1},
+            data:{"buyerId":this.userId,"goodsId":this.id,"number":1,"status":1},
             success:function (product) {
-              console.log(product);
               if (!product.flag) {
-                _this.error="该商品在购物车中已存在，不能重复添加。";
-                _this.$store.dispatch('errorAsyc',_this.error);
-                _this.$router.push('/index-shopping');
-              }else{
-                _this.$router.push('/index-shopping');
+                _this.error="该商品在购物车中已存在，不能重复添加!";
+                if (_this.error){
+                  setTimeout(()=>{
+                    _this.error='';
+                  },2000);
+                }
 
+              }else{
+                _this.success="添加购物车成功!";
+                setTimeout(()=>{
+                  _this.success='';
+                },2000);
               }
 
             },
@@ -265,8 +275,6 @@
       background #e7f4f0;
       padding-bottom :100px;
       box-sizing border-box;
-      .sale-product-top {
-      }
       .sale-product-container {
         width: 86%;
         margin: 0 auto;
@@ -276,20 +284,33 @@
           flex:1;
           .sale-product-desc-top{
             background :#fff;
-            padding:38px 150px;
+            padding:20px 150px;
             .sale-product-top-name{
               color:#323232;
               font-size :24px;
+              margin 0;
             }
             .sale-product-top-share{
-              margin-top :26px;
+              height 20px;
+              line-height 20px;
+              margin-top :16px;
               .img{
-                margin-right:8px;
+                width 20px;
+                height 20px;
+                display inline-block;
+                vertical-align middle;
+                img{
+                  width 100%;
+                  height 100%;
+                }
               }
               .info{
-                margin-right :30px;
+                margin-right :20px;
                 font-size :18px;
                 color:#323232;
+                display inline-block;
+                vertical-align middle;
+                margin-top 3px;
               }
             }
             .swiper-container{
@@ -391,7 +412,7 @@
               color :#a3a3a7;
               font-size :16px;
               font-weight :bold;
-              margin-bottom :43px;
+              margin-bottom :23px;
             }
             .sale-product-top-router{
               position: relative;

@@ -10,8 +10,19 @@
             <div class="swiper-slide">
               <img src="../../assets/imgs/index/banner.png">
             </div>
+            <div class="swiper-slide">
+              <img src="../../assets/imgs/index/banner1.jpg"/>
+            </div>
+            <div class="swiper-slide">
+              <img src="../../assets/imgs/index/banner2.jpg"/>
+            </div>
+            <div class="swiper-slide">
+             <img src="../../assets/imgs/index/banner3.jpg"/>
+            </div>
           </div>
           <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
         </div>
       </div>
 
@@ -32,6 +43,62 @@
                 <router-link :to="'/detail?typeId='+type.id+'&name='+type.type">
                   {{type.type}}
                 </router-link>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="index-category-line">
+          <div class="index-lines">
+            <div class="index-line-title">
+              <img src="../../assets/imgs/index/新闻.png"/>
+              <div class="title">
+                让生活更有趣
+              </div>
+            </div>
+            <div class="index-line-swiper">
+              <div class="swiper-container1">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide" >
+                    <router-link to="/line-1">
+                        <img src="https://img.alicdn.com/tfscom/i4/O1CN011K8XfMejDwXytNk_!!0-arctic.jpg"/>
+                        <div class="swiper-info">
+                          <div class="info-top">
+                            双11潮流盛典男神齐聚！张艺兴霸气开场
+                          </div>
+                          <div class="info-desc">
+                            众男神亮相双11潮流盛典！
+                          </div>
+                        </div>
+                    </router-link>
+                  </div>
+                  <div class="swiper-slide" >
+                    <router-link to="/line-2">
+                      <img src="https://img.alicdn.com/tfscom/i1/O1CN011KSEhGaBP2xZQEE_!!0-arctic.jpg"/>
+                      <div class="swiper-info">
+                        <div class="info-top">
+                          李宇春压轴潮流盛典，玩转国潮白流苏！
+                        </div>
+                        <div class="info-desc">
+                          李宇春压轴亮相天猫双11潮流盛典！
+                        </div>
+                      </div>
+                    </router-link>
+                  </div>
+                  <div class="swiper-slide" >
+                    <router-link to="/line-3">
+                      <img src="https://img.alicdn.com/tfscom/i3/O1CN011nFyxVhuxBckkiR_!!0-arctic.jpg"/>
+                      <div class="swiper-info">
+                        <div class="info-top">
+                          官宣：手机天猫双11也有大波红包领！
+                        </div>
+                        <div class="info-desc">
+                          今年双11可不是一般开心，手机天猫APP安利超多福利给大家，都是只有下载了手机天猫APP的小可爱们才能独享的哦~
+                        </div>
+                      </div>
+                    </router-link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -62,9 +129,6 @@
         <icon-common></icon-common>
 
       </div>
-      <div class="index-copyright">
-        Copyright @ 2019 Team Sunny
-      </div>
     </div>
   </div>
 </template>
@@ -72,14 +136,14 @@
 <script>
   import $ from 'jquery'
   import NavCommon from '../../common/nav/Nav'
-  import  Swiper from 'swiper'
+  import  Swiper from '../../../node_modules/swiper/dist/js/swiper.min.js'
   import Icon from '../../common/indexIcon/Icon'
+  import "swiper/dist/css/swiper.css"
   export default {
     name: "Index",
     components:{
       "nav-common":NavCommon,
       "icon-common":Icon,
-
     },
     data(){
       return{
@@ -87,23 +151,52 @@
         user:this.$store.state.user,
         products:[],
         imgUrl:'http://119.23.12.250:8090/images',
-        categories:[]
+        categories:[],
       }
     },
     created() {
       let _this=this;
-      new Swiper ('.swiper-container', {
-        loop: true,
-        pagination: {
-          el: '.swiper-pagination',
-        }
-      });
+
       $.ajax({
         url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{},
+        data:{"pageSize":9,"status":1},
         success:function (data) {
           _this.products=data.data.rows;
+          _this.$nextTick(()=>{
+            new Swiper ('.swiper-container', {
+              loop: true, // 循环模式选项
+              autoplay:true,
+              speed:1000,
+              // 如果需要分页器
+              pagination: {
+                el: '.swiper-pagination',
+                clickable :true
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }
+            });
+            new Swiper ('.swiper-container1', {
+              direction: 'vertical',
+              loop: true, // 循环模式选项
+              autoplay:true,
+              speed:1000,
+              // 如果需要分页器
+              pagination: {
+                el: '.swiper-pagination',
+                clickable :true
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }
+            })
+          });
+
         },
         error:function (error) {
           console.log(error);
@@ -128,22 +221,15 @@
         return function (icon) {
           if(icon.length>0){
             return this.imgUrl+icon[0].address;
-
           }
-
-
         }
-
       },
-
-
-
-
     }
   }
 </script>
 
 <style lang="stylus" scoped>
+
   .index-category-item:hover{
     transform: scale(1.1);
     -webkit-transform: scale(1.1);
@@ -152,19 +238,29 @@
     -ms-transform: scale(1.1);
     cursor :pointer;
   }
-  .item:hover{
+  .item:hover {
     transform: scale(1.05);
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
     -o-transform: scale(1.05);
     -ms-transform: scale(1.05);
-    cursor :pointer;
+    cursor: pointer;
+
+  }
+  .item a:hover{
+    text-decoration none;
+  }
+  .swiper-slide a{
+    text-decoration none;
+    color :#000;
   }
   .index{
     width: 100%;
     height: 100%;
     background :#fff;
     font-family "Microsoft Yahei";
+    position: relative;
+    font-size 16px;
     .index-top {
       width: 100%;
       z-index :100;
@@ -178,19 +274,21 @@
         }
       }
     }
-
     .index-bottom{
       width :100%;
-      height:auto;
+      height:100%;
+      position: absolute;
       .index-category{
-        width:82%;
+        position: absolute;
+        width:1286px;
         margin :0 auto;
         text-align :center;
         background :#e7f4f0;
         height :auto;
         padding-top:100px;
         padding-bottom :40px;
-        position: relative;
+        left :50%;
+        margin-left -643px;
         .index-category-all{
           .all{
             font-size :30px;
@@ -238,18 +336,79 @@
           }
 
         }
+        .index-category-line{
+          width :75%;
+          margin :40px auto;
+          .index-lines{
+            display :flex;
+            width :100%;
+            height 100px;
+            background #fff;
+            .index-line-title{
+              width 200px;
+              height 100px;
+              img{
+                width 60px;
+                height 60px;
+              }
+              .title{
+                color :#969896;
+                font-size 14px;
+              }
+            }
+            .index-line-swiper{
+              flex 1;
+              .swiper-container1{
+                height 100px;
+                overflow hidden;
+                .swiper-wrapper{
+                  text-align left;
+                  .swiper-slide{
+                    font-size: 18px;
+                    a{
+                      display :flex;
+                      img{
+                        width 120px;
+                        height 60px;
+                        margin-top 20px;
+                      }
+                      .swiper-info{
+                        flex 1;
+                        margin-left 20px;
+                        margin-top 18px;
+                        .info-top{
+                          font-size :16px;
+                          height 30px;
+                        }
+                        .info-desc{
+                          font-size :14px;
+                          color :#969896;
+                          height 30px;
+                        }
+                      }
+                    }
+
+                  }
+                }
+
+              }
+            }
+          }
+
+        }
         .index-category-recommend{
-          margin-top :100px;
+          margin-top :60px;
           .all{
             font-size :30px;
             margin-bottom :60px;
           }
           .recommend-items{
+            padding-left 27px;
             .item{
-              width:280px;
-              height :440px;
-              display :inline-block;
-              margin-right :15px;
+              width: 288px;
+              height: 440px;
+              display: inline-block;
+              margin-right: 42px;
               vertical-align :top;
               margin-bottom :30px;
               box-shadow :0 0 20px #ccc;
@@ -275,13 +434,11 @@
                 background :#85cab5;
                 font-size :24px;
                 color :#fff;
-                padding-top :29px;
-                padding-bottom :30px;
                 .item-name{
-                  margin-bottom :22px;
                 }
                 .item-price{
                   font-weight :bold;
+                  margin-top 30px;
 
                 }
               }
@@ -289,19 +446,11 @@
           }
         }
       }
-      .index-copyright{
-        text-align :center;
-        margin-top :110px;
-        color :#333333;
-        margin-bottom :100px;
-        font-weight :bold;
-        font-size :18px;
-      }
     }
   }
   .index .icon{
     position: fixed;
-    right 155px;
+    right:178px;
 
   }
 </style>

@@ -42,6 +42,28 @@
 
         </div>
       </div>
+      <div class="recommend">
+        <h1>--为你推荐--</h1>
+        <div class="recommend-items">
+          <div class="item" v-for="(item,index) of recommendProducts" :key="index"
+          >
+            <router-link :to="'/sale-product?id='+item.goods.id">
+              <div class="item-img" >
+                <img :src="getImg(item.imageList)"  />
+              </div>
+              <div class="item-description">
+                <div class="item-name">
+                  {{item.goods.name}}
+                </div>
+                <div class="item-price">
+                  价格：{{item.goods.price}}
+                </div>
+              </div>
+            </router-link>
+
+          </div>
+        </div>
+      </div>
       <icon-common></icon-common>
     </div>
 
@@ -71,7 +93,9 @@
         phone:'',
         name:'',
         total:'',
-        message:''
+        message:'',
+        recommendProducts:[]
+
       }
     },
     created(){
@@ -79,7 +103,7 @@
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
-        data:{"id":_this.id},
+        data:{"id":_this.id,"status":1},
         success:function (good) {
           _this.details=good.data;
           _this.total=good.data.price;
@@ -102,12 +126,31 @@
           console.log(error);
         }
       });
+      $.ajax({
+        url:'/api/sunny/goods/newSearch',
+        async:true,
+        data:{"typeId":20,"status":1},
+        success:function (good) {
+          _this.recommendProducts=good.data.rows;
+        },
+        error:function (error) {
+          console.log(error);
+        }
+      });
     },
     computed:{
       getImgUrl(){
         if (this.details.imageList){
           return this.httpUrl+this.details.imageList[0].address;
 
+        }
+      },
+      getImg(){
+        return function (icon) {
+          if (icon){
+            return this.httpUrl+icon[0].address;
+
+          }
         }
       }
     },
@@ -125,15 +168,26 @@
             "money":_this.total,
             "buyerAddress":_this.buyerAddress,
             "sellerAddress":_this.sellerAddress,
-            "status":_this.status
+            "status":_this.status,
           },
           success:function (order) {
             if(order.flag){
               _this.message="生成订单成功！";
+              $.ajax({
+                url:'/api/sunny/cart/delete',
+                async:true,
+                data:{"ids":_this.sellerId,"status":3},
+                success:function (user) {
+                  _this.sellerAddress=user.data.school;
+                },
+                error:function (error) {
+                  console.log(error);
+                }
+              });
               setTimeout(()=>{
-                _this.$router.push('/index');
-
+                _this.$router.push('/index-shopping');
               },2000);
+
             }
 
           },
@@ -279,6 +333,61 @@
             background none;
             color :#85cab5;
             display block;
+          }
+        }
+      }
+      .recommend{
+        width:80%;
+        margin: 0 auto;
+        box-sizing: border-box;
+        h1{
+          text-align center;
+          width 100%;
+          height 30px;
+          font-size 26px;
+          color coral;
+        }
+        .recommend-items{
+          padding-left 27px;
+          margin-top 40px;
+          .item{
+            width: 288px;
+            height: 340px;
+            display: inline-block;
+            margin-right: 42px;
+            vertical-align :top;
+            margin-bottom :30px;
+            box-shadow :0 0 20px #ccc;
+            border-radius :8px;
+            background :#85cab5;
+            transition: All 0.4s ease-in-out;
+            -webkit-transition: All 0.4s ease-in-out;
+            -moz-transition: All 0.4s ease-in-out;
+            -o-transition: All 0.4s ease-in-out;
+            .item-img{
+              width :100%;
+              height :225px;
+              img{
+                max-width :100%;
+                max-height :100%;
+                border-radius :8px;
+              }
+            }
+            .item-description{
+              width:280px;
+              height :auto;
+              background :#85cab5;
+              font-size :24px;
+              color :#fff;
+              text-align center
+              .item-name{
+              }
+              .item-price{
+                font-weight :bold;
+                margin-top 20px;
+
+              }
+            }
           }
         }
       }

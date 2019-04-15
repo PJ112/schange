@@ -20,11 +20,7 @@ import SellersHJudge from '../pages/sellers/pages/SellersHJudge'
 import test from '../pages/test'
 import Index from '../pages/index/Index'
 import IndexShopping from '../pages/index/components/Shopping'
-import IndexCollection from '../pages/index/components/Collection'
-import IndexIntegral from '../pages/index/components/Integral'
-import IndexProfile from '../pages/index/components/Profile'
-import IndexOrdering from '../pages/index/components/Ordering'
-import IndexPrivateLetter from '../pages/index/components/PrivateLetter'
+
 
 import ConfirmOrdering from '../pages/index/pages/ConfirmOrdering'
 
@@ -38,6 +34,10 @@ import ContactSeller from '../pages/index/pages/ContactSeller'
 
 import ContactBuyer from '../pages/index/pages/ContactBuyer'
 import SearchDetail from '../pages/index/pages/SearchDetail'
+
+import Line1 from '../pages/index/components/Line1'
+import Line2 from '../pages/index/components/Line2'
+import Line3 from '../pages/index/components/Line3'
 
 
 Vue.use(Router);
@@ -133,26 +133,7 @@ export default new Router({
      component:IndexShopping
 
     },
-    {
-     path:'/index-collection',
-     component:IndexCollection
-    },
-    {
-     path:'/index-integral',
-     component:IndexIntegral
-    },
-    {
-     path:'/index-profile',
-     component:IndexProfile
-    },
-    {
-     path:'/index-private-letter',
-     component:IndexPrivateLetter
-    },
-    {
-     path:'/index-ordering',
-     component:IndexOrdering
-    },
+
     {
      path:'/confirm-ordering',
      component:ConfirmOrdering
@@ -180,6 +161,18 @@ export default new Router({
     {
       path:'/search-detail',
       component:SearchDetail
+    },
+    {
+      path:'/line-1',
+      component:Line1
+    },
+    {
+      path:'/line-2',
+      component:Line2
+    },
+    {
+      path:'/line-3',
+      component:Line3
     },
     {
      path:'/sellersmes',
