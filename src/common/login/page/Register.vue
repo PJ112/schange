@@ -20,10 +20,12 @@
       <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
       <a
         href="#"
-        @click="changeverifyImg()"
+        @click="generatedCode"
+        class="loginIn-verify"
       >
-        <img class="register-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>
-        <img class="register-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>
+        <span>{{ccode}}</span>
+        <!--<img class="register-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>-->
+        <!--<img class="register-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>-->
       </a>
       <button class="register-button" @click="go">注册</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
@@ -64,6 +66,16 @@
       }
     },
     methods: {
+      generatedCode(){
+        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        let code = ''
+        for (let i = 0; i < 4; i++) {
+          let index = Math.floor(Math.random() * 36)
+          code += random[index]
+        }
+        this.ccode = code
+      },
       show() {
         this.showPas = !this.showPas
         this.isShow = !this.isShow
@@ -74,8 +86,12 @@
       },
       go() {
         // alert(this.school)
-        this.school = this.newList.find(item => item.id === this.schoolChange)['name'];
-        this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
+        if(this.school){
+          this.school = this.newList.find(item => item.id === this.schoolChange)['name'];
+        }
+       if(this.city){
+         this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
+       }
         let _this = this;
         if(_this.user===""  || _this.pass==="" || _this.verifyText === "" ){
           let alertDara = {
@@ -105,6 +121,15 @@
           this.alertDara = alertDara;
           this.pass =""
           this.NewPassword =""
+        }else if(this.verifyText !== this.ccode){
+          let alertDara = {
+            content: "验证码错误！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          this.alertDara = alertDara;
+          this.verifyText = ""
         }else{
           $.ajax({
             url:"/api/sunny/user/register",
@@ -123,6 +148,7 @@
               switch (data.message){
                 case "注册成功":{
                   _this.$router.push("/loginin");
+                  _this.$store.dispatch('updateUserAsyc',_this.user);
                   break;
                 }
                 case "注册失败:用户信息异常":
@@ -155,6 +181,9 @@
         console.log("点击了确定",data)
       }
     },
+    mounted(){
+      this.generatedCode()
+    },
     watch: {
       cityChange(){
         for(let i=0;i<this.university.length;i++) {
@@ -165,7 +194,7 @@
       }
     },
     created(){
-      axios.get('../../../static/school.json').then((res)=>{
+      axios.get('../../../static/json/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
         this.university = data.university
@@ -225,6 +254,17 @@
       width:calc(28vh);
       height:calc(4.8vh);
       border-radius:5px
+    .loginIn-verify
+      position:absolute;
+      margin-top:1.3%;
+      margin-left:1%;
+      display:inline-block;
+      width:calc(10vh);
+      text-align:center;
+      line-height:calc(4.8vh)
+      height:calc(4.8vh);
+      border-radius:5px;
+      border:1px solid #67d49d
     .register-img
       margin-top: 6%;
       width:calc(10vh);

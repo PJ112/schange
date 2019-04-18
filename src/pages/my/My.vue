@@ -61,13 +61,14 @@
                 to="/mycollection"
                 :class="{'is-active':$route.meta.active === '/mycollection'}"
               >
+                <i class="iconfont my-LiIconFlag" v-show="Messflag">&#xe605;</i>
                 <i class="iconfont my-LiIconM">&#xe69d;</i>
                 消息
               </router-link>
               <router-link
                 class="my-li"
                 to="/mypublish"
-                :class="{'is-active':$route.meta.active === '/mypublish'}"
+                :class="{'is-active':$route.meta.isactive === '/mypublish'}"
               >
                 <i class="iconfont my-LiIcon">&#xe616;</i>
                 已发布
@@ -103,11 +104,12 @@
           <router-view
             :user="user"
             :userId="userId"
-            :school="school"
             :UserSrc="UserSrc"
             :UserSex="UserSex"
             :wechat="wechat"
             :phone="phone"
+            :school="school"
+            :Messflag="Messflag"
           ></router-view>
         </div>
         <div class="my-link">
@@ -140,17 +142,16 @@
         changeuserImg:false,
         alertDara:"",
         imgFile:'',
-
         kind:1,
         UserSrc:'',
         UserSex:Number,
         wechat:'',
         phone:'',
+        school:'',
         UserAddress:'',
         httpUrl:'http://119.23.12.250:8090/images',
-
         PId:Number,
-
+        Messflag:false
       }
     },
     methods:{
@@ -285,7 +286,6 @@
       ...mapState(['user']),
       ...mapState(['img']),
       ...mapState(['userId']),
-      ...mapState(['school'])
     },
     created(){
       let _this = this
@@ -299,13 +299,12 @@
         success: function (data) {
           if (data){
             if (data.data){
-
               _this.UserSrc=  data.data.address;
               _this.UserSex = data.data.sex
               _this.wechat = data.data.wechat
               _this.phone = data.data.phone
               _this.school = data.data.school
-              console.log(data)
+              console.log(_this.school)
               let nowTime=new Date().getTime();
               let createTime=data.data.creatTime;
               let day=Math.ceil((nowTime-createTime)/1000/60/60/24);
@@ -320,7 +319,7 @@
 
         },
         dataType: 'json'
-      })
+      }),
       $.ajax({
         url: "/api/sunny/image/findImageAddress",
         async: true,
@@ -336,6 +335,23 @@
               _this.address =data.data.address;
               _this.UserAddress = _this.httpUrl+_this.address;
             }
+          }
+        },
+        error: function () {
+
+        },
+        dataType: 'json'
+      }),
+      $.ajax({
+        url: "/api/sunny/message/findUnreadMessage",
+        async: true,
+        type: 'GET',
+        data: {
+          "userId":_this.userId.userId
+        },
+        success: function (data) {
+          if (data){
+           _this.Messflag = data.flag
           }
         },
         error: function () {
@@ -437,6 +453,7 @@
           font-size:0;
           .router-link-active
             background:#85cab5;
+            color:white;
           .my-li
             display:inline-block;
             padding-left:42px;
@@ -457,6 +474,12 @@
             font-size:18px;
             vertical-align:top;
             margin-right:20px;
+          .my-LiIconFlag
+            position:absolute
+            margin-left:-2%;
+            font-size:18px;
+            vertical-align:top;
+            color:red;
           .my-LiIconB
             font-size:24px;
             vertical-align:top;

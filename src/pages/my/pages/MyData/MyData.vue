@@ -30,7 +30,7 @@
       </div>
       <div class="myData-tel">
         所在学校<br/>
-        <input type="text" class="myData-tel-detail" :value="school.school"/>
+        <input type="text" class="myData-tel-detail" v-model="school"/>
       </div>
       <div class="myData-baocun" @click="goBao">
         <img src="../../resource/保存.png"/>
@@ -55,7 +55,8 @@
         sex:'',
         phone:'',
         username:'',
-        id:Number
+        id:Number,
+        school:''
       }
     },
     props:{
@@ -80,7 +81,8 @@
               "phone": _this.phone,
               "wechat":_this.wechat,
               "id":_this.id,
-              'sex':_this.sex
+              'sex':_this.sex,
+              "school":_this.school
             },
             success: function (data) {
               switch(data.message){
@@ -137,7 +139,8 @@
               "phone": _this.phone,
               "wechat":_this.wechat,
               "id":_this.id,
-              'sex':_this.sex
+              'sex':_this.sex,
+              "school":_this.school
             },
             success: function (data) {
               switch(data.message){
@@ -165,6 +168,7 @@
                           _this.school = data.data.school
                           _this.wechat = data.data.wechat
                           _this.phone = data.data.phone
+                          _this.sex = data.data.sex
 
                         }
 
@@ -203,6 +207,33 @@
     },
     created(){
       this.username = this.user.user
+      let _this = this
+      $.ajax({
+        url: "/api/sunny/user/findOne",
+        async: true,
+        type: 'GET',
+        data: {
+          "id":_this.userId.userId
+        },
+        success: function (data) {
+          if (data){
+            if (data.data){
+              _this.UserSex = data.data.sex
+              _this.wechat = data.data.wechat
+              _this.phone = data.data.phone
+              _this.school = data.data.school
+              console.log(_this.school)
+            }
+
+
+          }
+
+        },
+        error: function () {
+
+        },
+        dataType: 'json'
+      })
     }
   }
 </script>

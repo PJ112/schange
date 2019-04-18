@@ -82,6 +82,7 @@
         type:'GET',
         data:{
           "kindId":_this.sellerId,
+          "kind":1,
         },
         success:function (data) {
           if (data.data){

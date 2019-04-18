@@ -6,13 +6,13 @@
           <img class="SellersPublish-li-left-img" :src="httpUrl+item.imageList[0].address"/>
         </div>
         <div class="SellersPublish-li-right">
-          <div class="SellersPublish-li-right-content">{{item.content}}</div>
+          <div class="SellersPublish-li-right-content">{{item.goods.name}}</div>
           <div class="SellersPublish-li-right-jifen">价格:{{item.goods.price}}</div>
           <div class="SellersPublish-li-right-button" @click="goMes(item.goods.id)" >私信卖家</div>
         </div>
       </li>
     </div>
-    <ul class="SellersPublish-page" v-show="list">
+    <ul class="SellersPublish-page">
       <li v-if="pageNum === 0" class="disabled unforepage">上一页</li>
       <li v-else @click="LoadData(pageNum-1)" class="forepage">上一页</li>
       <li
