@@ -32,7 +32,7 @@
 
 <style lang="stylus" scoped>
   .myOrder
-    min-height:calc(80vh)
+    min-height:calc(100vh)
     margin-left:8%;
     margin-top:6%;
     margin-bottom:3%;

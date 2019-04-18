@@ -26,7 +26,7 @@
     margin-left:8%;
     margin-top:32px;
     margin-bottom:3%;
-    min-height:calc(70vh)
+    min-height:calc(100vh)
     .myBuy-h1
       display:inline-block
       font-size:18px;

@@ -65,6 +65,7 @@
           },
           success:function (data) {
             _this.list = data.data.rows;
+            _this.total = data.data.total;
           },
           error:function () {
           },

@@ -177,6 +177,7 @@
   .myCollection
     margin-left:8%;
     margin-top:32px;
+    min-height:calc(100vh)
     .myCollection-h1
       display:inline-block
       font-size:18px;

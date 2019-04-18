@@ -9,9 +9,10 @@
          <div class="myBuy-li-right">
            <div class="myBuy-li-right-content">{{item.goods.name}}</div>
            <div class="myBuy-li-right-jifen">价格:{{item.goods.price}}</div>
-           <button class="myBuy-li-right-button" @click="lookCommence(item.goods.id)">查看评价</button>
+           <!--<button class="myBuy-li-right-button" @click="lookCommence(item.goods.id)">查看评价</button>-->
          </div>
        </div>
+       <div class="assess"></div>
      </li>
      <ul class="myPublish-page" >
        <li v-if="pageNum === 1" class="disabled unforepage">上一页</li>
@@ -23,7 +24,7 @@
          :class="[index==pageNum-1?'ItemnumberPage':'numberPage']"
        >{{item}}</li>
        <li v-if="pageNum === totalPages || totalPages === -1" class="disabled unforepage">下一页</li>
-       <li  @click="LoadData(pageNum)" class="forepage" v-else>下一页</li>
+       <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
      </ul>
    </div>
    <div class="no-data" v-else >nothing...</div>

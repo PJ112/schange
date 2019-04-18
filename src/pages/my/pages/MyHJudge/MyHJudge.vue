@@ -123,6 +123,7 @@
     margin-left:8%;
     margin-top:32px;
     margin-bottom:3%;
+    min-height:calc(100vh)
     .MyHJudge-h1
       display:inline-block
       font-size:18px;
@@ -180,10 +181,10 @@
       .MyHJudge-li-right
         flex:1;
         display:inline-block
-        background: rgba(141, 141, 141, 0.20);
+        background: rgba(141, 141, 141, 0.1);
         .MyHJudge-li-right-content
           margin-top:10px;
-          margin-left:3%;
+          margin-left:4%;
           margin-right:3%
         .MyHJudge-li-right-time
           margin-top:2%;

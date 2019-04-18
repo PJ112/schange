@@ -375,14 +375,13 @@
     .my-content
       padding-top:10px;
       margin:0 auto;
-      min-height:calc(80vh);
       width:80%;
+      min-height:calc(120vh);
       background:#e7f4f0;
       .my-left
         display:inline-block;
         vertical-align:top;
         width:20%;
-        height:80%;
         margin-left:7%;
       .my-top
         height:calc(33vh);
@@ -490,7 +489,7 @@
         vertical-align:top;
         margin-left:3%;
         width:63%;
-        min-height:75%;
+        min-height:calc(76vh);
         background:white;
       .my-link
         display:inline-block;

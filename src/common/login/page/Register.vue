@@ -5,11 +5,13 @@
       <div class="register-school">
       <span >
         <select class="school-city"  v-model="cityChange">
+          <option selected>--城市</option>
           <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option>
         </select>
       </span>
         <span>
       <select  class="school-school" v-model="schoolChange">
+        <option selected>--学校</option>
           <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="school">{{item.name}}</option>
       </select>
      </span>
@@ -17,9 +19,8 @@
       <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
       <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
       <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
+      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText" @click="go"/>
       <a
-        href="#"
         @click="generatedCode"
         class="loginIn-verify"
       >
@@ -66,16 +67,6 @@
       }
     },
     methods: {
-      generatedCode(){
-        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        let code = ''
-        for (let i = 0; i < 4; i++) {
-          let index = Math.floor(Math.random() * 36)
-          code += random[index]
-        }
-        this.ccode = code
-      },
       show() {
         this.showPas = !this.showPas
         this.isShow = !this.isShow
@@ -179,6 +170,16 @@
       alertSureFn:function(data){
         this.alertDara = '';
         console.log("点击了确定",data)
+      },
+      generatedCode(){
+        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        let code = ''
+        for (let i = 0; i < 4; i++) {
+          let index = Math.floor(Math.random() * 36)
+          code += random[index]
+        }
+        this.ccode = code
       }
     },
     mounted(){
@@ -194,7 +195,7 @@
       }
     },
     created(){
-      axios.get('../../../static/json/school.json').then((res)=>{
+      axios.get('/static/json/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
         this.university = data.university
@@ -210,6 +211,18 @@
   }
   &.fade-enter, &.fade-leave-to {
     opacity: 0;
+  }
+  .loginIn-verify{
+    cursor:pointer;
+    position:absolute;
+    margin-top:1.3%;
+    margin-left:1%;
+    width:calc(10vh);
+    text-align:center;
+    line-height:calc(4.8vh);
+    height:calc(4.8vh);
+    border-radius:5px;
+    border:1px solid #67d49d
   }
   .register
     margin-top:8%;
@@ -254,17 +267,6 @@
       width:calc(28vh);
       height:calc(4.8vh);
       border-radius:5px
-    .loginIn-verify
-      position:absolute;
-      margin-top:1.3%;
-      margin-left:1%;
-      display:inline-block;
-      width:calc(10vh);
-      text-align:center;
-      line-height:calc(4.8vh)
-      height:calc(4.8vh);
-      border-radius:5px;
-      border:1px solid #67d49d
     .register-img
       margin-top: 6%;
       width:calc(10vh);

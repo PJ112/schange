@@ -37,6 +37,7 @@ export default {
     z-index:-1;
     margin-left:8%;
     margin-top:32px;
+    min-height:calc(100vh)
     .myPublish-h1
       display:inline-block
       font-size:18px;
