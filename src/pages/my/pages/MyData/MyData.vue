@@ -193,16 +193,9 @@
       },
       alertSureFn(data) {
         this.alertDara = '';
-        console.log("点击了确定",data)
-      },
-      alertBackFn(data) {
-        this.alertDara = '';
-        console.log("点击了取消",data)
       },
       alertSureFn(data) {
         this.alertDara = '';
-        console.log("点击了确定",data)
-
       }
     },
     created(){
@@ -222,7 +215,6 @@
               _this.wechat = data.data.wechat
               _this.phone = data.data.phone
               _this.school = data.data.school
-              console.log(_this.school)
             }
 
 

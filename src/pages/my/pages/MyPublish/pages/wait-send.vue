@@ -29,18 +29,23 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
-    <div class="assess-success" v-show="Asuccess">
-      发货成功！
-    </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: "WaitSend",
     props:{
       userId:Number
     },
+    components: {Alert},
     data() {
       return {
         list: [],
@@ -51,12 +56,20 @@
         chose:false,
         choseIndex:Number,
         goodsId:'',
+        alertDara:'',
         httpUrl:'http://119.23.12.250:8090/images',
-        Asuccess:false
-
       }
     },
     methods: {
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       LoadData(value) {
         let _this = this
         _this.pageNum = value + 1
@@ -80,10 +93,6 @@
       },
       goSend(orderid){
         let _this = this
-        _this.Asuccess = true
-        setTimeout(()=>{
-          _this.Asuccess = false
-      },2000);
         $.ajax({
           url:"/api/sunny/order/sendGoods",
           async:true,
@@ -93,25 +102,13 @@
             "status":3
           },
           success:function (data) {
-            $.ajax({
-              url:"/api/sunny/order/newSearch",
-              async:true,
-              type:'GET',
-              data:{
-                "sellerId":_this.userId.userId,
-                "pageNum":_this.pageNum,
-                "pageSize":_this.pageSize,
-                "status":2
-              },
-              success:function (data) {
-                _this.list = data.data.rows;
-                _this.total = data.data.total;
-                _this.LoadData(0);
-              },
-              error:function () {
-              },
-              dataType:'json'
-            })
+            let alertDara = {
+              content: "成功发货！",
+              contentColor: "#85cab5",
+              btn: ["确定"],
+              btnColor: ["", ""]
+            };
+            _this.alertDara = alertDara;
 
           },
           error:function () {
@@ -166,6 +163,7 @@
     width:calc(66vh);
     font-size:18px;
     height:calc(66vh);
+    line-height:calc(66vh);
     text-align:center;
     margin-left:3%;
     color:#85cab5

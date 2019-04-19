@@ -44,15 +44,20 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img">
     </div>
-    <div class="assess-success" v-show="Asuccess">
-      发表成功！
-    </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: "GoAssess",
+    components: {Alert},
     data() {
       return {
         BuyList:[],
@@ -61,9 +66,7 @@
         pageSize:3,
         showCommence:false,
         newList:[],
-        BuyList:[],
 
-        Asuccess:false,
         //传递给后端的数据
         sellerId:Number,
         goodsId:Number,
@@ -76,6 +79,15 @@
       userId:Number,
     },
     methods:{
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       goCancel(){
         this.showCommence = false
       },
@@ -99,30 +111,15 @@
               "status":5
             },
             success: function (data) {
-              _this.Asuccess = true
-              setTimeout(()=>{
-                _this.Asuccess = false
-            },2000);
+              let alertDara = {
+                content: "评价成功！",
+                contentColor: "#85cab5",
+                btn: ["确定"],
+                btnColor: ["", ""]
+              };
+              _this.alertDara = alertDara;
               _this.showCommence = false
               _this.inputValue =""
-              $.ajax({
-                url: "/api/sunny/goods/findBoughtGoods",
-                async: true,
-                type: 'GET',
-                data: {
-                  "buyerId":_this.userId.userId,
-                  "status":4
-                },
-                success: function (data) {
-                  _this.BuyList = data.data
-                  _this.total =  data.data.length
-                  _this. LoadData(1)
-                },
-                error: function () {
-
-                },
-                dataType: 'json'
-              })
             },
             error: function () {
             },

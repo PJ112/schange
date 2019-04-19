@@ -133,7 +133,7 @@
         success: function (data) {
           if (data){
             _this.Messflag = data.flag
-//            alert(_this.Messflag)
+           console.log(_this.Messflag)
           }
         },
         error: function () {

@@ -11,7 +11,7 @@
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
             <button class="myOrder-li-right-button" @click="goReceive(item.order.id)">确认收货</button>
             <div class="myOrder-li-right-text" >派送中...
-              <img src="../../../../../assets/imgs/go-send.gif" class="go-send-img">
+              <img src="../../../../../assets/imgs/111.gif" class="go-send-img">
             </div>
           </div>
         </div>
@@ -33,13 +33,17 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
-    <div class="assess-success" v-show="Asuccess">
-      收货成功！
-    </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: 'Send',
     data() {
@@ -50,17 +54,27 @@
         status:Number,
         total:Number,
         httpUrl:'http://119.23.12.250:8090/images',
-        Asuccess:false
+        alertDara:''
       }
     },
+    components: {Alert},
     props:{
       userId:Number,
     },
     methods: {
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       goReceive(id){
         let _this = this
         $.ajax({
-          url:"/api/sunny//order/gotGoods",
+          url:"/api/sunny/order/gotGoods",
           async:true,
           type:'GET',
           data:{
@@ -68,31 +82,13 @@
             "status":4
           },
           success:function (data) {
-            $.ajax({
-              url:"/api/sunny/order/newSearch",
-              async:true,
-              type:'GET',
-              data:{
-                "buyerId":_this.userId.userId,
-                "pageNum":_this.pageNum,
-                "pageSize":_this.pageSize,
-                "status":3
-              },
-              success:function (data) {
-                _this.list = data.data.rows;
-                console.log(_this.list)
-                _this.total = data.data.total;
-                console.log(data.data.rows)
-                _this.LoadData(0);
-                _this.Asuccess = true
-                setTimeout(()=>{
-                  _this.Asuccess = false
-              },2000);
-              },
-              error:function () {
-              },
-              dataType:'json'
-            })
+            _this.alertDara = {
+              content: "确认收货！",
+              contentColor: "#85cab5",
+              btn: ["确定"],
+              btnColor: ["", ""]
+            };
+            _this.alertDara = alertDara;
           },
           error:function () {
           },
@@ -176,6 +172,7 @@
     font-size:20px;
     font-weight: bold;
     height:calc(66vh);
+    line-height:calc(66vh);
     text-align:center;
     margin-left:3%;
     color:#85cab5

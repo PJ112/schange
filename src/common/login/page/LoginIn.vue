@@ -167,7 +167,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  @import "../../../assets/iconfont/iconfont.css"
+  @import "../../../assets/iconfont/iconfont.css";
   .loginIn
     margin-left:10%;
     font-size:12px;
