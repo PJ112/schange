@@ -18,7 +18,9 @@
               </div>
             </div>
             <div class="shopping-item-delete">
-              <span class="shop" @click="addProduct(item.goods.id)">加入购物车</span>
+              <div class="info" v-if="error" style="color: red">{{error}}</div>
+              <div class="info" v-if="success" style="color: lightseagreen;">{{success}}</div>
+              <span  class="shop" @click="addProduct(item.goods.id)">加入购物车</span>
               <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
             </div>
           </div>
@@ -71,7 +73,9 @@
         name:this.$route.query.name,
         imgUrl:'http://119.23.12.250:8090/images',
         userId:this.$store.state.userId.userId,
-        recommendProducts:[]
+        recommendProducts:[],
+        error:'',
+        success:''
       }
     },
     created(){
@@ -95,7 +99,6 @@
         async:true,
         data:{"typeId":20,"status":1},
         success:function (good) {
-          console.log(good);
           _this.recommendProducts=good.data.rows;
         },
         error:function (error) {
@@ -129,11 +132,16 @@
             data:{"buyerId":this.userId,"goodsId":id,"number":1,"status":1},
             success:function (product) {
               if (!product.flag) {
-                _this.error="该商品在购物车中已存在，不能重复添加。";
-                _this.$store.dispatch('errorAsyc',_this.error);
-                _this.$router.push('/index-shopping');
+                _this.error="该商品在购物车中已存在，不能重复添加！";
+                setTimeout(()=>{
+                  _this.error='';
+                },2000);
+
               }else{
-                _this.$router.push('/index-shopping');
+               _this.success="添加购物车成功！";
+               setTimeout(()=>{
+                 _this.success="";
+               },2000);
 
               }
             },
@@ -258,10 +266,17 @@
               float:right;
               margin-right :40px;
               color :#2ab7b7;
-              width:220px;
+              width:320px;
               font-size :18px;
               height:160px;
-              line-height :240px;
+              line-height :190px;
+              box-sizing border-box;
+              .info{
+                width 300px;
+                height 20px;
+                font-size 14px;
+                margin-bottom 20px;
+              }
               span{
                 display :inline-block;
                 text-align :center;
@@ -345,7 +360,7 @@
   }
   .shopping .icon{
     position: fixed;
-    right: 131px;
+    right: 190px;
     top: 450px;
   }
 </style>
