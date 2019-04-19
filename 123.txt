@@ -1,31 +1,5 @@
-order
-  商品查找页面 只有money
+已发布里面 未售出 查商品 可以删除商品
+待发货 查订单
+已发货
+已售出
 
-user
-  根据sellers 的 id查找用户的图片
-
-历史评价
-  中两张图片都是地址都是address
-
-
-已购买
-  给我的全部是对象 没有办法 最好给我数组 我进行循环展示
-    // if(this.inputValue.value === ""){
-        //   alert('请输入评价信息!')
-        // }else{
-        //   let date = new Date();
-        //   let year = date.getFullYear();
-        //   let month = date.getMonth()+1;
-        //   let day = date.getDate();
-        //   let hour = date.getHours();
-        //   let minute = date.getMinutes();
-        //   let second = date.getSeconds();
-        //   console.log(year+'年'+month+'月'+day+'日 '+hour +':'+minute+':'+second)
-        //   this.showIndex = index
-        //   this.comment = true
-        //   alert(this.showIndex)
-        //   alert('发表成功！')
-        // }
-
-
-  findOnePage 头像获取不成功 添加头像 返回添加成功 但是头像不显示

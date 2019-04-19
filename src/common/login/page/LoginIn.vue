@@ -7,10 +7,10 @@
       <input class="loginIn-test" type="text" placeholder="验证码" v-model="verifyText" @keyup.enter="go"/>
       <a
         href="#"
-        @click="changeverifyImg()"
+        @click="generatedCode"
+        class="loginIn-verify"
       >
-        <img class="loginIn-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>
-        <img class="loginIn-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>
+        <span>{{ccode}}</span>
       </a>
       <button class="loginIn-button" @click="go">登录</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
@@ -27,6 +27,7 @@
 
 <script>
   import Alert from '../../Alert/Alert'
+  import {mapState} from 'vuex'
   export default {
     name: 'LoginIn',
     components: {Alert},
@@ -39,11 +40,12 @@
         verifyText:'',
         verifyImg:'',
         alertDara: '',
-        userId:0
+        userId:0,
+        ccode:''
       }
     },
 
-    methods:{
+    methods: {
       show () {
         this.showPas = !this.showPas;
         this.isShow = ! this.isShow
@@ -71,39 +73,15 @@
           };
           _this.alertDara = alertDara;
         }
-        // else if(_this.verifyText !== ""){
-        //   $.ajax({
-        //     url:"/api/sunny/user/check",
-        //     async:false,
-        //     type:'GET',
-        //     // contentType:"application/json;charset=utf-8",
-        //     // dataType:text,
-        //     data:{
-        //       "verify":_this.verifyText
-        //     },
-        //     success:function (data) {
-        //       //验证成功
-        //       //验证失败:无指定参数
-        //       switch (data.message) {
-        //         case "验证码成功":
-        //           console.log("验证码成功")
-        //         case "验证失败:无指定参数":{
-        //           let alertDara = {
-        //             content: "验证码错误！",
-        //             contentColor: "red",
-        //             btn: ["确定"],
-        //             btnColor: ["", ""]
-        //           };
-        //           _this.alertDara = alertDara;
-        //         }
-        //       }
-        //
-        //     },
-        //     error:function () {
-        //     },
-        //     dataType:'json'
-        //   })
-        // }
+         else if(_this.verifyText !== _this.ccode){
+          let alertDara = {
+            content: "验证码错误！",
+            contentColor: "red",
+            btn: ["确定"],
+            btnColor: ["", ""]
+          };
+          _this.alertDara = alertDara;
+         }
         else{
           $.ajax({
             url:"/api/sunny/user/login",
@@ -165,10 +143,26 @@
       alertSureFn:function(data){
         this.alertDara = '';
         console.log("点击了确定",data)
+      },
+      generatedCode(){
+        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        let code = ''
+        for (let i = 0; i < 4; i++) {
+          let index = Math.floor(Math.random() * 36)
+          code += random[index]
+        }
+        this.ccode = code
       }
-    },
+  },
     created(){
+      this.user = this.$store.state.user.user
     },
+    mounted(){
+      this.generatedCode()
+    },
+    computed:{
+  },
   }
 </script>
 
@@ -203,11 +197,16 @@
       height:calc(4.8vh);
       border-radius:5px;
       margin-left:10%;
-    .loginIn-img
-      margin-top: 6%;
+    .loginIn-verify
+      position:absolute;
+      top:60.5%
+      margin-left:1%;
       width:calc(10vh);
+      text-align:center;
+      line-height:calc(4.8vh)
       height:calc(4.8vh);
-      margin-left:3%;
+      border-radius:5px;
+      border:1px solid #67d49d
     .loginIn-button
       margin-left:10%;
       margin-top:8%;

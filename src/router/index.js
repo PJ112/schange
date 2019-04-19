@@ -9,15 +9,26 @@ import MyData from '../pages/my/pages/MyData/MyData'
 import MyMall from '../pages/my/pages/MyMall/MyMall'
 import MyCollection from '../pages/my/pages/MyCollection/MyCollection'
 import MyBuy from '../pages/my/pages/MyBuy/MyBuy'
+import Assess  from '../pages/my/pages/MyBuy/pages/asseess.vue'
+import GoAssess  from '../pages/my/pages/MyBuy/pages/go-assess.vue'
+
 import MyHJudge from '../pages/my/pages/MyHJudge/MyHJudge'
+
 import MyOrder from '../pages/my/pages/MyOrder/MyOrder'
+import NoPay from '../pages/my/pages/MyOrder/pages/no-pay.vue'
+import NoSend from '../pages/my/pages/MyOrder/pages/no-send.vue'
+import Send from '../pages/my/pages/MyOrder/pages/send.vue'
+
 import MyPublish from '../pages/my/pages/MyPublish/MyPublish'
+import NoBuy from '../pages/my/pages/MyPublish/pages/no-buy.vue'
+import WaitSend from '../pages/my/pages/MyPublish/pages/wait-send.vue'
+import AlSend from '../pages/my/pages/MyPublish/pages/al-send.vue'
+import AlBuy from '../pages/my/pages/MyPublish/pages/al-buy.vue'
 
 import SellersMes from '../pages/sellers/SellersMes'
 import SellersPublish from '../pages/sellers/pages/SellersPublish'
 import SellersHJudge from '../pages/sellers/pages/SellersHJudge'
 
-import test from '../pages/test'
 import Index from '../pages/index/Index'
 import IndexShopping from '../pages/index/components/Shopping'
 
@@ -44,10 +55,6 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {
-      path:`/test`,
-      component:test
-    },
     {
       path: '/',
       name: 'Login',
@@ -93,10 +100,19 @@ export default new Router({
         {
           path:'/mybuy',
           component:MyBuy,
+          redirect:'/assess',
           meta:{
             requireAuth:true,
-            active:'/mybuy'
-          }
+            active:'/assess'
+          },
+          children:[{
+            path:'/assess',
+            component:Assess,
+          },
+            {
+              path:'/goassess',
+              component:GoAssess,
+            }]
         },
         {
           path:'/myhjudge',
@@ -109,18 +125,45 @@ export default new Router({
         {
           path:'/myorder',
           component:MyOrder,
+          redirect:'/nopay',
           meta:{
             requireAuth:true,
-            active:'/myorder'
-          }
+            active:'/nopay'
+          },
+          children:[{
+            path:'/nopay',
+            component:NoPay,
+          },
+            {
+              path:'/nosend',
+              component:NoSend,
+            },
+            {
+              path:'/send',
+              component:Send,
+            }]
         },
         {
           path:'/mypublish',
           component:MyPublish,
+          redirect:'/nobuy',
           meta:{
             requireAuth:true,
             active:'/mypublish'
-          }
+          },
+          children:[{
+            path:'/waitsend',
+            component:WaitSend,
+          },{
+            path:'/alsend',
+            component:AlSend,
+          },{
+            path:'/albuy',
+            component:AlBuy,
+          },{
+            path:'/nobuy',
+            component:NoBuy,
+          }]
         },
       ]
     },
