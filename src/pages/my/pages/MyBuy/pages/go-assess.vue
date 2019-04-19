@@ -44,6 +44,9 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img">
     </div>
+    <div class="assess-success" v-show="Asuccess">
+      发表成功！
+    </div>
   </div>
 </template>
 
@@ -60,6 +63,7 @@
         newList:[],
         BuyList:[],
 
+        Asuccess:false,
         //传递给后端的数据
         sellerId:Number,
         goodsId:Number,
@@ -76,7 +80,7 @@
         this.showCommence = false
       },
       LoadData(value) {
-        this.paggNum = value
+        this.pageNum = value
         this.newList = this.BuyList.slice((value-1) * this.pageSize, value *this.pageSize)
       },
       goPublish(){
@@ -95,8 +99,12 @@
               "status":5
             },
             success: function (data) {
+              _this.Asuccess = true
+              setTimeout(()=>{
+                _this.Asuccess = false
+            },2000);
               _this.showCommence = false
-              alert("发表成功！")
+              _this.inputValue =""
               $.ajax({
                 url: "/api/sunny/goods/findBoughtGoods",
                 async: true,
@@ -165,6 +173,16 @@
   .no-img{
     width:calc(78vh);
     height:calc(78vh)
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .assess{
     display:none

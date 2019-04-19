@@ -9,8 +9,10 @@
           <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-            <button class="myOrder-li-right-button">已付款</button>
-            <div class="myOrder-li-right-text"  @click="goReceive(item.order.id)">确认收货</div>
+            <button class="myOrder-li-right-button" @click="goReceive(item.order.id)">确认收货</button>
+            <div class="myOrder-li-right-text" >派送中...
+              <img src="../../../../../assets/imgs/go-send.gif" class="go-send-img">
+            </div>
           </div>
         </div>
       </li>
@@ -31,6 +33,9 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
+    <div class="assess-success" v-show="Asuccess">
+      收货成功！
+    </div>
   </div>
 </template>
 
@@ -45,6 +50,7 @@
         status:Number,
         total:Number,
         httpUrl:'http://119.23.12.250:8090/images',
+        Asuccess:false
       }
     },
     props:{
@@ -62,7 +68,6 @@
             "status":4
           },
           success:function (data) {
-            alert(data.message)
             $.ajax({
               url:"/api/sunny/order/newSearch",
               async:true,
@@ -79,6 +84,10 @@
                 _this.total = data.data.total;
                 console.log(data.data.rows)
                 _this.LoadData(0);
+                _this.Asuccess = true
+                setTimeout(()=>{
+                  _this.Asuccess = false
+              },2000);
               },
               error:function () {
               },
@@ -152,6 +161,26 @@
     height:calc(66vh);
     background-size:100% 100%;
   }
+  .go-send-img{
+    position: absolute;
+    margin-top:-3%;
+    margin-left:5%;
+    opacity:1;
+    width:50px;
+    height:50px;
+    /*transform: rotateX(180deg);*/
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:20px;
+    font-weight: bold;
+    height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
+  }
   .myOrder-li
     list-style:none;
     margin-top:20px;
@@ -188,7 +217,7 @@
       display:inline-block;
       float:right;
       margin-top:-2%;
-      margin-right:8%;
+      margin-right:20%;
       color:#85cab5
       font-size:13px;
       cursor:pointer;

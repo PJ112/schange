@@ -29,6 +29,9 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
+    <div class="assess-success" v-show="Asuccess">
+      发货成功！
+    </div>
   </div>
 </template>
 
@@ -49,6 +52,7 @@
         choseIndex:Number,
         goodsId:'',
         httpUrl:'http://119.23.12.250:8090/images',
+        Asuccess:false
 
       }
     },
@@ -75,6 +79,11 @@
         })
       },
       goSend(orderid){
+        let _this = this
+        _this.Asuccess = true
+        setTimeout(()=>{
+          _this.Asuccess = false
+      },2000);
         $.ajax({
           url:"/api/sunny/order/sendGoods",
           async:true,
@@ -84,7 +93,6 @@
             "status":3
           },
           success:function (data) {
-            alert(data.message)
             $.ajax({
               url:"/api/sunny/order/newSearch",
               async:true,
@@ -152,6 +160,16 @@
     width:calc(66vh);
     height:calc(66vh);
     background-size:100% 100%;
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .content
     margin-top:20px;

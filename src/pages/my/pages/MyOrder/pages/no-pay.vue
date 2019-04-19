@@ -31,6 +31,9 @@
    <div class="no-data" v-else>
      <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
    </div>
+   <div class="assess-success" v-show="Asuccess">
+     支付成功！
+   </div>
  </div>
 </template>
 
@@ -45,6 +48,7 @@
         status:Number,
         total:Number,
         httpUrl:'http://119.23.12.250:8090/images',
+        Asuccess:false
       }
     },
     props:{
@@ -63,7 +67,10 @@
             "status":2
           },
           success:function (data) {
-            alert(data.message)
+            _this.Asuccess = true
+            setTimeout(()=>{
+              _this.Asuccess = false
+          },2000);
           },
           error:function () {
           },
@@ -150,6 +157,16 @@
     width:calc(66vh);
     height:calc(66vh);
     background-size:100% 100%;
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .myOrder-li
     list-style:none;
