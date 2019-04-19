@@ -14,7 +14,8 @@
     <div class="index-nav-login">
        <span v-if="user">
         <div class="index-show-profile"  @mouseenter="show=true" @mouseleave="show=false" style="display: inline-block;height: 92px;padding-top: 30px;">
-          <span class="index-nav-login-img">
+          <span class="index-nav-login-img" style="position: relative;">
+                 <span class="red-point point"  style="position: absolute;left: 43px;top:-15px;" v-if="isExistUnreadMessage"></span>
                 <img style="width: 50px;height: 50px;border-radius: 50%" src="../../assets/imgs/index/person.png" v-if="!userImg">
                 <img style="width: 50px;height: 50px;border-radius: 50%" :src="userImg" v-if="userImg"/>
           </span>
@@ -31,8 +32,10 @@
                 <img class="index-profile-sex" src="../../assets/imgs/my/mycollection/保密.png" v-else/>
               </div>
               <div class="index-profile-category">
-                <div class="index-category-item" v-for="(category,index) of categories" :key="index">
-                  <router-link :to="category.path">
+                <div class="index-category-item" v-for="(category,index) of categories" :key="index" style="position: relative;">
+                  <router-link :to="category.path" >
+                    <span class="red-point" v-if="category.path=='/my'" style="position: absolute;left: 55px;top:10px; "></span>
+                    <span class="red-point" v-if="category.path=='/mycollection'" style="position: absolute;left: 55px;top:10px; "></span>
                     <img class="item-img" src="../../assets/imgs/index_profile/积分商城.png">
                     <div class="item-info">
                       {{category.info}}
@@ -77,7 +80,7 @@
               },
               {
                 info:'个人中心',
-                path:'/my'
+                path:'/my',
               },
               {
                 info:'订单管理',
@@ -85,7 +88,7 @@
               },
               {
                 info:'我的私信',
-                path:'/mycollection'
+                path:'/mycollection',
               }
             ],
             show:false,
@@ -94,8 +97,8 @@
             sex:0,
             userImg:'',
             httpUrl:'http://119.23.12.250:8090/images',
-            name:''
-
+            name:'',
+            isExistUnreadMessage:false
           }
         },
         created(){
@@ -130,6 +133,19 @@
               console.log(error);
             }
           });
+          $.ajax({
+            url:'/api/sunny/message/findUnreadMessage',
+            async:true,
+            data:{userId:this.userId},
+            success:function (message) {
+              if (message.flag){
+                _this.isExistUnreadMessage=message.flag;
+              }
+            },
+            error:function (error) {
+              console.log(error);
+            }
+          })
         },
         methods:{
           logout(){
@@ -265,6 +281,7 @@
       }
       .index-profile-intro{
          margin:12px;
+
          .index-profile-img{
            width :60px;
            height :60px;
@@ -334,6 +351,13 @@
 
     }
 
+  }
+  .red-point{
+    width 8px;
+    height:8px;
+    background :red;
+    border-radius 50%;
+    display: inline-block;
   }
 
 </style>

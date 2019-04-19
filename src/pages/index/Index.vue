@@ -152,6 +152,7 @@
         products:[],
         imgUrl:'http://119.23.12.250:8090/images',
         categories:[],
+        userId:this.$store.state.userId.userId
       }
     },
     created() {
@@ -212,7 +213,8 @@
         error:function (error) {
           console.log(error);
         }
-      })
+      });
+
 
     },
     computed:{
