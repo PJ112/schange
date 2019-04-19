@@ -9,7 +9,9 @@
           <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-            <button class="myOrder-li-right-button"  v-show="item.order.status === 2">待发货</button>
+            <img src="../../../../../assets/imgs/go-send.png" class="go-send-img">
+            <button class="myOrder-li-right-button"  v-show="item.order.status === 2">待发货
+            </button>
             <div class="myOrder-li-right-text"  v-show="item.order.status === 2">付款成功</div>
           </div>
         </div>
@@ -28,7 +30,9 @@
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div class="no-data" v-else>nothing...</div>
+    <div class="no-data" v-else>
+      <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
+    </div>
   </div>
 </template>
 
@@ -103,11 +107,20 @@
 
 <style lang="stylus" scoped>
   .no-data{
-    width:100%;
-    text-align:center;
     height:calc(66vh);
     line-height:calc(66vh);
-    color:red;
+  }
+  .no-img{
+    width:calc(66vh);
+    height:calc(66vh);
+    background-size:100% 100%;
+  }
+  .go-send-img{
+    position: absolute;
+    margin-top:-5%
+    margin-left:16%;
+    width:50px;
+    height:50px;
   }
   .myOrder-li
     list-style:none;

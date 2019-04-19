@@ -39,7 +39,9 @@
         </div>
       </div>
     </div>
-    <div  class="myCollection-no" v-else>你还没有消息哦!</div>
+    <div  class="myCollection-no" v-else>
+      <img  class="no-img" src="../../../../assets/imgs/nothing.jpg"/>
+    </div>
     <alert v-if="alertDara"
            :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
   </div>
@@ -168,12 +170,14 @@
     height:calc(10vh);
     margin-bottom:3%
   }
+  .no-img{
+    width:calc(78vh);
+    height:calc(78vh);
+    background-size:100% 100%;
+  }
   .myCollection-no
     height:calc(78vh)
     line-height:calc(78vh)
-    color:red;
-    width:100%;
-    margin-left:40%;
   .myCollection
     margin-left:8%;
     margin-top:32px;

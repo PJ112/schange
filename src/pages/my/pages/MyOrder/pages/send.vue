@@ -28,7 +28,9 @@
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div class="no-data" v-else>nothing...</div>
+    <div class="no-data" v-else>
+      <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
+    </div>
   </div>
 </template>
 
@@ -142,11 +144,13 @@
 
 <style lang="stylus" scoped>
   .no-data{
-    width:100%;
-    text-align:center;
     height:calc(66vh);
     line-height:calc(66vh);
-    color:red;
+  }
+  .no-img{
+    width:calc(66vh);
+    height:calc(66vh);
+    background-size:100% 100%;
   }
   .myOrder-li
     list-style:none;

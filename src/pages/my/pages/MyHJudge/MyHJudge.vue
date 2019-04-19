@@ -40,7 +40,9 @@
         <li  @click="LoadData(pageNum+1)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div class="MyHJudge-no" v-else>暂无历史评价！</div>
+    <div class="MyHJudge-no" v-else>
+      <img  class="no-img" src="../../../../assets/imgs/nothing.jpg"/>
+    </div>
   </div>
 </template>
 
@@ -116,9 +118,12 @@
   .MyHJudge-no
     height:calc(78vh)
     line-height:calc(78vh)
-    color:red;
     width:100%;
-    margin-left:40%;
+  .no-img{
+    width:calc(78vh);
+    height:calc(78vh);
+    background-size:100% 100%;
+  }
   .MyHJudge
     margin-left:8%;
     margin-top:32px;

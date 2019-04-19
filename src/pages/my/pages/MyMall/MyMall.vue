@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="myMall-no">暂无商品，敬请期待！</div>
+    <div class="myMall-no">
+      <img  class="no-img" src="../../../../assets/imgs/nothing.jpg"/>
+    </div>
     <!--<div class="myMall">-->
     <!--<h1 class="myMall-h1">积分商城</h1>-->
     <!--<h2 class="myMall-h2">已有积分:</h2>-->
@@ -57,11 +59,12 @@
 
 <style lang="stylus" scoped>
   .myMall-no
+    width:calc(78vh);
     height:calc(78vh)
-    line-height:calc(78vh)
-    color:red;
-    width:100%;
-    margin-left:40%;
+    .no-img
+      width:calc(78vh);
+      height:calc(78vh)
+      background-size:100% 100%;
   .myMall
     margin-left:8%;
     margin-top:32px;
