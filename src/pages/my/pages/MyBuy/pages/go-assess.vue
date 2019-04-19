@@ -41,7 +41,9 @@
         <li  @click="LoadData(pageNum)" class="forepage" v-else>下一页</li>
       </ul>
     </div>
-    <div class="no-data" v-else>nothing...</div>
+    <div class="no-data" v-else>
+      <img src="../../../../../assets/imgs/nothing.jpg" class="no-img">
+    </div>
   </div>
 </template>
 
@@ -159,9 +161,10 @@
   .no-data{
     height:calc(78vh);
     line-height:calc(78vh);
-    color:red;
-    width:100%;
-    margin-left:40%;
+  }
+  .no-img{
+    width:calc(78vh);
+    height:calc(78vh)
   }
   .assess{
     display:none
