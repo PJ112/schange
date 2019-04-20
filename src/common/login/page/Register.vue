@@ -19,7 +19,7 @@
       <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
       <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
       <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText" @click="go"/>
+      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
       <a
         @click="generatedCode"
         class="loginIn-verify"
