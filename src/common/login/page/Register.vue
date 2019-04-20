@@ -19,15 +19,14 @@
       <input class="register-pas" type="password" placeholder="请输入长度为6-16位的密码" v-model="pass"/>
       <input class="register-pas" type="password" placeholder="请确认密码" v-show="!showPas" v-model="NewPassword" />
       <input class="register-pas" type="text" placeholder="请确认密码" v-show="showPas" v-model="NewPassword" />
-      <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
-      <a
-        @click="generatedCode"
-        class="loginIn-verify"
-      >
-        <span>{{ccode}}</span>
-        <!--<img class="register-img"  :src="verifyImg"  alt="图片加载失败" v-if="verifyImg"/>-->
-        <!--<img class="register-img"  src="http://119.23.12.250/sunny/verify"  alt="图片加载失败" v-else/>-->
-      </a>
+     <div class="register-v">
+       <input class="register-test" type="text" placeholder="验证码" v-model="verifyText"/>
+       <a
+         href="#"
+         class="loginIn-verify"
+         @click.native="generatedCode"
+       >{{ccode}}</a>
+     </div>
       <button class="register-button" @click="go">注册</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
@@ -63,21 +62,25 @@
         verifyText:"",
         alertDara: '',
         school:'',
-        verify:String
       }
     },
     methods: {
+      generatedCode(){
+        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        let code = ''
+        for (let i = 0; i < 4; i++) {
+          let index = Math.floor(Math.random() * 36)
+          code += random[index]
+        }
+        this.ccode = code
+      },
       show() {
         this.showPas = !this.showPas
         this.isShow = !this.isShow
       },
-      changeverifyImg(){
-        let num = Math.ceil(Math.random() *10);
-        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
-      },
       go() {
-        // alert(this.school)
-        if(this.school){
+        if(!this.school){
           this.school = this.newList.find(item => item.id === this.schoolChange)['name'];
         }
        if(this.city){
@@ -165,21 +168,9 @@
       },
       alertBackFn: function(data) {
         this.alertDara = '';
-        console.log("点击了取消",data)
       },
       alertSureFn:function(data){
         this.alertDara = '';
-        console.log("点击了确定",data)
-      },
-      generatedCode(){
-        const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        let code = ''
-        for (let i = 0; i < 4; i++) {
-          let index = Math.floor(Math.random() * 36)
-          code += random[index]
-        }
-        this.ccode = code
       }
     },
     mounted(){
@@ -211,18 +202,6 @@
   }
   &.fade-enter, &.fade-leave-to {
     opacity: 0;
-  }
-  .loginIn-verify{
-    cursor:pointer;
-    position:absolute;
-    margin-top:1.3%;
-    margin-left:1%;
-    width:calc(10vh);
-    text-align:center;
-    line-height:calc(4.8vh);
-    height:calc(4.8vh);
-    border-radius:5px;
-    border:1px solid #67d49d
   }
   .register
     margin-top:8%;
@@ -261,17 +240,23 @@
       height:calc(4.8vh);
       border:1px solid gainsboro
       border-radius:5px
-    .register-test
-      margin-left:10%;
-      margin-top: 6%;
-      width:calc(28vh);
-      height:calc(4.8vh);
-      border-radius:5px
-    .register-img
-      margin-top: 6%;
-      width:calc(10vh);
-      height:calc(4.8vh);
-      margin-left:3%;
+    .register-v
+       margin-top: 6%;
+      .register-test
+        margin-left:10%;
+        margin-right:4%;
+        width:calc(28vh);
+        height:calc(4.8vh);
+        border-radius:5px
+     .loginIn-verify
+         display:inline-block;
+         cursor:pointer;
+         width:calc(10vh);
+         text-align:center;
+         line-height:calc(4.8vh);
+         height:calc(4.8vh);
+         border-radius:5px;
+         border:1px solid #67d49d
     .register-button
       margin-left:10%;
       margin-top:8%;
