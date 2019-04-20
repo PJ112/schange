@@ -84,7 +84,7 @@
          this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
        }
         let _this = this;
-        if(_this.user===""  || _this.pass==="" || _this.verifyText === "" ){
+        if(_this.user===""  || _this.pass===""){
           let alertDara = {
             content: "信息填写不完整！",
             contentColor: "red",
