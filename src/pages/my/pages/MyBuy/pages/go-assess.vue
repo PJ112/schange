@@ -44,12 +44,20 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img">
     </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: "GoAssess",
+    components: {Alert},
     data() {
       return {
         BuyList:[],
@@ -58,7 +66,6 @@
         pageSize:3,
         showCommence:false,
         newList:[],
-        BuyList:[],
 
         //传递给后端的数据
         sellerId:Number,
@@ -72,11 +79,20 @@
       userId:Number,
     },
     methods:{
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       goCancel(){
         this.showCommence = false
       },
       LoadData(value) {
-        this.paggNum = value
+        this.pageNum = value
         this.newList = this.BuyList.slice((value-1) * this.pageSize, value *this.pageSize)
       },
       goPublish(){
@@ -95,26 +111,15 @@
               "status":5
             },
             success: function (data) {
+              let alertDara = {
+                content: "评价成功！",
+                contentColor: "#85cab5",
+                btn: ["确定"],
+                btnColor: ["", ""]
+              };
+              _this.alertDara = alertDara;
               _this.showCommence = false
-              alert("发表成功！")
-              $.ajax({
-                url: "/api/sunny/goods/findBoughtGoods",
-                async: true,
-                type: 'GET',
-                data: {
-                  "buyerId":_this.userId.userId,
-                  "status":4
-                },
-                success: function (data) {
-                  _this.BuyList = data.data
-                  _this.total =  data.data.length
-                  _this. LoadData(1)
-                },
-                error: function () {
-
-                },
-                dataType: 'json'
-              })
+              _this.inputValue =""
             },
             error: function () {
             },
@@ -165,6 +170,16 @@
   .no-img{
     width:calc(78vh);
     height:calc(78vh)
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .assess{
     display:none

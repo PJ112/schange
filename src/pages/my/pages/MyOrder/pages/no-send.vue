@@ -9,7 +9,6 @@
           <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-            <img src="../../../../../assets/imgs/go-send.png" class="go-send-img">
             <button class="myOrder-li-right-button"  v-show="item.order.status === 2">待发货
             </button>
             <div class="myOrder-li-right-text"  v-show="item.order.status === 2">付款成功</div>
@@ -114,13 +113,6 @@
     width:calc(66vh);
     height:calc(66vh);
     background-size:100% 100%;
-  }
-  .go-send-img{
-    position: absolute;
-    margin-top:-5%
-    margin-left:16%;
-    width:50px;
-    height:50px;
   }
   .myOrder-li
     list-style:none;

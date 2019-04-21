@@ -9,7 +9,6 @@
          <div class="myPublish-li-right">
            <div class="myPublish-li-right-content">{{item.goods.goods.name}}</div>
            <div class="myPublish-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-           <div class="myPublish-li-right-button" @click="goSend(item.order.id)">去发货</div>
          </div>
        </li>
      </div>

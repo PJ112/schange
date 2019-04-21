@@ -63,7 +63,7 @@
             "sellerId":_this.userId.userId,
             "pageNum":_this.pageNum,
             "pageSize":_this.pageSize,
-            "status":5
+            "status":4
           },
           success:function (data) {
             _this.list = data.data.rows;

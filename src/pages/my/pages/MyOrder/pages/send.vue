@@ -9,8 +9,10 @@
           <div class="myOrder-li-right-content">{{item.goods.goods.name}}</div>
           <div class="myOrder-li-right-top">
             <div class="myOrder-li-right-jifen">价格:{{item.goods.goods.price}}</div>
-            <button class="myOrder-li-right-button">已付款</button>
-            <div class="myOrder-li-right-text"  @click="goReceive(item.order.id)">确认收货</div>
+            <button class="myOrder-li-right-button" @click="goReceive(item.order.id)">确认收货</button>
+            <div class="myOrder-li-right-text" >派送中...
+              <img src="../../../../../assets/imgs/111.gif" class="go-send-img">
+            </div>
           </div>
         </div>
       </li>
@@ -31,10 +33,17 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: 'Send',
     data() {
@@ -45,16 +54,27 @@
         status:Number,
         total:Number,
         httpUrl:'http://119.23.12.250:8090/images',
+        alertDara:''
       }
     },
+    components: {Alert},
     props:{
       userId:Number,
     },
     methods: {
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       goReceive(id){
         let _this = this
         $.ajax({
-          url:"/api/sunny//order/gotGoods",
+          url:"/api/sunny/order/gotGoods",
           async:true,
           type:'GET',
           data:{
@@ -62,28 +82,13 @@
             "status":4
           },
           success:function (data) {
-            alert(data.message)
-            $.ajax({
-              url:"/api/sunny/order/newSearch",
-              async:true,
-              type:'GET',
-              data:{
-                "buyerId":_this.userId.userId,
-                "pageNum":_this.pageNum,
-                "pageSize":_this.pageSize,
-                "status":3
-              },
-              success:function (data) {
-                _this.list = data.data.rows;
-                console.log(_this.list)
-                _this.total = data.data.total;
-                console.log(data.data.rows)
-                _this.LoadData(0);
-              },
-              error:function () {
-              },
-              dataType:'json'
-            })
+            _this.alertDara = {
+              content: "确认收货！",
+              contentColor: "#85cab5",
+              btn: ["确定"],
+              btnColor: ["", ""]
+            };
+            _this.alertDara = alertDara;
           },
           error:function () {
           },
@@ -152,6 +157,27 @@
     height:calc(66vh);
     background-size:100% 100%;
   }
+  .go-send-img{
+    position: absolute;
+    margin-top:-3%;
+    margin-left:5%;
+    opacity:1;
+    width:50px;
+    height:50px;
+    /*transform: rotateX(180deg);*/
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:20px;
+    font-weight: bold;
+    height:calc(66vh);
+    line-height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
+  }
   .myOrder-li
     list-style:none;
     margin-top:20px;
@@ -188,7 +214,7 @@
       display:inline-block;
       float:right;
       margin-top:-2%;
-      margin-right:8%;
+      margin-right:20%;
       color:#85cab5
       font-size:13px;
       cursor:pointer;

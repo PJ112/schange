@@ -133,7 +133,7 @@
         success: function (data) {
           if (data){
             _this.Messflag = data.flag
-//            alert(_this.Messflag)
+           console.log(_this.Messflag)
           }
         },
         error: function () {
@@ -165,7 +165,7 @@
     cursor:pointer
     margin-top:3%;
     width:90%;
-    box-shadow:0 0px 9px red;
+    box-shadow:0 0px 9px #85cab5;
     border-radius:5px;
     height:calc(10vh);
     margin-bottom:3%

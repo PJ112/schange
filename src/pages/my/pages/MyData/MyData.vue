@@ -38,7 +38,7 @@
     </div>
     <transition name="fade">
       <alert v-if="alertDara"
-             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn"></alert>
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="goRouter"></alert>
     </transition>
   </div>
 </template>
@@ -67,6 +67,9 @@
       phone:''
     },
     methods: {
+      goRouter(){
+        this.$router.go(0)
+      },
       goBao() {
         let _this = this;
         this.sex=$("input:radio[name='sex']:checked").val();
@@ -149,37 +152,12 @@
                     title: "",
                     titleColor: "#abd9ca",
                     content: "修改成功！",
-                    contentColor: "gray",
+                    contentColor: "#67d49d",
                     btn: ["确定"],
                     btnColor: ["", ""],
                   };
                   _this.alertDara = alertDara;
                   _this.$store.dispatch('updateUserAsyc',_this.username)
-                  $.ajax({
-                    url: "/api/sunny/user/findOne",
-                    async: true,
-                    type: 'GET',
-                    data: {
-                      "id":_this.userId.userId
-                    },
-                    success: function (data) {
-                      if (data){
-                        if (data.data){
-                          _this.school = data.data.school
-                          _this.wechat = data.data.wechat
-                          _this.phone = data.data.phone
-                          _this.sex = data.data.sex
-
-                        }
-
-                      }
-
-                    },
-                    error: function () {
-
-                    },
-                    dataType: 'json'
-                  })
                   break;
                 }
               }
@@ -193,16 +171,9 @@
       },
       alertSureFn(data) {
         this.alertDara = '';
-        console.log("点击了确定",data)
-      },
-      alertBackFn(data) {
-        this.alertDara = '';
-        console.log("点击了取消",data)
       },
       alertSureFn(data) {
         this.alertDara = '';
-        console.log("点击了确定",data)
-
       }
     },
     created(){
@@ -222,7 +193,6 @@
               _this.wechat = data.data.wechat
               _this.phone = data.data.phone
               _this.school = data.data.school
-              console.log(_this.school)
             }
 
 

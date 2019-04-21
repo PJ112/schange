@@ -4,14 +4,16 @@
       <input class="loginIn-user" type="text" placeholder="用户名" v-model="user" maxlength="11" />
       <input class="loginIn-pas" type="password" placeholder="密码" v-show="!showPas" v-model="pass"/>
       <input class="loginIn-pas" type="text" placeholder="密码" v-show="showPas" v-model="pass"/>
-      <input class="loginIn-test" type="text" placeholder="验证码" v-model="verifyText" @keyup.enter="go"/>
-      <a
-        href="#"
-        @click="generatedCode"
-        class="loginIn-verify"
-      >
-        <span>{{ccode}}</span>
-      </a>
+      <div class="loginIn-V">
+        <input class="loginIn-test" type="text" placeholder="验证码" v-model="verifyText" @keyup.enter="go"/>
+          <a
+            href="#"
+            @click="generatedCode"
+            class="loginIn-verify"
+          >
+            <span>{{ccode}}</span>
+          </a>
+      </div>
       <button class="loginIn-button" @click="go">登录</button>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="isShow">&#xe669;</i>
       <i class="iconfont loginIn-yanjing" @click="show" v-show="!isShow">&#xe625;</i>
@@ -167,7 +169,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  @import "../../../assets/iconfont/iconfont.css"
+  @import "../../../assets/iconfont/iconfont.css";
   .loginIn
     margin-left:10%;
     font-size:12px;
@@ -191,22 +193,23 @@
       border:1px solid gainsboro
       border-radius:5px
       margin-left:10%;
-    .loginIn-test
-      margin-top:6%;
-      width:calc(28vh);
-      height:calc(4.8vh);
-      border-radius:5px;
-      margin-left:10%;
-    .loginIn-verify
-      position:absolute;
-      top:60.5%
-      margin-left:1%;
-      width:calc(10vh);
-      text-align:center;
-      line-height:calc(4.8vh)
-      height:calc(4.8vh);
-      border-radius:5px;
-      border:1px solid #67d49d
+    .loginIn-V
+       margin-top:6%;
+      .loginIn-test
+        display:inline-block;
+        width:calc(28vh);
+        height:calc(4.8vh);
+        border-radius:5px;
+        margin-left:10%;
+        margin-right:4%;
+      .loginIn-verify
+        display:inline-block;
+        width:calc(10vh);
+        text-align:center;
+        line-height:calc(4.8vh)
+        height:calc(4.8vh);
+        border-radius:5px;
+        border:1px solid #67d49d
     .loginIn-button
       margin-left:10%;
       margin-top:8%;

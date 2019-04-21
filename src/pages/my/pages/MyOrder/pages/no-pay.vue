@@ -31,10 +31,17 @@
    <div class="no-data" v-else>
      <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
    </div>
+   <transition
+     name="fade"
+   >
+     <alert v-if="alertDara"
+            :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+   </transition>
  </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: 'NoPay',
     data() {
@@ -45,12 +52,23 @@
         status:Number,
         total:Number,
         httpUrl:'http://119.23.12.250:8090/images',
+        alertDara:''
       }
     },
+    components: {Alert},
     props:{
       userId:Number,
     },
     methods: {
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       goPay(id,goodsId){
         let _this = this
         $.ajax({
@@ -63,27 +81,13 @@
             "status":2
           },
           success:function (data) {
-            alert(data.message)
-          },
-          error:function () {
-          },
-          dataType:'json'
-        })
-        $.ajax({
-          url:"/api/sunny/order/newSearch",
-          async:true,
-          type:'GET',
-          data:{
-            "buyerId":_this.userId.userId,
-            "pageNum":_this.pageNum,
-            "pageSize":_this.pageSize,
-          },
-          success:function (data) {
-            _this.list = data.data.rows;
-            console.log(_this.list)
-            _this.total = data.data.total;
-            console.log(data.data.rows)
-            _this.LoadData(0);
+           _this.alertDara = {
+              content: "支付成功！",
+              contentColor: "#85cab5",
+              btn: ["确定"],
+              btnColor: ["", ""]
+            };
+            _this.alertDara = alertDara;
           },
           error:function () {
           },
@@ -150,6 +154,17 @@
     width:calc(66vh);
     height:calc(66vh);
     background-size:100% 100%;
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    line-height: calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .myOrder-li
     list-style:none;

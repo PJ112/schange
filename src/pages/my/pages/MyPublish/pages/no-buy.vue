@@ -42,18 +42,30 @@
     <div class="no-data" v-else>
       <img src="../../../../../assets/imgs/nothing.jpg" class="no-img"/>
     </div>
+    <!--<div class="assess-success" v-show="Asuccess">-->
+      <!--删除成功！-->
+    <!--</div>-->
+    <transition
+      name="fade"
+    >
+      <alert v-if="alertDara"
+             :alertDara="alertDara" @alertBack="alertBackFn" @alertSure="alertSureFn" @click.native="alert"></alert>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Alert from '../../../../../common/Alert/Alert.vue'
   export default {
     name: "NoBuy",
     props:{
       userId:Number
     },
+    components: {Alert},
     data() {
       return {
         list: [],
+        alertDara:'',
         pageNum:Number,
         pageSize:3,
         status:1,
@@ -66,6 +78,15 @@
       }
     },
     methods: {
+      alertSureFn:function(data){
+        this.alertDara = '';
+      },
+      alertBackFn: function(data) {
+        this.alertDara = '';
+      },
+      alert(){
+        this.$router.go(0);
+      },
       Chose() {
         this.chose = true
       },
@@ -87,25 +108,13 @@
           },
           success:function (data) {
             _this.chose = false;
-            $.ajax({
-              url:"/api/sunny/goods/newSearch",
-              async:true,
-              type:'GET',
-              data:{
-                "sellerId":_this.userId.userId,
-                "pageNum":_this.pageNum,
-                "pageSize":_this.pageSize,
-                "status":_this.status
-              },
-              success:function (data) {
-                _this.list = data.data.rows;
-                _this.total = data.data.total;
-                _this.LoadData(0);
-              },
-              error:function () {
-              },
-              dataType:'json'
-            })
+            let alertDara = {
+              content: "删除成功！",
+              contentColor: "#85cab5",
+              btn: ["确定"],
+              btnColor: ["", ""]
+            };
+            _this.alertDara = alertDara;
           },
           error:function () {
           },
@@ -179,6 +188,17 @@
     width:calc(66vh);
     height:calc(66vh);
     background-size:100% 100%;
+  }
+  .assess-success{
+    position:fixed;
+    width:calc(66vh);
+    font-size:18px;
+    height:calc(66vh);
+    lien-height:calc(66vh);
+    text-align:center;
+    margin-left:3%;
+    color:#85cab5
+    z-index:100;
   }
   .myPublish-h2
     display:block
