@@ -21,6 +21,7 @@
         </div>
         <div class="confirm-ordering-container-form">
           <form>
+            <span v-if="errorPhone" style="text-align:center;display:block;color: red;font-size: 14px;margin-bottom: 10px;">{{errorPhone}}</span>
             <div class="confirm-ordering-input">
               <div class="confirm-ordering-form-name">真实姓名：</div>
               <input type="text" class="confirm-ordering-input-name" v-model="name">
@@ -94,8 +95,8 @@
         name:'',
         total:'',
         message:'',
-        recommendProducts:[]
-
+        recommendProducts:[],
+        errorPhone:''
       }
     },
     created(){
@@ -157,6 +158,32 @@
     methods:{
       addOrder(){
         let _this=this;
+        let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!_this.name){
+          _this.errorPhone='姓名不能为空';
+          setTimeout(()=>{
+            _this.errorPhone='';
+
+          },2000);
+          return;
+        }
+        if (!myreg.test(_this.phone)){
+          _this.errorPhone='手机号码格式不正确';
+          setTimeout(()=>{
+            _this.errorPhone='';
+
+          },2000);
+          return;
+        }
+
+        if (!_this.name){
+          _this.errorPhone='交易地址不能为空';
+          setTimeout(()=>{
+            _this.errorPhone='';
+
+          },2000);
+          return;
+        }
         $.ajax({
           url:'/api/sunny/order/add',
           async:true,
@@ -186,7 +213,7 @@
               });
               setTimeout(()=>{
                 _this.$router.push('/index-shopping');
-              },2000);
+              },1000);
 
             }
 

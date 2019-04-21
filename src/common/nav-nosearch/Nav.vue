@@ -27,13 +27,41 @@
                 <img class="index-profile-sex" src="../../assets/imgs/my/mycollection/保密.png" v-else/>
               </div>
               <div class="index-profile-category">
-                <div class="index-category-item" v-for="(category,index) of categories" :key="index" style="position: relative;">
-                  <router-link :to="category.path">
-                    <span class="red-point" v-if="category.path=='/my'" style="position: absolute;left: 55px;top:10px; "></span>
-                    <span class="red-point" v-if="category.path=='/mycollection'" style="position: absolute;left: 55px;top:10px; "></span>
-                    <img class="item-img" src="../../assets/imgs/index_profile/积分商城.png">
+                 <div class="index-category-item" style="position: relative;">
+                   <router-link to="/index-shopping" style="display: inline-block;" >
+                     <img src="../../assets/imgs/index_profile/购物车.png"/>
                     <div class="item-info">
-                      {{category.info}}
+                      购物车
+                    </div>
+                  </router-link>
+                </div><div class="index-category-item" style="position: relative;">
+                 <router-link to="/mymall" style="display: inline-block;">
+                    <img src="../../assets/imgs/index_profile/积分商城.png"/>
+                    <div class="item-info">
+                      积分商城
+                    </div>
+                  </router-link>
+                </div><div class="index-category-item" style="position: relative;">
+                 <router-link to="/my" style="display: inline-block;">
+                   <span class="red-point" v-if="isExistUnreadMessage" style="position: absolute;left: 54px;"></span>
+                   <img src="../../assets/imgs/index_profile/个人中心.png"/>
+                    <div class="item-info">
+                     个人中心
+                    </div>
+                  </router-link>
+                </div><div class="index-category-item" style="position: relative;">
+                 <router-link to="/myorder" style="display: inline-block;">
+                   <img src="../../assets/imgs/index_profile/订单管理.png"/>
+                    <div class="item-info">
+                      订单管理
+                    </div>
+                  </router-link>
+                </div><div class="index-category-item" style="position: relative;">
+                 <router-link to="/mycollection" style="display: inline-block;">
+                   <span class="red-point" v-if="isExistUnreadMessage" style="position: absolute;left: 57px;"></span>
+                   <i class="iconfont" style="font-size: 25px;display: block;color:#85cab5;">&#xe69d;</i>
+                    <div class="item-info">
+                      我的私信
                     </div>
                   </router-link>
                 </div>
@@ -64,28 +92,6 @@
         name: "Nav",
         data(){
           return{
-            categories:[
-              {
-                info:'购物车',
-                path:'/index-shopping'
-              },
-              {
-                info:'积分商城',
-                path:'/mymall'
-              },
-              {
-                info:'个人中心',
-                path:'/my'
-              },
-              {
-                info:'订单管理',
-                path:'/myorder'
-              },
-              {
-                info:'我的私信',
-                path:'/mycollection'
-              }
-            ],
             show:false,
             user:this.$store.state.user.user,
             userId:this.$store.state.userId.userId,
@@ -134,6 +140,7 @@
            async:true,
            data:{userId:this.userId},
            success:function (message) {
+             console.log(message);
              if (message.flag){
                _this.isExistUnreadMessage=message.flag;
              }

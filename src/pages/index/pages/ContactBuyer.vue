@@ -46,7 +46,7 @@
             <h1>{{username}}</h1>
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
-                <div class="contact-seller-content-item-right" v-if="item.sendId===meId">
+                <div class="contact-seller-content-item-right" v-if="item.sendId!==meId">
                   <div class="time">
                     {{getTime(item.createTime)}}
                   </div>
@@ -182,8 +182,9 @@
           $.ajax({
             url:'/api/sunny/message/findMessage',
             async:true,
-            data:{"id":_this.buyerId,"otherId":_this.meId,"goodsId":_this.goodsId},
+            data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
             success:function (message) {
+
 
               _this.message=message.data;
 

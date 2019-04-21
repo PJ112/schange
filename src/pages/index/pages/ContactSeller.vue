@@ -251,7 +251,6 @@
                   data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
                   success:function (message) {
                     _this.message=message.data;
-                    console.log(_this.message);
                     if (_this.message.length>0){
                       _this.content='';
                     }

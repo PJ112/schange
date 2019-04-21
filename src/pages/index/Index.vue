@@ -33,10 +33,10 @@
           <div class="all">所有分类</div>
           <div class="index-category-items">
             <div class="index-category-item" v-for="(item,index) of categories" :key="index" >
-              <div class="item-icon">
-                <img src="../../assets/imgs/index/图书.png">
+              <div class="item-icon" style="padding-top:30px;">
+                <img style="width: 40px;height: 40px;" :src="getImgSrc(item.tbType.type)">
               </div>
-              <div class="item-name">
+              <div class="item-name" style="margin-top: 30px;">
                 {{item.tbType.type}}
               </div>
               <div class="item-one" v-for="(type,index) of item.tbTypeList" :key="index">
@@ -226,6 +226,11 @@
           }
         }
       },
+      getImgSrc(){
+        return function (icon) {
+          return require('../../assets/imgs/index/'+icon+'.png');
+        }
+      }
     }
   }
 </script>
