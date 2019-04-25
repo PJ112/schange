@@ -192,8 +192,9 @@
     methods:{
       addProduct(){
 
-        if (this.$store.state.user){
-          let _this=this;
+        let _this=this;
+
+        if (_this.userId){
           $.ajax({
             url:'/api/sunny/cart/add',
             async:true,
@@ -226,21 +227,21 @@
 
       },
       confirmOrdering(){
-        if (this.$store.state.user){
+        if (this.userId){
           this.$router.push({path:"/confirm-ordering",query:{id:this.id}});
         }else{
           this.$router.push('/loginin');
         }
       },
       sellerIndex(){
-        if (this.$store.state.user){
+        if (this.userId){
           this.$router.push({path:"/sellersmes",query:{id:this.sellerId}});
         }else{
           this.$router.push('/loginin');
         }
       },
       contactSeller(){
-        if (this.$store.state.user){
+        if (this.userId){
           this.$router.push({path:"/contact-seller",query:{id:this.id}});
         }else{
           this.$router.push('/loginin');

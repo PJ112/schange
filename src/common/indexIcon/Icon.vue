@@ -1,8 +1,8 @@
 <template>
     <div class="icon">
         <span class="top" @click="scrollToTop"><img src="../../assets/imgs/index/top.png"/></span>
-        <span class="publish"><router-link to="/publish"><img src="../../assets/imgs/index/sale.png"/></router-link></span>
-        <span class="shopping"><router-link to="/index-shopping"><img src="../../assets/imgs/index/购物车.png"/></router-link></span>
+        <span class="publish"><span style="cursor: pointer;" @click="goToPublish" ><img src="../../assets/imgs/index/sale.png"/></span></span>
+        <span class="shopping"><span  style="cursor: pointer;" @click="goToIndexShop" ><img src="../../assets/imgs/index/购物车.png"/></span></span>
     </div>
 </template>
 
@@ -12,6 +12,7 @@
         data(){
           return{
             speed:20,
+            userId:this.$store.state.userId.userId,
           }
         },
         methods:{
@@ -30,6 +31,23 @@
 
 
 
+          },
+          goToPublish(){
+            let _this=this;
+            if (_this.userId){
+              _this.$router.push('/publish');
+            }else{
+              _this.$router.push('/loginin');
+            }
+          },
+          goToIndexShop(){
+            let _this=this;
+            if (_this.userId){
+              _this.$router.push('/index-shopping');
+
+            }else{
+              _this.$router.push('/loginin');
+            }
           }
         }
     }

@@ -7,6 +7,7 @@
         </div>
         <div class="shopping-container-items" v-if="goods.length>0"  v-for="(item,index) of goods" :key="index">
           <div class="shopping-item-intro">
+            <router-link :to="'/sale-product?id='+item.goods.id">
             <img  class="shopping-intro-img" :src="getUrlImg(item.imageList)">
             <div class="shopping-item-desc">
               <div class="shopping-desc-title">
@@ -16,6 +17,7 @@
                 <span>价格：</span>{{item.goods.price}}元
               </div>
             </div>
+            </router-link>
             <div class="shopping-item-delete">
               <span class="shop" @click="addProduct(item.goods.id)">加入购物车</span>
               <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
@@ -125,7 +127,7 @@
     },
     methods:{
       addProduct(id){
-        if (this.$store.state.user){
+        if (this.userId){
           let _this=this;
           $.ajax({
             url:'/api/sunny/cart/add',
@@ -151,7 +153,7 @@
 
       },
       confirmOrdering(id){
-        if (this.$store.state.user){
+        if (this.userId){
           this.$router.push({
             path:'/confirm-ordering',
             query:{

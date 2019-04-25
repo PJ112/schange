@@ -291,56 +291,61 @@
           })
         },
         addProduct(){
-          if (this.goodsId){
-            if (this.typeId==''){
-              this.typeId=this.parentId;
+          if (this.userId){
+            if (this.goodsId){
+              if (this.typeId==''){
+                this.typeId=this.parentId;
+              }
+              let  _this=this;
+              $.ajax({
+                url:"/api/sunny/goods/update?id="+this.goodsId+"&name="+this.name+"&sellerId="+this.id+"&content="+this.content+
+                  "&typeId="+this.typeId+"&number=1&price="+this.price+"&oldDegree="+this.oldDegree+"&means="+this.means+"&status="+1+"",
+                async:true,
+                type:'GET',
+                success:function (product) {
+                  _this.message=product.message;
+                  setTimeout(()=>{
+                    _this.$router.push('/mypublish');
+                  },1000);
+
+
+                },
+                error:function (error) {
+                  console.log(error);
+                },
+                dataType:'json'
+              })
+            } else{
+              if (this.typeId==''){
+                this.typeId=this.parentId;
+              }
+              let  _this=this;
+              $.ajax({
+                url:"/api/sunny/goods/addGoods?goods.name="+this.name+"&goods.sellerId="+this.id+"&goods.typeId="+this.typeId+"" +
+                  "&goods.price="+this.price+"&goods.oldDegree="+this.oldDegree+"&goods.means="+this.means+"&content.contents="+this.content+"" +
+                  "&address="+this.fileResource+"&status="+1+"",
+                async:true,
+                type:'GET',
+                success:function (data) {
+
+                  _this.message=data.message;
+
+                  setTimeout(()=>{
+                    _this.$router.push('/index');
+                  },1000);
+
+
+                },
+                error:function (error) {
+                  console.log(error);
+                },
+                dataType:'json'
+              })
             }
-            let  _this=this;
-            $.ajax({
-              url:"/api/sunny/goods/update?id="+this.goodsId+"&name="+this.name+"&sellerId="+this.id+"&content="+this.content+
-                "&typeId="+this.typeId+"&number=1&price="+this.price+"&oldDegree="+this.oldDegree+"&means="+this.means+"&status="+1+"",
-              async:true,
-              type:'GET',
-              success:function (product) {
-                _this.message=product.message;
-                setTimeout(()=>{
-                  _this.$router.push('/mypublish');
-                },1000);
-
-
-              },
-              error:function (error) {
-                console.log(error);
-              },
-              dataType:'json'
-            })
           } else{
-            if (this.typeId==''){
-              this.typeId=this.parentId;
-            }
-            let  _this=this;
-            $.ajax({
-              url:"/api/sunny/goods/addGoods?goods.name="+this.name+"&goods.sellerId="+this.id+"&goods.typeId="+this.typeId+"" +
-                "&goods.price="+this.price+"&goods.oldDegree="+this.oldDegree+"&goods.means="+this.means+"&content.contents="+this.content+"" +
-                "&address="+this.fileResource+"&status="+1+"",
-              async:true,
-              type:'GET',
-              success:function (data) {
-
-                _this.message=data.message;
-
-                setTimeout(()=>{
-                  _this.$router.push('/index');
-                },1000);
-
-
-              },
-              error:function (error) {
-                console.log(error);
-              },
-              dataType:'json'
-            })
+            this.$router.push('/loginin');
           }
+
 
         }
       }

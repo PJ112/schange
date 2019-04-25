@@ -20,9 +20,9 @@
             学校：<span>{{school}}</span>
           </div>
           <div class="contact-seller-container-index">
-            <router-link :to="'/sellersmes?id='+buyerId">
+            <span @click="goToSeller" style="cursor: pointer;">
               买家主页
-            </router-link>
+            </span>
           </div>
         </div>
         <div class="contact-seller-container-chat">
@@ -46,7 +46,7 @@
             <h1>{{username}}</h1>
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
-                <div class="contact-seller-content-item-right" v-if="item.sendId!==meId">
+                <div class="contact-seller-content-item-right" v-if="item.sendId==meId">
                   <div class="time">
                     {{getTime(item.createTime)}}
                   </div>
@@ -124,7 +124,6 @@
     },
     created(){
       let _this=this;
-      console.log(this.goodsId);
       $.ajax({
         url:'/api/sunny/goods/findOne',
         async:true,
@@ -236,57 +235,78 @@
       sendMessage(){
         let  _this=this;
 
-        if (_this.content===""){
-          return;
-        }
-        $.ajax({
-          url:'/api/sunny/message/addMessage ',
-          async:true,
-          data:{"reId":_this.buyerId,"sendId":_this.meId,"content":this.content.trim(),"goodsId":_this.goodsId},
-          success:function (content) {
-            if (content.flag){
-              if (_this.buyerId){
-                $.ajax({
-                  url:'/api/sunny/message/findMessage',
-                  async:true,
-                  data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
-                  success:function (message) {
-                    _this.message=message.data;
-                    if (_this.message.length>0){
-                      _this.content='';
-                    }
+        if (_this.userId){
+          if (_this.content===""){
+            return;
+          }
+          $.ajax({
+            url:'/api/sunny/message/addMessage ',
+            async:true,
+            data:{"reId":_this.buyerId,"sendId":_this.meId,"content":this.content.trim(),"goodsId":_this.goodsId},
+            success:function (content) {
+              if (content.flag){
+                if (_this.buyerId){
+                  $.ajax({
+                    url:'/api/sunny/message/findMessage',
+                    async:true,
+                    data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
+                    success:function (message) {
+                      _this.message=message.data;
+                      if (_this.message.length>0){
+                        _this.content='';
+                      }
 
-                  },
-                  error:function (error) {
-                    console.log(error);
-                  }
-                })
+                    },
+                    error:function (error) {
+                      console.log(error);
+                    }
+                  })
+                }
+
               }
 
+
+            },
+            error:function (error) {
+              console.log(error);
             }
+          })
+        } else{
+          _this.$router.push('/loginin');
+        }
 
-
-          },
-          error:function (error) {
-            console.log(error);
-          }
-        })
       },
       addProduct(){
         let _this=this;
-        $.ajax({
-          url:'/api/sunny/cart/add',
-          async:true,
-          data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
-          success:function (product) {
-            if (product.flag){
-              _this.$router.push('/index-shopping');
+        if (_this.userId){
+          $.ajax({
+            url:'/api/sunny/cart/add',
+            async:true,
+            data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
+            success:function (product) {
+              if (product.flag){
+                _this.$router.push('/index-shopping');
+              }
+            },
+            error:function (error) {
+              console.log(error);
             }
-          },
-          error:function (error) {
-            console.log(error);
-          }
-        })
+          })
+        }else{
+          _this.$router.push('/loginin');
+        }
+
+      },
+      goToSeller(){
+        let _this=this;
+        if (this.userId){
+           _this.$router.push({
+             path:'/sellersmes',
+             query:{id:_this.buyerId}
+           })
+        }else{
+          _this.$router.push('/loginin');
+        }
       }
     }
   }

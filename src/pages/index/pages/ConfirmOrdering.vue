@@ -158,70 +158,75 @@
     methods:{
       addOrder(){
         let _this=this;
-        let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-        if (!_this.name){
-          _this.errorPhone='姓名不能为空';
-          setTimeout(()=>{
-            _this.errorPhone='';
+        if (_this.userId){
+          let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+          if (!_this.name){
+            _this.errorPhone='姓名不能为空';
+            setTimeout(()=>{
+              _this.errorPhone='';
 
-          },2000);
-          return;
-        }
-        if (!myreg.test(_this.phone)){
-          _this.errorPhone='手机号码格式不正确';
-          setTimeout(()=>{
-            _this.errorPhone='';
-
-          },2000);
-          return;
-        }
-
-        if (!_this.name){
-          _this.errorPhone='交易地址不能为空';
-          setTimeout(()=>{
-            _this.errorPhone='';
-
-          },2000);
-          return;
-        }
-        $.ajax({
-          url:'/api/sunny/order/add',
-          async:true,
-          data:{
-            "buyerId":_this.userId,
-            "sellerId":this.sellerId,
-            "goodsId":_this.id,
-            "number":1,
-            "money":_this.total,
-            "buyerAddress":_this.buyerAddress,
-            "sellerAddress":_this.sellerAddress,
-            "status":_this.status,
-          },
-          success:function (order) {
-            if(order.flag){
-              _this.message="生成订单成功！";
-              $.ajax({
-                url:'/api/sunny/cart/delete',
-                async:true,
-                data:{"ids":_this.sellerId,"status":3},
-                success:function (user) {
-                  _this.sellerAddress=user.data.school;
-                },
-                error:function (error) {
-                  console.log(error);
-                }
-              });
-              setTimeout(()=>{
-                _this.$router.push('/index-shopping');
-              },1000);
-
-            }
-
-          },
-          error:function (error) {
-            console.log(error);
+            },2000);
+            return;
           }
-        });
+          if (!myreg.test(_this.phone)){
+            _this.errorPhone='手机号码格式不正确';
+            setTimeout(()=>{
+              _this.errorPhone='';
+
+            },2000);
+            return;
+          }
+
+          if (!_this.name){
+            _this.errorPhone='交易地址不能为空';
+            setTimeout(()=>{
+              _this.errorPhone='';
+
+            },2000);
+            return;
+          }
+          $.ajax({
+            url:'/api/sunny/order/add',
+            async:true,
+            data:{
+              "buyerId":_this.userId,
+              "sellerId":this.sellerId,
+              "goodsId":_this.id,
+              "number":1,
+              "money":_this.total,
+              "buyerAddress":_this.buyerAddress,
+              "sellerAddress":_this.sellerAddress,
+              "status":_this.status,
+            },
+            success:function (order) {
+              if(order.flag){
+                _this.message="生成订单成功！";
+                $.ajax({
+                  url:'/api/sunny/cart/delete',
+                  async:true,
+                  data:{"ids":_this.sellerId,"status":3},
+                  success:function (user) {
+                    _this.sellerAddress=user.data.school;
+                  },
+                  error:function (error) {
+                    console.log(error);
+                  }
+                });
+                setTimeout(()=>{
+                  _this.$router.push('/index-shopping');
+                },1000);
+
+              }
+
+            },
+            error:function (error) {
+              console.log(error);
+            }
+          });
+        } else {
+          _this.$router.push('/loginin');
+        }
+
       }
     }
   }

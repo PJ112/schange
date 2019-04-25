@@ -139,13 +139,11 @@
               console.log(error);
             }
           });
-          console.log(_this.userId);
           $.ajax({
             url:'/api/sunny/message/findUnreadMessage',
             async:true,
             data:{userId:this.userId},
             success:function (message) {
-              console.log(message);
               if (message.flag){
                 _this.isExistUnreadMessage=message.flag;
               }
@@ -161,7 +159,7 @@
             storage.clear();
             this.$store.dispatch('updateUserAsyc','');
             this.$store.dispatch('updateuserIdAsyc','');
-            this.$router.push('/loginin');
+            window.location.reload();
 
           },
           search(){

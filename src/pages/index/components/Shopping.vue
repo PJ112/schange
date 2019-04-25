@@ -32,7 +32,7 @@
           </div>
           <div class="shopping-container-count">
             <span v-if="!total">结算</span>
-            <router-link v-if="total" tag="span" :to="'/confirm-ordering?id='+radio+'&total='+total">结算</router-link>
+            <span v-if="total" @click="buy(radio,total)" >结算</span>
           </div>
         </div>
         <div v-else style="text-align: center;margin-top: 30px;color: red;height: 100px;box-sizing: border-box">
@@ -151,34 +151,49 @@
         this.total=price;
       },
       deleteProduct(id){
+
         let _this=this;
-        $.ajax({
-          url:'/api/sunny/cart/delete',
-          async:true,
-          data:{"ids":id,"status":3},
-          success:function (product) {
+        if (!_this.userId){
+            _this.$router.push('/loginin');
+        } else{
+          $.ajax({
+            url:'/api/sunny/cart/delete',
+            async:true,
+            data:{"ids":id,"status":3},
+            success:function (product) {
 
-            if (product.flag){
-              $.ajax({
-                url:'/api/sunny/cart/search',
-                async:true,
-                data:{"buyerId":_this.userId,"status":1},
-                success:function (good) {
-                  _this.shopCarts=good.data;
-                },
-                error:function (error) {
-                  console.log(error);
-                }
-              });
+              if (product.flag){
+                $.ajax({
+                  url:'/api/sunny/cart/search',
+                  async:true,
+                  data:{"buyerId":_this.userId,"status":1},
+                  success:function (good) {
+                    _this.shopCarts=good.data;
+                  },
+                  error:function (error) {
+                    console.log(error);
+                  }
+                });
 
+              }
+            },
+            error:function (error) {
+              console.log(error);
             }
-          },
-          error:function (error) {
-            console.log(error);
+          });
+        }
+
+      },
+      buy(){
+        let _this=this;
+          if (!this.userId) {
+            this.$router.push('/loginin');
+          }else{
+            this.$router.push({
+              path:'/confirm-ordering',
+              query:{id:_this.radio,total:_this.total}
+            })
           }
-        });
-
-
       }
     }
   }

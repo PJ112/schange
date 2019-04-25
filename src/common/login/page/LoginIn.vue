@@ -54,7 +54,7 @@
       },
       changeverifyImg(){
         let num = Math.ceil(Math.random() *10);
-        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
+        this.verifyImg = '/api/sunny/verify?'+num;
       },
       go(){
         let _this = this;

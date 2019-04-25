@@ -156,7 +156,7 @@
             storage.clear();
             this.$store.dispatch('updateUserAsyc','');
             this.$store.dispatch('updateuserIdAsyc','');
-            this.$router.push('/loginin');
+            window.location.reload();
           }
        }
     }
