@@ -80,12 +80,6 @@
         this.isShow = !this.isShow
       },
       go() {
-        if(!this.school){
-          this.school = this.newList.find(item => item.id === this.schoolChange)['name'];
-        }
-       if(this.city){
-         this.city = this.cityList.find(item => item.id === this.cityChange)['name'];
-       }
         let _this = this;
         if(_this.user===""  || _this.pass===""){
           let alertDara = {
@@ -125,6 +119,12 @@
           this.alertDara = alertDara;
           this.verifyText = ""
         }else{
+          if(!_this.school){
+            _this.school = _this.newList.find(item => item.id === _this.schoolChange)['name'];
+          }
+          if(!_this.city){
+            _this.city = _this.cityList.find(item => item.id === _this.cityChange)['name'];
+          }
           $.ajax({
             url:"/api/sunny/user/register",
             async:true,
@@ -186,7 +186,8 @@
       }
     },
     created(){
-      axios.get('/static/json/school.json').then((res)=>{
+      this.generatedCode()
+      axios.get('static/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
         this.university = data.university
