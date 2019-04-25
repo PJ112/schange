@@ -186,6 +186,7 @@
       }
     },
     created(){
+      this.generatedCode()
       axios.get('static/school.json').then((res)=>{
         const data = res.data
         this.cityList = data.zone
