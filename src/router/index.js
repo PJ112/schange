@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+
 import Login from '@/common/login/Login';
 import LoginIn from '../common/login/page/LoginIn';
 import My from '../pages/my/My'
@@ -16,6 +17,7 @@ import MyHJudge from '../pages/my/pages/MyHJudge/MyHJudge'
 
 import MyOrder from '../pages/my/pages/MyOrder/MyOrder'
 import NoPay from '../pages/my/pages/MyOrder/pages/no-pay.vue'
+import Pay from '../pages/my/pages/MyOrder/pages/Pay.vue'
 import NoSend from '../pages/my/pages/MyOrder/pages/no-send.vue'
 import Send from '../pages/my/pages/MyOrder/pages/send.vue'
 
@@ -55,11 +57,11 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    { path: '/', redirect: '/index' },
     {
-      path: '/',
+      path:'/login',
       name: 'Login',
       component: Login,
-      redirect:'/resgister',
       children:[
         {
           path:'/loginin',
@@ -171,6 +173,10 @@ export default new Router({
      path:'/index',
      component:Index
      },
+    {
+      path:'/pay',
+      component:Pay
+    },
     {
      path:'/index-shopping',
      component:IndexShopping

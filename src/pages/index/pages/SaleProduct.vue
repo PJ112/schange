@@ -119,7 +119,7 @@
     created(){
       let  _this=this;
       $.ajax({
-        url:'/api/sunny/goods/findOne',
+        url:'http://119.23.12.250/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (data) {
@@ -140,7 +140,7 @@
           }
           if (sellerId){
             $.ajax({
-              url:'/api/sunny/user/findOne',
+              url:'http://119.23.12.250/sunny/user/findOne',
               async:true,
               data:{"id":sellerId},
               success:function (user) {
@@ -150,7 +150,7 @@
                 _this.day=day;
                 _this.username=user.data.username;
                 $.ajax({
-                  url:'/api/sunny/image/findImageAddress',
+                  url:'http://119.23.12.250/sunny/image/findImageAddress',
                   async:true,
                   data:{"kindId":sellerId,"kind":1},
                   success:function (user) {
@@ -196,7 +196,7 @@
 
         if (_this.userId){
           $.ajax({
-            url:'/api/sunny/cart/add',
+            url:'http://119.23.12.250/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":this.id,"number":1,"status":1},
             success:function (product) {

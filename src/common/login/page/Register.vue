@@ -4,15 +4,21 @@
       <input class="register-user" type="text" placeholder="请输入昵称" v-model="user"/>
       <div class="register-school">
       <span >
-        <select class="school-city"  v-model="cityChange">
-          <option selected>--城市</option>
-          <option :value="item.id" v-for="item in cityList" :key="item.id" >{{item.name}}</option>
+        <select class="school-city"  v-model="cityChange" @change="cityName($event)">
+          <option   selected>--城市</option>
+          <option  v-for="item in cityList" :value="item.id" :key="item.id" v-model="city">{{item.name}}</option>
         </select>
       </span>
         <span>
+      <select  class="school-city" v-model="provinceChange" @change="Province($event)">
+        <option  selected>--省份</option>
+        <option  v-for="(province,index) in PList" :key="index" :value="province">{{province}}</option>
+      </select>
+     </span>
+        <span>
       <select  class="school-school" v-model="schoolChange">
         <option selected>--学校</option>
-          <option :value="item.id" v-for="item in newList" :key="item.id"  v-model="school">{{item.name}}</option>
+        <option  v-for="item in NewList" :key="item.id"  v-model="school">{{item.name}}</option>
       </select>
      </span>
       </div>
@@ -54,8 +60,11 @@
         NewPassword: '',
         pass: '',
         cityChange:'--城市',
+        CityName:"",
+        provinceChange:'--省份',
         cityList:'',
-        newList:[],
+        PList:[],
+        NewList:[],
         university:[],
         schoolChange:'--学校',
         verifyImg:"",
@@ -65,6 +74,47 @@
       }
     },
     methods: {
+      Province(){
+        let province = event.target.value;
+        let _this=this
+        $.ajax({
+          url:"http://119.29.166.254:9090/api/university/getUniversityByCityName?name="+province,
+          async:true,
+          type:'GET',
+          data:{
+
+          },
+          success:function (data) {
+            _this.NewList = data
+            console.log(_this.NewList)
+          },
+          error:function () {
+
+          },
+          dataType:'json'
+        })
+      },
+      cityName(event){
+        let id = event.target.value;
+        console.log(id)
+        let _this=this
+        $.ajax({
+          url:"http://119.29.166.254:9090/api/province/getCitiesByProvinceId?id="+id,
+          async:true,
+          type:'GET',
+          data:{
+
+          },
+          success:function (data) {
+            _this.PList = data
+            console.log(_this.PList)
+          },
+          error:function () {
+
+          },
+          dataType:'json'
+        })
+      },
       generatedCode(){
         const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
           'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -81,6 +131,8 @@
       },
       go() {
         let _this = this;
+        console.log(_this.provinceChange)
+        console.log(_this.schoolChange)
         if(_this.user===""  || _this.pass===""){
           let alertDara = {
             content: "信息填写不完整！",
@@ -118,22 +170,54 @@
           };
           this.alertDara = alertDara;
           this.verifyText = ""
-        }else{
-          if(!_this.school){
-            _this.school = _this.newList.find(item => item.id === _this.schoolChange)['name'];
-          }
-          if(!_this.city){
-            _this.city = _this.cityList.find(item => item.id === _this.cityChange)['name'];
-          }
+        }else if(_this.provinceChange === '--省份' &&_this.schoolChange ==='--学校' ){
           $.ajax({
-            url:"/api/sunny/user/register",
+            url:"http://119.23.12.250/sunny/user/register",
             async:true,
             type:'GET',
             data:{
               "username":this.user,
               "password":this.pass,
-              "address":this.city,
-              "school":this.school
+            },
+            success:function (data) {
+              //注册成功
+              //注册失败:用户信息异常
+              //注册失败:用户已存在
+              switch (data.message){
+                case "注册成功":{
+                  _this.$router.push("/loginin");
+                  _this.$store.dispatch('updateUserAsyc',_this.user);
+                  break;
+                }
+                case "注册失败:用户信息异常":
+                  console.log("注册失败:用户信息异常");
+                  break;
+                case "注册失败:用户已存在":{
+                  let alertDara = {
+                    content: "用户已存在！",
+                    contentColor: "red",
+                    btn: ["确定"],
+                    btnColor: ["", ""]
+                  };
+                  _this.alertDara = alertDara;
+                }
+              }
+            },
+            error:function () {
+
+            },
+            dataType:'json'
+          })
+        }else{
+          $.ajax( {
+            url:"http://119.23.12.250/sunny/user/register",
+            async:true,
+            type:'GET',
+            data:{
+              "username":this.user,
+              "password":this.pass,
+              "address":_this.provinceChange,
+              "school":_this.schoolChange
             },
             success:function (data) {
               //注册成功
@@ -176,22 +260,25 @@
     mounted(){
       this.generatedCode()
     },
-    watch: {
-      cityChange(){
-        for(let i=0;i<this.university.length;i++) {
-          if (this.cityChange === this.university[i].zone) {
-            this.newList.push(this.university[i])
-          }
-        }
-      }
+    watch:{
     },
     created(){
       this.generatedCode()
-      axios.get('static/school.json').then((res)=>{
-        const data = res.data
-        this.cityList = data.zone
-        this.university = data.university
-        this.cityChange()
+      let _this = this
+      $.ajax({
+        url:"http://119.29.166.254:9090/api/provinces",
+        async:true,
+        type:'GET',
+        data:{
+        },
+        success:function (data) {
+          _this.cityList = data
+        console.log(data)
+        },
+        error:function () {
+
+        },
+        dataType:'json'
       })
     },
   }
@@ -214,16 +301,18 @@
     border-radius:10px;
     margin:-5% auto;
     .register-school
-      margin-left:10%;
+      margin-left:8%;
       margin-top:6%;
       .school-city
-        width:calc(12vh);
+        width:calc(10vh);
         height:calc(4vh);
         border:1px solid gainsboro
         border-radius:5px
+        margin-left:2%
+        margin-right:2%;
       .school-school
-        margin-left:5%;
-        width:calc(25vh);
+        margin-left:3%;
+        width:calc(15vh);
         height:calc(4vh);
         border:1px solid gainsboro
         border-radius:5px

@@ -125,13 +125,13 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'/api/sunny/goods/findOne',
+        url:'http://119.23.12.250/sunny/goods/findOne',
         async:true,
         data:{"id":_this.goodsId,"status":1},
         success:function (good) {
           _this.details=good.data;
           $.ajax({
-            url:'/api/sunny/user/findOne ',
+            url:'http://119.23.12.250/sunny/user/findOne ',
             async:true,
             data:{"id":_this.buyerId},
             success:function (user) {
@@ -142,7 +142,7 @@
               _this.username=user.data.username;
               _this.school=user.data.school;
               $.ajax({
-                url:'/api/sunny/image/findImageAddress',
+                url:'http://119.23.12.250/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.buyerId,"kind":1},
                 success:function (img) {
@@ -157,7 +157,7 @@
                 }
               });
               $.ajax({
-                url:'/api/sunny/image/findImageAddress',
+                url:'http://119.23.12.250/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.meId,"kind":1},
                 success:function (img) {
@@ -179,7 +179,7 @@
             }
           });
           $.ajax({
-            url:'/api/sunny/message/findMessage',
+            url:'http://119.23.12.250/sunny/message/findMessage',
             async:true,
             data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
             success:function (message) {
@@ -240,14 +240,14 @@
             return;
           }
           $.ajax({
-            url:'/api/sunny/message/addMessage ',
+            url:'http://119.23.12.250/sunny/message/addMessage ',
             async:true,
             data:{"reId":_this.buyerId,"sendId":_this.meId,"content":this.content.trim(),"goodsId":_this.goodsId},
             success:function (content) {
               if (content.flag){
                 if (_this.buyerId){
                   $.ajax({
-                    url:'/api/sunny/message/findMessage',
+                    url:'http://119.23.12.250/sunny/message/findMessage',
                     async:true,
                     data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
                     success:function (message) {
@@ -280,7 +280,7 @@
         let _this=this;
         if (_this.userId){
           $.ajax({
-            url:'/api/sunny/cart/add',
+            url:'http://119.23.12.250/sunny/cart/add',
             async:true,
             data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
             success:function (product) {

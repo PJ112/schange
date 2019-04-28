@@ -82,7 +82,7 @@
       </span>
        <span v-else class="nav-login">
          <span class="index-nav-loginin"><router-link to="/loginin">登陆</router-link></span>
-         <span class="index-nav-register"><router-link to="/register">注册</router-link></span>
+         <span class="index-nav-register"><router-link to="/resgister">注册</router-link></span>
        </span>
 
 
@@ -110,14 +110,14 @@
         created(){
           let _this=this;
           $.ajax({
-            url:'/api/sunny/user/findOne',
+            url:'http://119.23.12.250/sunny/user/findOne',
             async:true,
             data:{"id":_this.userId},
             success:function (user) {
               if (user.flag){
                 _this.sex=user.data.sex;
                 $.ajax({
-                  url:'/api/sunny/image/findImageAddress',
+                  url:'http://119.23.12.250/sunny/image/findImageAddress',
                   async:true,
                   data:{"kindId":_this.userId,"kind":1},
                   success:function (user) {
@@ -140,7 +140,7 @@
             }
           });
           $.ajax({
-            url:'/api/sunny/message/findUnreadMessage',
+            url:'http://119.23.12.250/sunny/message/findUnreadMessage',
             async:true,
             data:{userId:this.userId},
             success:function (message) {
@@ -160,6 +160,7 @@
             this.$store.dispatch('updateUserAsyc','');
             this.$store.dispatch('updateuserIdAsyc','');
             window.location.reload();
+            this.$router.go('/')
 
           },
           search(){

@@ -56,7 +56,7 @@
         let _this = this
         _this.pageNum = value + 1
         $.ajax({
-          url:"/api/sunny/order/newSearch",
+          url:"http://119.23.12.250/sunny/order/newSearch",
           async:true,
           type:'GET',
           data:{
@@ -78,7 +78,7 @@
       let _this = this
       _this.pageNum = 1
       $.ajax({
-        url:"/api/sunny/order/newSearch",
+        url:"http://119.23.12.250/sunny/order/newSearch",
         async:true,
         type:'GET',
         data:{

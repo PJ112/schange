@@ -70,35 +70,38 @@
         this.$router.go(0);
       },
       goPay(id,goodsId){
-        let _this = this
-        $.ajax({
-          url:"/api/sunny/order/pay",
-          async:true,
-          type:'GET',
-          data:{
-            "id":id,
-            "goodsId":goodsId,
-            "status":2
-          },
-          success:function (data) {
-           _this.alertDara = {
-              content: "支付成功！",
-              contentColor: "#85cab5",
-              btn: ["确定"],
-              btnColor: ["", ""]
-            };
-            _this.alertDara = alertDara;
-          },
-          error:function () {
-          },
-          dataType:'json'
+        this.$router.push({
+          path:'/pay',
+          query:{"id":id,"goodsId":goodsId}
         })
+//        $.ajax({
+//          url:"http://119.23.12.250/sunny/order/pay",
+//          async:true,
+//          type:'GET',
+//          data:{
+//            "id":id,
+//            "goodsId":goodsId,
+//            "status":2
+//          },
+//          success:function (data) {
+//           _this.alertDara = {
+//              content: "支付成功！",
+//              contentColor: "#85cab5",
+//              btn: ["确定"],
+//              btnColor: ["", ""]
+//            };
+//            _this.alertDara = alertDara;
+//          },
+//          error:function () {
+//          },
+//          dataType:'json'
+//        })
       },
       LoadData(value) {
         this.pageNum = value
         let _this = this
         $.ajax({
-          url:"/api/sunny/order/newSearch",
+          url:"http://119.23.12.250/sunny/order/newSearch",
           async:true,
           type:'GET',
           data:{
@@ -119,7 +122,7 @@
     created(){
       let _this = this
       $.ajax({
-        url:"/api/sunny/order/newSearch",
+        url:"http://119.23.12.250/sunny/order/newSearch",
         async:true,
         type:'GET',
         data:{

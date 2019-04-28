@@ -57,7 +57,7 @@
     created(){
       let _this = this
       $.ajax({
-        url:"/api/sunny/user/findOne",
+        url:"http://119.23.12.250/sunny/user/findOne",
         async:true,
         type:'GET',
         data:{
@@ -77,7 +77,7 @@
         dataType:'json'
       })
       $.ajax({
-        url:"/api/sunny/image/findImageAddress",
+        url:"http://119.23.12.250/sunny/image/findImageAddress",
         async:true,
         type:'GET',
         data:{

@@ -84,7 +84,7 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'/api/sunny/goods/newSearch',
+        url:'http://119.23.12.250/sunny/goods/newSearch',
         async:true,
         data:{"typeId":this.typeId,"pageNum":1,"pageSize":6,"status":1},
         success:function (good) {
@@ -98,7 +98,7 @@
         }
       });
       $.ajax({
-        url:'/api/sunny/goods/newSearch',
+        url:'http://119.23.12.250/sunny/goods/newSearch',
         async:true,
         data:{"typeId":20,"status":1},
         success:function (good) {
@@ -130,7 +130,7 @@
         if (this.userId){
           let _this=this;
           $.ajax({
-            url:'/api/sunny/cart/add',
+            url:'http://119.23.12.250/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":id,"number":1,"status":1},
             success:function (product) {
