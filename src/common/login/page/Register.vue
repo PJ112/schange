@@ -126,7 +126,7 @@
             _this.city = _this.cityList.find(item => item.id === _this.cityChange)['name'];
           }
           $.ajax({
-            url:"/api/sunny/user/register",
+            url:"http://119.23.12.250/sunny/user/register",
             async:true,
             type:'GET',
             data:{

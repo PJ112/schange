@@ -104,7 +104,7 @@
        created(){
          let _this=this;
          $.ajax({
-           url:'/api/sunny/user/findOne',
+           url:'http://119.23.12.250/sunny/user/findOne',
            async:true,
            data:{"id":_this.userId},
            success:function (user) {
@@ -112,7 +112,7 @@
                _this.sex=user.data.sex;
                if (user.flag){
                  $.ajax({
-                   url:'/api/sunny/image/findImageAddress',
+                   url:'http://119.23.12.250/sunny/image/findImageAddress',
                    async:true,
                    data:{"kindId":_this.userId,"kind":1},
                    success:function (user) {
@@ -136,7 +136,7 @@
            }
          });
          $.ajax({
-           url:'/api/sunny/message/findUnreadMessage',
+           url:'http://119.23.12.250/sunny/message/findUnreadMessage',
            async:true,
            data:{userId:this.userId},
            success:function (message) {

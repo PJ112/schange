@@ -54,7 +54,7 @@
       },
       changeverifyImg(){
         let num = Math.ceil(Math.random() *10);
-        this.verifyImg = '/api/sunny/verify?'+num;
+        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
       },
       go(){
         let _this = this;
@@ -86,7 +86,7 @@
          }
         else{
           $.ajax({
-            url:"/api/sunny/user/login",
+            url:"http://119.23.12.250/sunny/user/login",
             async:false,
             type:'GET',
             data:{

@@ -57,19 +57,16 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login,
-      redirect:'/resgister',
-      children:[
-        {
-          path:'/loginin',
-          component:LoginIn
-        },
-        {
-          path:'/resgister',
-          component:Register
-        }
-      ]
+      name: 'Index',
+      component:Index,
+    },
+    {
+      path:'/loginin',
+      component:LoginIn
+    },
+    {
+      path:'/resgister',
+      component:Register
     },
     {
       path: '/my',

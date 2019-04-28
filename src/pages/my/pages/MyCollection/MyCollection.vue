@@ -91,7 +91,7 @@
     created(){
       let _this = this
       $.ajax({
-        url: "/api/sunny/message/findNewMessage",
+        url: "http://119.23.12.250/sunny/message/findNewMessage",
         async: true,
         type: 'GET',
         data: {
@@ -124,7 +124,7 @@
         dataType: 'json'
       })
       $.ajax({
-        url: "/api/sunny/message/findUnreadMessage",
+        url: "http://119.23.12.250/sunny/message/findUnreadMessage",
         async: true,
         type: 'GET',
         data: {

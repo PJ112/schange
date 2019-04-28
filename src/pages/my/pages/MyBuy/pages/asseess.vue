@@ -66,7 +66,7 @@
         let _this = this
         alert(id)
         $.ajax({
-          url: "/api/sunny/comment/findOne",
+          url: "http://119.23.12.250/sunny/comment/findOne",
           async: true,
           type: 'GET',
           data: {
@@ -86,7 +86,7 @@
     created(){
       let _this = this
       $.ajax({
-        url: "/api/sunny/goods/findBoughtGoods",
+        url: "http://119.23.12.250/sunny/goods/findBoughtGoods",
         async: true,
         type: 'GET',
         data: {

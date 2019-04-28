@@ -72,7 +72,7 @@
       goPay(id,goodsId){
         let _this = this
         $.ajax({
-          url:"/api/sunny/order/pay",
+          url:"http://119.23.12.250/sunny/order/pay",
           async:true,
           type:'GET',
           data:{
@@ -98,7 +98,7 @@
         this.pageNum = value
         let _this = this
         $.ajax({
-          url:"/api/sunny/order/newSearch",
+          url:"http://119.23.12.250/sunny/order/newSearch",
           async:true,
           type:'GET',
           data:{
@@ -119,7 +119,7 @@
     created(){
       let _this = this
       $.ajax({
-        url:"/api/sunny/order/newSearch",
+        url:"http://119.23.12.250/sunny/order/newSearch",
         async:true,
         type:'GET',
         data:{

@@ -76,7 +76,7 @@
         this.id = this.userId.userId;
         if (!this.username){
           $.ajax({
-            url: "/api/sunny/user/update",
+            url: "http://119.23.12.250/sunny/user/update",
             async: true,
             type: 'GET',
             data: {
@@ -101,7 +101,7 @@
                   _this.alertDara = alertDara;
                   _this.$store.dispatch('updateUserAsyc',_this.username)
                   $.ajax({
-                    url: "/api/sunny/user/findOne",
+                    url: "http://119.23.12.250/sunny/user/findOne",
                     async: true,
                     type: 'GET',
                     data: {
@@ -135,7 +135,7 @@
           })
         }else{
           $.ajax({
-            url: "/api/sunny/user/update",
+            url: "http://119.23.12.250/sunny/user/update",
             async: true,
             type: 'GET',
             data: {
@@ -180,7 +180,7 @@
       this.username = this.user.user
       let _this = this
       $.ajax({
-        url: "/api/sunny/user/findOne",
+        url: "http://119.23.12.250/sunny/user/findOne",
         async: true,
         type: 'GET',
         data: {

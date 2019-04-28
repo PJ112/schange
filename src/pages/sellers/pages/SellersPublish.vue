@@ -46,7 +46,7 @@
         this.pageNum = value;
         let _this = this;
         $.ajax({
-          url:"/api/sunny/goods/newSearch",
+          url:"http://119.23.12.250/sunny/goods/newSearch",
           async:true,
           type:'GET',
           data:{
@@ -71,7 +71,7 @@
     created(){
       let _this = this;
       $.ajax({
-        url:"/api/sunny/goods/newSearch",
+        url:"http://119.23.12.250/sunny/goods/newSearch",
         async:true,
         type:'GET',
         data:{
