@@ -102,7 +102,7 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (good) {
@@ -110,7 +110,7 @@
           _this.total=good.data.price;
           _this.sellerId=good.data.sellerId;
           $.ajax({
-            url:'http://119.23.12.250/sunny/user/findOne',
+            url:'/api/sunny/user/findOne',
             async:true,
             data:{"id":_this.sellerId},
             success:function (user) {
@@ -128,9 +128,9 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{"typeId":20,"status":1},
+        data:{"typeId":28,"status":1},
         success:function (good) {
           _this.recommendProducts=good.data.rows;
         },
@@ -186,7 +186,7 @@
             return;
           }
           $.ajax({
-            url:'http://119.23.12.250/sunny/order/add',
+            url:'/api/sunny/order/add',
             async:true,
             data:{
               "buyerId":_this.userId,
@@ -202,7 +202,7 @@
               if(order.flag){
                 _this.message="生成订单成功！";
                 $.ajax({
-                  url:'http://119.23.12.250/sunny/cart/delete',
+                  url:'/api/sunny/cart/delete',
                   async:true,
                   data:{"ids":_this.sellerId,"status":3},
                   success:function (user) {

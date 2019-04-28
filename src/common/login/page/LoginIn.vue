@@ -54,7 +54,7 @@
       },
       changeverifyImg(){
         let num = Math.ceil(Math.random() *10);
-        this.verifyImg = 'http://119.23.12.250/sunny/verify?'+num;
+        this.verifyImg = '/api/sunny/verify?'+num;
       },
       go(){
         let _this = this;
@@ -86,7 +86,7 @@
          }
         else{
           $.ajax({
-            url:"http://119.23.12.250/sunny/user/login",
+            url:"/api/sunny/user/login",
             async:false,
             type:'GET',
             data:{
@@ -140,11 +140,9 @@
       },
       alertBackFn: function(data) {
         this.alertDara = '';
-        console.log("点击了取消",data)
       },
       alertSureFn:function(data){
         this.alertDara = '';
-        console.log("点击了确定",data)
       },
       generatedCode(){
         const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',

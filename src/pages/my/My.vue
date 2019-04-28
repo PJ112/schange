@@ -192,18 +192,18 @@
           let res = data.target || data.srcElement;
           this.userInfo.avatar = res.result;
           let _this =this
-          this.$http.post('http://119.23.12.250/sunny/image/imgUpload', formData, config)
+          this.$http.post('/api/sunny/image/imgUpload', formData, config)
             .then((res)=>{
               if (res.status === 200) {
                 _this.fileResource=res.body.data
                 if(!_this.UserAddress){
                   $.ajax({
-                    url:"http://119.23.12.250/sunny/image/addImageAddress?kind="+_this.kind+"&id="+_this.userId.userId +"&address="+_this.fileResource+"",
+                    url:"/api/sunny/image/addImageAddress?kind="+_this.kind+"&id="+_this.userId.userId +"&address="+_this.fileResource+"",
                     async:true,
                     type:'GET',
                     success:function (data) {
                       $.ajax({
-                        url: "http://119.23.12.250/sunny/image/findImageAddress",
+                        url: "/api/sunny/image/findImageAddress",
                         async: true,
                         type: 'GET',
                         data: {
@@ -238,13 +238,13 @@
                 }else{
                   // alert( _this.fileResource)
                   $.ajax({
-                    url:"http://119.23.12.250/sunny/image/update?kind="+_this.kind+"&id="+_this.PId +"&address="+_this.fileResource+"",
+                    url:"/api/sunny/image/update?kind="+_this.kind+"&id="+_this.PId +"&address="+_this.fileResource+"",
                     async:true,
                     type:'GET',
                     success:function (data) {
                       // alert(data.message)
                       $.ajax({
-                        url: "http://119.23.12.250/sunny/image/findImageAddress",
+                        url: "/api/sunny/image/findImageAddress",
                         async: true,
                         type: 'GET',
                         data: {
@@ -290,7 +290,7 @@
     created(){
       let _this = this
       $.ajax({
-        url: "http://119.23.12.250/sunny/user/findOne",
+        url: "/api/sunny/user/findOne",
         async: true,
         type: 'GET',
         data: {
@@ -321,7 +321,7 @@
         dataType: 'json'
       }),
       $.ajax({
-        url: "http://119.23.12.250/sunny/image/findImageAddress",
+        url: "/api/sunny/image/findImageAddress",
         async: true,
         type: 'GET',
         data: {
@@ -343,7 +343,7 @@
         dataType: 'json'
       }),
       $.ajax({
-        url: "http://119.23.12.250/sunny/message/findUnreadMessage",
+        url: "/api/sunny/message/findUnreadMessage",
         async: true,
         type: 'GET',
         data: {

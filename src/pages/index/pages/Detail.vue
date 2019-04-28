@@ -8,17 +8,15 @@
         </div>
         <div class="shopping-container-items" v-if="products.length>0"  v-for="(item,index) of products" :key="index">
           <div class="shopping-item-intro">
-            <router-link :to="'/sale-product?id='+item.goods.id">
-                <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
-                <div class="shopping-item-desc">
-                  <div class="shopping-desc-title">
-                   {{item.goods.name}}
-                  </div>
-                  <div class="shopping-desc-price">
-                    <span>价格：</span>{{item.goods.price}}元
-                  </div>
-                </div>
-            </router-link>
+            <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
+            <div class="shopping-item-desc">
+              <div class="shopping-desc-title">
+               {{item.goods.name}}
+              </div>
+              <div class="shopping-desc-price">
+                <span>价格：</span>{{item.goods.price}}元
+              </div>
+            </div>
             <div class="shopping-item-delete">
               <div class="info" v-if="error" style="color: red">{{error}}</div>
               <div class="info" v-if="success" style="color: lightseagreen;">{{success}}</div>
@@ -26,7 +24,6 @@
               <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
             </div>
           </div>
-
         </div>
         <div class="shopping-container-items1" v-if="products.length===0"  style="text-align: center;color: red;padding: 20px;padding-top: 40px;">
           <span style="font-size: 16px;">不好意思哦,该分类还没有发布商品!</span>
@@ -35,7 +32,7 @@
       <div class="recommend">
         <h1>--为你推荐--</h1>
         <div class="recommend-items">
-          <div class="item" v-for="(item,index) of recommendProducts" :key="index"
+          <div class="item" style="text-align: center" v-for="(item,index) of recommendProducts" :key="index"
           >
             <router-link :to="'/sale-product?id='+item.goods.id">
               <div class="item-img" >
@@ -76,15 +73,13 @@
         name:this.$route.query.name,
         imgUrl:'http://119.23.12.250:8090/images',
         userId:this.$store.state.userId.userId,
-        recommendProducts:[],
-        error:'',
-        success:''
+        recommendProducts:[]
       }
     },
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"typeId":this.typeId,"pageNum":1,"pageSize":6,"status":1},
         success:function (good) {
@@ -98,9 +93,9 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{"typeId":20,"status":1},
+        data:{"typeId":28,"status":1},
         success:function (good) {
           _this.recommendProducts=good.data.rows;
         },
@@ -128,23 +123,16 @@
     methods:{
       addProduct(id){
         if (this.userId){
-          let _this=this;
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
+            url:'/api/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":id,"number":1,"status":1},
             success:function (product) {
               if (!product.flag) {
-                _this.error="该商品在购物车中已存在，不能重复添加！";
-                setTimeout(()=>{
-                  _this.error='';
-                },2000);
+                alert("该商品在购物车中已存在，不能重复添加！")
 
               }else{
-               _this.success="添加购物车成功！";
-               setTimeout(()=>{
-                 _this.success="";
-               },2000);
+                alert("添加购物车成功！")
 
               }
             },

@@ -100,7 +100,7 @@
         }else{
           let _this = this
           $.ajax({
-            url: "http://119.23.12.250/sunny/comment/add",
+            url: "/api/sunny/comment/add",
             async: true,
             type: 'GET',
             data: {
@@ -136,7 +136,7 @@
     created(){
       let _this = this
       $.ajax({
-        url: "http://119.23.12.250/sunny/goods/findBoughtGoods",
+        url: "/api/sunny/goods/findBoughtGoods",
         async: true,
         type: 'GET',
         data: {

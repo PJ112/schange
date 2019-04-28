@@ -40,9 +40,9 @@
         </div>
       </div>
       <div class="recommend">
-          <h1>--为你推荐--</h1>
+        <h1>--为你推荐--</h1>
         <div class="recommend-items">
-          <div class="item" v-for="(item,index) of recommendProducts" :key="index"
+          <div class="item" style="text-align: center" v-for="(item,index) of recommendProducts" :key="index"
           >
             <router-link :to="'/sale-product?id='+item.goods.id">
               <div class="item-img" >
@@ -99,7 +99,7 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/cart/search',
+        url:'/api/sunny/cart/search',
         async:true,
         data:{"buyerId":this.userId,"status":1},
         success:function (good) {
@@ -113,9 +113,9 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
-        data:{"typeId":20,"status":1},
+        data:{"typeId":28,"status":1},
         success:function (good) {
           _this.recommendProducts=good.data.rows;
         },
@@ -147,24 +147,29 @@
     },
     methods:{
       toggleChange(id,price){
-        this.radio=id;
-        this.total=price;
+        if (this.userId){
+          this.radio=id;
+          this.total=price;
+        } else{
+          this.$router.push('/loginin');
+        }
+
       },
       deleteProduct(id){
 
         let _this=this;
         if (!_this.userId){
-            _this.$router.push('/loginin');
+          _this.$router.push('/loginin');
         } else{
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/delete',
+            url:'/api/sunny/cart/delete',
             async:true,
             data:{"ids":id,"status":3},
             success:function (product) {
 
               if (product.flag){
                 $.ajax({
-                  url:'http://119.23.12.250/sunny/cart/search',
+                  url:'/api/sunny/cart/search',
                   async:true,
                   data:{"buyerId":_this.userId,"status":1},
                   success:function (good) {
@@ -186,14 +191,14 @@
       },
       buy(){
         let _this=this;
-          if (!this.userId) {
-            this.$router.push('/loginin');
-          }else{
-            this.$router.push({
-              path:'/confirm-ordering',
-              query:{id:_this.radio,total:_this.total}
-            })
-          }
+        if (!this.userId) {
+          this.$router.push('/loginin');
+        }else{
+          this.$router.push({
+            path:'/confirm-ordering',
+            query:{id:_this.radio,total:_this.total}
+          })
+        }
       }
     }
   }

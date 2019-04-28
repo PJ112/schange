@@ -53,10 +53,10 @@
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
                 <div class="contact-seller-content-item-right" v-if="item.sendId===reId">
-                   <div class="time">
-                     {{getTime(item.createTime)}}
-                   </div>
-                    <span class="content">
+                  <div class="time">
+                    {{getTime(item.createTime)}}
+                  </div>
+                  <span class="content">
                       {{item.content}}
                     </span>
                   <span class="point"></span>
@@ -132,14 +132,14 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (good) {
           _this.details=good.data;
           _this.sellerId=_this.details.sellerId;
           $.ajax({
-            url:'http://119.23.12.250/sunny/user/findOne',
+            url:'/api/sunny/user/findOne',
             async:true,
             data:{"id":_this.sellerId},
             success:function (user) {
@@ -150,7 +150,7 @@
               _this.username=user.data.username;
               _this.school=user.data.school;
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.sellerId,"kind":1},
                 success:function (img) {
@@ -165,7 +165,7 @@
                 }
               });
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.reId,"kind":1},
                 success:function (img) {
@@ -185,7 +185,7 @@
             }
           });
           $.ajax({
-            url:'http://119.23.12.250/sunny/message/findMessage',
+            url:'/api/sunny/message/findMessage',
             async:true,
             data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
             success:function (message) {
@@ -239,7 +239,7 @@
             return;
           }
           $.ajax({
-            url:'http://119.23.12.250/sunny/message/addMessage ',
+            url:'/api/sunny/message/addMessage ',
             async:true,
             data:{"reId":_this.sellerId,"sendId":_this.reId,"content":this.content.trim(),"goodsId":this.id},
             success:function (content) {
@@ -247,7 +247,7 @@
               if (content.flag){
                 if (_this.sellerId){
                   $.ajax({
-                    url:'http://119.23.12.250/sunny/message/findMessage',
+                    url:'/api/sunny/message/findMessage',
                     async:true,
                     data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
                     success:function (message) {
@@ -281,7 +281,7 @@
         let _this=this;
         if (_this.userId){
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
+            url:'/api/sunny/cart/add',
             async:true,
             data:{"buyerId":this.reId,"goodsId":this.id,"number":1,"status":1},
             success:function (product) {
@@ -322,14 +322,14 @@
       },
       goToSeller(){
         let _this=this;
-         if (_this.userId){
-           _this.$router.push({
-             path:'/sellersmes',
-             query:{id:_this.sellerId}
-           })
-         }  else{
-           _this.$router.push('/loginin');
-         }
+        if (_this.userId){
+          _this.$router.push({
+            path:'/sellersmes',
+            query:{id:_this.sellerId}
+          })
+        }  else{
+          _this.$router.push('/loginin');
+        }
       }
     }
   }
