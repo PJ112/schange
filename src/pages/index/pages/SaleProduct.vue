@@ -119,7 +119,7 @@
     created(){
       let  _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (data) {
@@ -140,7 +140,7 @@
           }
           if (sellerId){
             $.ajax({
-              url:'http://119.23.12.250/sunny/user/findOne',
+              url:'/api/sunny/user/findOne',
               async:true,
               data:{"id":sellerId},
               success:function (user) {
@@ -150,7 +150,7 @@
                 _this.day=day;
                 _this.username=user.data.username;
                 $.ajax({
-                  url:'http://119.23.12.250/sunny/image/findImageAddress',
+                  url:'/api/sunny/image/findImageAddress',
                   async:true,
                   data:{"kindId":sellerId,"kind":1},
                   success:function (user) {
@@ -192,11 +192,10 @@
     methods:{
       addProduct(){
 
-        let _this=this;
-
-        if (_this.userId){
+        if (this.$store.state.user){
+          let _this=this;
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
+            url:'/api/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":this.id,"number":1,"status":1},
             success:function (product) {
@@ -227,21 +226,21 @@
 
       },
       confirmOrdering(){
-        if (this.userId){
+        if (this.$store.state.user){
           this.$router.push({path:"/confirm-ordering",query:{id:this.id}});
         }else{
           this.$router.push('/loginin');
         }
       },
       sellerIndex(){
-        if (this.userId){
+        if (this.$store.state.user){
           this.$router.push({path:"/sellersmes",query:{id:this.sellerId}});
         }else{
           this.$router.push('/loginin');
         }
       },
       contactSeller(){
-        if (this.userId){
+        if (this.$store.state.user){
           this.$router.push({path:"/contact-seller",query:{id:this.id}});
         }else{
           this.$router.push('/loginin');

@@ -172,7 +172,7 @@
           this.verifyText = ""
         }else if(_this.provinceChange === '--省份' &&_this.schoolChange ==='--学校' ){
           $.ajax({
-            url:"http://119.23.12.250/sunny/user/register",
+            url:"/api/sunny/user/register",
             async:true,
             type:'GET',
             data:{
@@ -210,7 +210,7 @@
           })
         }else{
           $.ajax( {
-            url:"http://119.23.12.250/sunny/user/register",
+            url:"/api/sunny/user/register",
             async:true,
             type:'GET',
             data:{

@@ -74,7 +74,7 @@
       goReceive(id){
         let _this = this
         $.ajax({
-          url:"http://119.23.12.250/sunny/order/gotGoods",
+          url:"/api/sunny/order/gotGoods",
           async:true,
           type:'GET',
           data:{
@@ -99,7 +99,7 @@
         this.pageNum = value
         let _this = this
         $.ajax({
-          url:"http://119.23.12.250/sunny/order/findPage",
+          url:"/api/sunny/order/findPage",
           async:true,
           type:'GET',
           data:{
@@ -118,7 +118,7 @@
     created(){
       let _this = this
       $.ajax({
-        url:"http://119.23.12.250/sunny/order/newSearch",
+        url:"/api/sunny/order/newSearch",
         async:true,
         type:'GET',
         data:{

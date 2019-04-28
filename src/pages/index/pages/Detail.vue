@@ -8,17 +8,15 @@
         </div>
         <div class="shopping-container-items" v-if="products.length>0"  v-for="(item,index) of products" :key="index">
           <div class="shopping-item-intro">
-            <router-link :to="'/sale-product?id='+item.goods.id">
-                <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
-                <div class="shopping-item-desc">
-                  <div class="shopping-desc-title">
-                   {{item.goods.name}}
-                  </div>
-                  <div class="shopping-desc-price">
-                    <span>价格：</span>{{item.goods.price}}元
-                  </div>
-                </div>
-            </router-link>
+            <img  class="shopping-intro-img" :src="getUrlImg(item.imageList[0].address)">
+            <div class="shopping-item-desc">
+              <div class="shopping-desc-title">
+               {{item.goods.name}}
+              </div>
+              <div class="shopping-desc-price">
+                <span>价格：</span>{{item.goods.price}}元
+              </div>
+            </div>
             <div class="shopping-item-delete">
               <div class="info" v-if="error" style="color: red">{{error}}</div>
               <div class="info" v-if="success" style="color: lightseagreen;">{{success}}</div>
@@ -26,7 +24,6 @@
               <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
             </div>
           </div>
-
         </div>
         <div class="shopping-container-items1" v-if="products.length===0"  style="text-align: center;color: red;padding: 20px;padding-top: 40px;">
           <span style="font-size: 16px;">不好意思哦,该分类还没有发布商品!</span>
@@ -84,7 +81,7 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"typeId":this.typeId,"pageNum":1,"pageSize":6,"status":1},
         success:function (good) {
@@ -98,7 +95,7 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"typeId":20,"status":1},
         success:function (good) {
@@ -127,10 +124,10 @@
     },
     methods:{
       addProduct(id){
-        if (this.userId){
+        if (this.$store.state.user){
           let _this=this;
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
+            url:'/api/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":id,"number":1,"status":1},
             success:function (product) {
@@ -158,7 +155,7 @@
 
       },
       confirmOrdering(id){
-        if (this.userId){
+        if (this.$store.state.user){
           this.$router.push({
             path:'/confirm-ordering',
             query:{

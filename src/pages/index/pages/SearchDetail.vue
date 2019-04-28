@@ -7,7 +7,6 @@
         </div>
         <div class="shopping-container-items" v-if="goods.length>0"  v-for="(item,index) of goods" :key="index">
           <div class="shopping-item-intro">
-            <router-link :to="'/sale-product?id='+item.goods.id">
             <img  class="shopping-intro-img" :src="getUrlImg(item.imageList)">
             <div class="shopping-item-desc">
               <div class="shopping-desc-title">
@@ -17,7 +16,6 @@
                 <span>价格：</span>{{item.goods.price}}元
               </div>
             </div>
-            </router-link>
             <div class="shopping-item-delete">
               <span class="shop" @click="addProduct(item.goods.id)">加入购物车</span>
               <span class="buy" @click="confirmOrdering(item.goods.id)">立即购买</span>
@@ -80,7 +78,7 @@
       this.goods=[];
       this.name=this.$route.query.name;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"name":_this.name,"status":1},
         success:function (good) {
@@ -92,7 +90,7 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"typeId":20,"status":1},
         success:function (good) {
@@ -127,10 +125,10 @@
     },
     methods:{
       addProduct(id){
-        if (this.userId){
+        if (this.$store.state.user){
           let _this=this;
           $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
+            url:'/api/sunny/cart/add',
             async:true,
             data:{"buyerId":this.userId,"goodsId":id,"number":1,"status":1},
             success:function (product) {
@@ -153,7 +151,7 @@
 
       },
       confirmOrdering(id){
-        if (this.userId){
+        if (this.$store.state.user){
           this.$router.push({
             path:'/confirm-ordering',
             query:{

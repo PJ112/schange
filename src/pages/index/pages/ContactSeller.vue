@@ -20,9 +20,9 @@
             学校：<span>{{school}}</span>
           </div>
           <div class="contact-seller-container-index">
-            <span @click="goToSeller" style="cursor: pointer;">
+            <router-link :to="'/sellersmes?id='+sellerId">
               卖家主页
-            </span>
+            </router-link>
           </div>
         </div>
         <div class="contact-seller-container-chat">
@@ -42,8 +42,8 @@
                 <div class="shop">
                   <div v-if="error" style="color: red;">{{error}}</div>
                   <div v-if="success" style="color:lightseagreen;">{{success}}</div>
-                  <span @click="addProduct" style="margin-top: 20px;cursor: pointer;">加入购物车</span>
-                  <span style="cursor: pointer;" @click="goToConfirmOrdering" ><span>立即购买</span></span>
+                  <span @click="addProduct" style="margin-top: 20px;">加入购物车</span>
+                  <router-link :to="'/confirm-ordering?id='+id"><span>立即购买</span></router-link>
                 </div>
               </div>
             </div>
@@ -124,22 +124,21 @@
         userImg:'',
         meImg:'',
         error:'' ,
-        success:'',
-        userId:this.$store.state.userId.userId
+        success:''
 
       }
     },
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (good) {
           _this.details=good.data;
           _this.sellerId=_this.details.sellerId;
           $.ajax({
-            url:'http://119.23.12.250/sunny/user/findOne',
+            url:'/api/sunny/user/findOne',
             async:true,
             data:{"id":_this.sellerId},
             success:function (user) {
@@ -150,7 +149,7 @@
               _this.username=user.data.username;
               _this.school=user.data.school;
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.sellerId,"kind":1},
                 success:function (img) {
@@ -165,7 +164,7 @@
                 }
               });
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.reId,"kind":1},
                 success:function (img) {
@@ -185,7 +184,7 @@
             }
           });
           $.ajax({
-            url:'http://119.23.12.250/sunny/message/findMessage',
+            url:'/api/sunny/message/findMessage',
             async:true,
             data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
             success:function (message) {
@@ -234,102 +233,69 @@
     methods:{
       sendMessage(){
         let  _this=this;
-        if (_this.userId){
-          if (_this.content===""){
-            return;
-          }
-          $.ajax({
-            url:'http://119.23.12.250/sunny/message/addMessage ',
-            async:true,
-            data:{"reId":_this.sellerId,"sendId":_this.reId,"content":this.content.trim(),"goodsId":this.id},
-            success:function (content) {
 
-              if (content.flag){
-                if (_this.sellerId){
-                  $.ajax({
-                    url:'http://119.23.12.250/sunny/message/findMessage',
-                    async:true,
-                    data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
-                    success:function (message) {
-                      _this.message=message.data;
-                      if (_this.message.length>0){
-                        _this.content='';
-                      }
+        if (_this.content===""){
+          return;
+        }
+        $.ajax({
+          url:'/api/sunny/message/addMessage ',
+          async:true,
+          data:{"reId":_this.sellerId,"sendId":_this.reId,"content":this.content.trim(),"goodsId":this.id},
+          success:function (content) {
 
-                    },
-                    error:function (error) {
-                      console.log(error);
+            if (content.flag){
+              if (_this.sellerId){
+                $.ajax({
+                  url:'/api/sunny/message/findMessage',
+                  async:true,
+                  data:{"id":_this.reId,"otherId":_this.sellerId,"goodsId":_this.id},
+                  success:function (message) {
+                    _this.message=message.data;
+                    if (_this.message.length>0){
+                      _this.content='';
                     }
-                  })
-                }
 
+                  },
+                  error:function (error) {
+                    console.log(error);
+                  }
+                })
               }
 
-
-            },
-            error:function (error) {
-              console.log(error);
             }
-          })
-        } else{
-          _this.$router.push('/loginin');
-        }
 
 
+          },
+          error:function (error) {
+            console.log(error);
+          }
+        })
       },
       addProduct(){
         let _this=this;
-        if (_this.userId){
-          $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
-            async:true,
-            data:{"buyerId":this.reId,"goodsId":this.id,"number":1,"status":1},
-            success:function (product) {
-              if (!product.flag) {
-                _this.error="该商品在购物车中已存在，不能重复添加！";
-                setTimeout(()=>{
-                  _this.error='';
-                },2000)
+        $.ajax({
+          url:'/api/sunny/cart/add',
+          async:true,
+          data:{"buyerId":this.reId,"goodsId":this.id,"number":1,"status":1},
+          success:function (product) {
+            if (!product.flag) {
+              _this.error="该商品在购物车中已存在，不能重复添加！";
+              setTimeout(()=>{
+                _this.error='';
+              },2000)
 
-              }else{
-                _this.success="添加购物车成功！";
-                setTimeout(()=>{
-                  _this.success='';
-                },2000)
+            }else{
+              _this.success="添加购物车成功！";
+              setTimeout(()=>{
+                _this.success='';
+              },2000)
 
-              }
-            },
-            error:function (error) {
-              console.log(error);
             }
-          })
-        } else{
-          _this.$router.push('/loginin');
-        }
-
-      },
-      goToConfirmOrdering(){
-        let _this=this;
-        if (_this.userId){
-          _this.$router.push({
-            path:'/confirm-ordering',
-            query:{id:_this.id}
-          })
-        } else{
-          _this.$router.push('/loginin');
-
-        }
-      },
-      goToSeller(){
-        let _this=this;
-         if (_this.userId){
-           _this.$router.push({
-             path:'/sellersmes',
-             query:{id:_this.sellerId}
-           })
-         }  else{
-           _this.$router.push('/loginin');
-         }
+          },
+          error:function (error) {
+            console.log(error);
+          }
+        })
       }
     }
   }

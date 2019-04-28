@@ -20,9 +20,9 @@
             学校：<span>{{school}}</span>
           </div>
           <div class="contact-seller-container-index">
-            <span @click="goToSeller" style="cursor: pointer;">
+            <router-link :to="'/sellersmes?id='+buyerId">
               买家主页
-            </span>
+            </router-link>
           </div>
         </div>
         <div class="contact-seller-container-chat">
@@ -46,7 +46,7 @@
             <h1>{{username}}</h1>
             <div class="contact-seller-content-items"  >
               <div v-for="(item,index) of message" :key="index" style="clear: both">
-                <div class="contact-seller-content-item-right" v-if="item.sendId==meId">
+                <div class="contact-seller-content-item-right" v-if="item.sendId!==meId">
                   <div class="time">
                     {{getTime(item.createTime)}}
                   </div>
@@ -124,14 +124,15 @@
     },
     created(){
       let _this=this;
+      console.log(this.goodsId);
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.goodsId,"status":1},
         success:function (good) {
           _this.details=good.data;
           $.ajax({
-            url:'http://119.23.12.250/sunny/user/findOne ',
+            url:'/api/sunny/user/findOne ',
             async:true,
             data:{"id":_this.buyerId},
             success:function (user) {
@@ -142,7 +143,7 @@
               _this.username=user.data.username;
               _this.school=user.data.school;
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.buyerId,"kind":1},
                 success:function (img) {
@@ -157,7 +158,7 @@
                 }
               });
               $.ajax({
-                url:'http://119.23.12.250/sunny/image/findImageAddress',
+                url:'/api/sunny/image/findImageAddress',
                 async:true,
                 data:{"kindId":_this.meId,"kind":1},
                 success:function (img) {
@@ -179,7 +180,7 @@
             }
           });
           $.ajax({
-            url:'http://119.23.12.250/sunny/message/findMessage',
+            url:'/api/sunny/message/findMessage',
             async:true,
             data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
             success:function (message) {
@@ -235,78 +236,57 @@
       sendMessage(){
         let  _this=this;
 
-        if (_this.userId){
-          if (_this.content===""){
-            return;
-          }
-          $.ajax({
-            url:'http://119.23.12.250/sunny/message/addMessage ',
-            async:true,
-            data:{"reId":_this.buyerId,"sendId":_this.meId,"content":this.content.trim(),"goodsId":_this.goodsId},
-            success:function (content) {
-              if (content.flag){
-                if (_this.buyerId){
-                  $.ajax({
-                    url:'http://119.23.12.250/sunny/message/findMessage',
-                    async:true,
-                    data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
-                    success:function (message) {
-                      _this.message=message.data;
-                      if (_this.message.length>0){
-                        _this.content='';
-                      }
-
-                    },
-                    error:function (error) {
-                      console.log(error);
+        if (_this.content===""){
+          return;
+        }
+        $.ajax({
+          url:'/api/sunny/message/addMessage ',
+          async:true,
+          data:{"reId":_this.buyerId,"sendId":_this.meId,"content":this.content.trim(),"goodsId":_this.goodsId},
+          success:function (content) {
+            if (content.flag){
+              if (_this.buyerId){
+                $.ajax({
+                  url:'/api/sunny/message/findMessage',
+                  async:true,
+                  data:{"id":_this.meId,"otherId":_this.buyerId,"goodsId":_this.goodsId},
+                  success:function (message) {
+                    _this.message=message.data;
+                    if (_this.message.length>0){
+                      _this.content='';
                     }
-                  })
-                }
 
+                  },
+                  error:function (error) {
+                    console.log(error);
+                  }
+                })
               }
 
-
-            },
-            error:function (error) {
-              console.log(error);
             }
-          })
-        } else{
-          _this.$router.push('/loginin');
-        }
 
+
+          },
+          error:function (error) {
+            console.log(error);
+          }
+        })
       },
       addProduct(){
         let _this=this;
-        if (_this.userId){
-          $.ajax({
-            url:'http://119.23.12.250/sunny/cart/add',
-            async:true,
-            data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
-            success:function (product) {
-              if (product.flag){
-                _this.$router.push('/index-shopping');
-              }
-            },
-            error:function (error) {
-              console.log(error);
+        $.ajax({
+          url:'/api/sunny/cart/add',
+          async:true,
+          data:{"buyerId":this.buyerId,"goodsId":this.goodsId,"number":1,"status":1},
+          success:function (product) {
+            if (product.flag){
+              _this.$router.push('/index-shopping');
             }
-          })
-        }else{
-          _this.$router.push('/loginin');
-        }
-
-      },
-      goToSeller(){
-        let _this=this;
-        if (this.userId){
-           _this.$router.push({
-             path:'/sellersmes',
-             query:{id:_this.buyerId}
-           })
-        }else{
-          _this.$router.push('/loginin');
-        }
+          },
+          error:function (error) {
+            console.log(error);
+          }
+        })
       }
     }
   }

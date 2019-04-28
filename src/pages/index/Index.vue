@@ -159,7 +159,7 @@
       let _this=this;
 
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"pageSize":9,"status":1},
         success:function (data) {
@@ -204,7 +204,7 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/type/findAll',
+        url:'/api/sunny/type/findAll',
         async:true,
         data:{},
         success:function (data) {

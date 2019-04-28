@@ -102,7 +102,7 @@
     created(){
       let _this=this;
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/findOne',
+        url:'/api/sunny/goods/findOne',
         async:true,
         data:{"id":_this.id,"status":1},
         success:function (good) {
@@ -110,7 +110,7 @@
           _this.total=good.data.price;
           _this.sellerId=good.data.sellerId;
           $.ajax({
-            url:'http://119.23.12.250/sunny/user/findOne',
+            url:'/api/sunny/user/findOne',
             async:true,
             data:{"id":_this.sellerId},
             success:function (user) {
@@ -128,7 +128,7 @@
         }
       });
       $.ajax({
-        url:'http://119.23.12.250/sunny/goods/newSearch',
+        url:'/api/sunny/goods/newSearch',
         async:true,
         data:{"typeId":20,"status":1},
         success:function (good) {
@@ -158,75 +158,70 @@
     methods:{
       addOrder(){
         let _this=this;
-        if (_this.userId){
-          let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-          if (!_this.name){
-            _this.errorPhone='姓名不能为空';
-            setTimeout(()=>{
-              _this.errorPhone='';
+        let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!_this.name){
+          _this.errorPhone='姓名不能为空';
+          setTimeout(()=>{
+            _this.errorPhone='';
 
-            },2000);
-            return;
-          }
-          if (!myreg.test(_this.phone)){
-            _this.errorPhone='手机号码格式不正确';
-            setTimeout(()=>{
-              _this.errorPhone='';
+          },2000);
+          return;
+        }
+        if (!myreg.test(_this.phone)){
+          _this.errorPhone='手机号码格式不正确';
+          setTimeout(()=>{
+            _this.errorPhone='';
 
-            },2000);
-            return;
-          }
-
-          if (!_this.name){
-            _this.errorPhone='交易地址不能为空';
-            setTimeout(()=>{
-              _this.errorPhone='';
-
-            },2000);
-            return;
-          }
-          $.ajax({
-            url:'http://119.23.12.250/sunny/order/add',
-            async:true,
-            data:{
-              "buyerId":_this.userId,
-              "sellerId":this.sellerId,
-              "goodsId":_this.id,
-              "number":1,
-              "money":_this.total,
-              "buyerAddress":_this.buyerAddress,
-              "sellerAddress":_this.sellerAddress,
-              "status":_this.status,
-            },
-            success:function (order) {
-              if(order.flag){
-                _this.message="生成订单成功！";
-                $.ajax({
-                  url:'http://119.23.12.250/sunny/cart/delete',
-                  async:true,
-                  data:{"ids":_this.sellerId,"status":3},
-                  success:function (user) {
-                    _this.sellerAddress=user.data.school;
-                  },
-                  error:function (error) {
-                    console.log(error);
-                  }
-                });
-                setTimeout(()=>{
-                  _this.$router.push('/index-shopping');
-                },1000);
-
-              }
-
-            },
-            error:function (error) {
-              console.log(error);
-            }
-          });
-        } else {
-          _this.$router.push('/loginin');
+          },2000);
+          return;
         }
 
+        if (!_this.name){
+          _this.errorPhone='交易地址不能为空';
+          setTimeout(()=>{
+            _this.errorPhone='';
+
+          },2000);
+          return;
+        }
+        $.ajax({
+          url:'/api/sunny/order/add',
+          async:true,
+          data:{
+            "buyerId":_this.userId,
+            "sellerId":this.sellerId,
+            "goodsId":_this.id,
+            "number":1,
+            "money":_this.total,
+            "buyerAddress":_this.buyerAddress,
+            "sellerAddress":_this.sellerAddress,
+            "status":_this.status,
+          },
+          success:function (order) {
+            if(order.flag){
+              _this.message="生成订单成功！";
+              $.ajax({
+                url:'/api/sunny/cart/delete',
+                async:true,
+                data:{"ids":_this.sellerId,"status":3},
+                success:function (user) {
+                  _this.sellerAddress=user.data.school;
+                },
+                error:function (error) {
+                  console.log(error);
+                }
+              });
+              setTimeout(()=>{
+                _this.$router.push('/index-shopping');
+              },1000);
+
+            }
+
+          },
+          error:function (error) {
+            console.log(error);
+          }
+        });
       }
     }
   }

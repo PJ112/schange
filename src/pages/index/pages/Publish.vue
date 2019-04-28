@@ -178,14 +178,14 @@
       created(){
           var _this=this;
             $.ajax({
-              url:'http://119.23.12.250/sunny/type/findType',
+              url:'/api/sunny/type/findType',
               async:true,
               data:{"parentId":0},
               success:function (data) {
                 _this.parentCategories=data.data;
                 if (_this.goodsId) {
                   $.ajax({
-                    url:'http://119.23.12.250/sunny/goods/findOne',
+                    url:'/api/sunny/goods/findOne',
                     async:true,
                     data:{"id":_this.goodsId,"status":1},
                     success:function (product) {
@@ -201,7 +201,7 @@
                         _this.typeId=_this.product.typeId;
                         _this.type=_this.product.type;
                         $.ajax({
-                          url:'http://119.23.12.250/sunny/type/findParentType',
+                          url:'/api/sunny/type/findParentType',
                           async:true,
                           data:{"id":_this.product.typeId},
                           success:function (type) {
@@ -251,11 +251,11 @@
           reader.onload = (data) => {
             let res = data.target || data.srcElement;
             this.avatar = res.result;
-            this.$http.post('http://119.23.12.250/sunny/image/imgUpload', formData, config)
+            this.$http.post('/api/sunny/image/imgUpload', formData, config)
               .then((res)=>{
                 if (_this.goodsId){
                   $.ajax({
-                    url:'http://119.23.12.250/sunny/image/update',
+                    url:'/api/sunny/image/update',
                     async:true,
                     data:{"id":_this.imageId,"address":res.body.data},
                     success:function (data) {
@@ -279,7 +279,7 @@
           this.type='';
           var _this=this;
           $.ajax({
-            url:'http://119.23.12.250/sunny/type/findType',
+            url:'/api/sunny/type/findType',
             async:true,
             data:{"parentId":_this.parentId},
             success:function (data) {
@@ -291,61 +291,56 @@
           })
         },
         addProduct(){
-          if (this.userId){
-            if (this.goodsId){
-              if (this.typeId==''){
-                this.typeId=this.parentId;
-              }
-              let  _this=this;
-              $.ajax({
-                url:"http://119.23.12.250/sunny/goods/update?id="+this.goodsId+"&name="+this.name+"&sellerId="+this.id+"&content="+this.content+
-                  "&typeId="+this.typeId+"&number=1&price="+this.price+"&oldDegree="+this.oldDegree+"&means="+this.means+"&status="+1+"",
-                async:true,
-                type:'GET',
-                success:function (product) {
-                  _this.message=product.message;
-                  setTimeout(()=>{
-                    _this.$router.push('/mypublish');
-                  },1000);
-
-
-                },
-                error:function (error) {
-                  console.log(error);
-                },
-                dataType:'json'
-              })
-            } else{
-              if (this.typeId==''){
-                this.typeId=this.parentId;
-              }
-              let  _this=this;
-              $.ajax({
-                url:"http://119.23.12.250/sunny/goods/addGoods?goods.name="+this.name+"&goods.sellerId="+this.id+"&goods.typeId="+this.typeId+"" +
-                  "&goods.price="+this.price+"&goods.oldDegree="+this.oldDegree+"&goods.means="+this.means+"&content.contents="+this.content+"" +
-                  "&address="+this.fileResource+"&status="+1+"",
-                async:true,
-                type:'GET',
-                success:function (data) {
-
-                  _this.message=data.message;
-
-                  setTimeout(()=>{
-                    _this.$router.push('/index');
-                  },1000);
-
-
-                },
-                error:function (error) {
-                  console.log(error);
-                },
-                dataType:'json'
-              })
+          if (this.goodsId){
+            if (this.typeId==''){
+              this.typeId=this.parentId;
             }
-          } else{
-            this.$router.push('/loginin');
-          }
+            let  _this=this;
+            $.ajax({
+              url:"/api/sunny/goods/update?id="+this.goodsId+"&name="+this.name+"&sellerId="+this.id+"&content="+this.content+
+                "&typeId="+this.typeId+"&number=1&price="+this.price+"&oldDegree="+this.oldDegree+"&means="+this.means+"&status="+1+"",
+              async:true,
+              type:'GET',
+              success:function (product) {
+                _this.message=product.message;
+                setTimeout(()=>{
+                  _this.$router.push('/mypublish');
+                },1000);
 
+
+              },
+              error:function (error) {
+                console.log(error);
+              },
+              dataType:'json'
+            })
+          } else{
+            if (this.typeId==''){
+              this.typeId=this.parentId;
+            }
+            let  _this=this;
+            $.ajax({
+              url:"/api/sunny/goods/addGoods?goods.name="+this.name+"&goods.sellerId="+this.id+"&goods.typeId="+this.typeId+"" +
+                "&goods.price="+this.price+"&goods.oldDegree="+this.oldDegree+"&goods.means="+this.means+"&content.contents="+this.content+"" +
+                "&address="+this.fileResource+"&status="+1+"",
+              async:true,
+              type:'GET',
+              success:function (data) {
+
+                _this.message=data.message;
+
+                setTimeout(()=>{
+                  _this.$router.push('/index');
+                },1000);
+
+
+              },
+              error:function (error) {
+                console.log(error);
+              },
+              dataType:'json'
+            })
+          }
 
         }
       }

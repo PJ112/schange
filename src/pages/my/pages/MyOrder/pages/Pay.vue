@@ -50,7 +50,7 @@
       goPay(){
         let _this = this
         $.ajax({
-          url:"http://119.23.12.250/sunny/order/pay",
+          url:"/api/sunny/order/pay",
           async:true,
           type:'GET',
           data:{
