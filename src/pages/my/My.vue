@@ -202,6 +202,7 @@
                     async:true,
                     type:'GET',
                     success:function (data) {
+                      _this.$router.go(0)
                       $.ajax({
                         url: "/api/sunny/image/findImageAddress",
                         async: true,
@@ -219,7 +220,6 @@
                               _this.UserAddress = _this.httpUrl+_this.address;
                               _this.$store.dispatch('updateUserAsyc',_this.user.user);
                               _this.$store.dispatch('updateuserIdAsyc', _this.userId.userId);
-                              _this.$router.go(0);
                             }
                           }
                         },
@@ -236,13 +236,11 @@
                   })
 
                 }else{
-                  // alert( _this.fileResource)
                   $.ajax({
                     url:"/api/sunny/image/update?kind="+_this.kind+"&id="+_this.PId +"&address="+_this.fileResource+"",
                     async:true,
                     type:'GET',
                     success:function (data) {
-                      // alert(data.message)
                       $.ajax({
                         url: "/api/sunny/image/findImageAddress",
                         async: true,
@@ -256,7 +254,7 @@
                           _this.UserAddress = _this.httpUrl+_this.address
                           _this.$store.dispatch('updateUserAsyc',_this.user.user);
                           _this.$store.dispatch('updateuserIdAsyc', _this.userId.userId);
-                          _this.$router.go(0);
+                          _this.$router.go(0)
                         },
                         error: function () {
 
